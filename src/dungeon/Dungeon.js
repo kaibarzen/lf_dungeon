@@ -3,7 +3,7 @@ import ImageLoader from './ImageLoader';
 class Dungeon
 {
 	constructor(node, images, {
-		width = 10,
+		width = 30,
 		height = 20,
 		cellWidth = 100,
 		cellHeight = 50,
@@ -23,14 +23,16 @@ class Dungeon
 	{
 		this.node = node;
 
-		this.generateCanvas('background');
+		this.node.style.display = "grid"
+
+		this.generateCanvas('background', {first: true});
 		this.generateCanvas('grid');
 		this.generateCanvas('tile');
 		this.generateCanvas('entity');
 		this.generateCanvas('highlight');
 
-		this.generateCanvas('hitTile', false);
-		this.generateCanvas('hitEntity', false);
+		this.generateCanvas('hitTile', {append: false});
+		this.generateCanvas('hitEntity', {append: false});
 
 		// current highlight position
 		this.highlightPos = {x: -1, y: -1};
@@ -64,13 +66,16 @@ class Dungeon
 		});
 	}
 
-	generateCanvas = (name, append = true) =>
+	generateCanvas = (name, {append = true, first = false} = {}) =>
 	{
 		let canvas = document.createElement('canvas');
 
 		if (append)
 		{
-			canvas.style.position = 'absolute';
+
+			canvas.style.gridColumn = "1";
+			canvas.style.gridRow = "1";
+
 			this.node.appendChild(canvas);
 		}
 
@@ -294,7 +299,6 @@ class Dungeon
 		const canvasHeight = height * cellHeight * 0.5;
 
 		const list = [this.background, this.grid, this.tile, this.entity, this.highlight, this.hitTile];
-
 		for (const item of list)
 		{
 			item.canvas.width = canvasWidth;
