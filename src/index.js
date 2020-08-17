@@ -1,17 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './resources/sass/index.sass';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import {store, testSlice} from './redux/index';
+import {Provider} from 'react-redux';
+
+import "normalize.css";
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<Provider store={store}>
+			<App />
+		</Provider>
+	</React.StrictMode>,
+	document.getElementById('root'),
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+window.store = store;
+window.testSlice = testSlice;
+
+// window.store.dispatch(window.testSlice.actions.set("JA"))
+
 serviceWorker.unregister();
