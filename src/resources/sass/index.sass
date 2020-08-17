@@ -1,15 +1,29 @@
-body
+body, .editor_container
   margin: 0
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   background-color: #282c34
+  overflow: hidden
+  height: 100vh
+  width: 100vw
 
 .ld_logo
   height: 100%
   padding: 10px
 
-.flex-row
+.editor_flex
   display: flex
   flex-direction: row
+  justify-content: flex-start
+  align-content: stretch
+  height: 100%
+  overflow: no-display
 
+.editor_flex .dungeon
+  flex-grow: 10
+  display: flex
+  justify-content: center
+  align-content: center
+  align-items: center
+  overflow: auto

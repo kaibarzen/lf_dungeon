@@ -1,25 +1,22 @@
 import React from 'react';
-import {Button} from '@blueprintjs/core';
 import {useDispatch, useSelector} from 'react-redux';
-import Navigation from './Components/Navigation';
+import Editor from './Components/Editor';
 
 function App(props)
 {
 
+	/*
 	const test = useSelector((state) => {
 		return state.test.test;
-		console.log("WHOLE STATE", state)
+		console.log("WHOLdE STATE", state)
 	})
 
 	const dispatch = useDispatch()
+	 */
 
 	return (
 		<div className='App bp3-dark'>
-			<Navigation/>
-			<header className='App-header'>
-				<Button icon='refresh' />
-				{test}
-			</header>
+			<Editor />
 		</div>
 	);
 }

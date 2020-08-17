@@ -4,7 +4,7 @@ import './resources/sass/index.sass';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import {store, testSlice} from './redux/index';
+import redux from './redux/index';
 import {Provider} from 'react-redux';
 
 import "normalize.css";
@@ -13,16 +13,14 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Provider store={store}>
+		<Provider store={redux.store}>
 			<App />
 		</Provider>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );
 
-window.store = store;
-window.testSlice = testSlice;
-
+window.redux = redux;
 // window.store.dispatch(window.testSlice.actions.set("JA"))
 
 serviceWorker.unregister();

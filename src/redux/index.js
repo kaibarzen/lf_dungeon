@@ -4,27 +4,23 @@ import {
 	createSlice,
 } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
+import dungeon from './dungeon';
 
 const ownMiddleWare = store => next => action =>
 {
-	if(action.payload === "WAS"){
+	if (action.payload === 'WAS')
+	{
 		return store; // Return on store on forbidden WAS
 	}
 	return next(action);
 };
-
-const middleware = [
-	...getDefaultMiddleware(),
-	ownMiddleWare,
-	logger,
-];
 
 // AUTH STATE
 const testState = {
 	test: 'Nein',
 };
 
-export const testSlice = createSlice({
+const testSlice = createSlice({
 	name: 'test',
 	initialState: testState,
 	reducers: {
@@ -39,9 +35,20 @@ export const testSlice = createSlice({
 	},
 });
 
-export const store = configureStore({
+const middleware = [
+	ownMiddleWare,
+];
+
+const store = configureStore({
 	reducer: {
 		test: testSlice.reducer,
+		dungeon: dungeon.slice.reducer,
 	},
 	middleware,
 });
+
+export default {
+	store,
+	dispatch: store.dispatch,
+	dungeon
+};
