@@ -8,6 +8,8 @@ const initialState = {
 	height: 0,
 	cellWidth: 0,
 	cellHeight: 0,
+	gridOpacity: 0,
+	gridEnabled: true,
 };
 
 // Because of how redux works we cant pass it into the store and have more then 1 fps, instead we pass a ref into the store.
@@ -26,6 +28,8 @@ const slice = createSlice({
 			state.height = dungeon.height;
 			state.cellWidth = dungeon.cellWidth;
 			state.cellHeight = dungeon.cellHeight;
+			state.gridOpacity = dungeon.gridOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
+			state.gridEnabled = dungeon.gridEnabled;
 		},
 		setSize: (state, action) =>
 		{
@@ -53,6 +57,18 @@ const slice = createSlice({
 
 			state.dungeon.resize({width, height, cellWidth, cellHeight});
 		},
+		setGrid: (state, action) =>
+		{
+			let {
+				opacity = state.gridOpacity, // int 0-100
+				enabled = state.gridEnabled, // Bool
+			} = action.payload;
+
+			state.gridOpacity = opacity;
+			state.gridEnabled = enabled;
+
+			state.dungeon.setGrid({enabled, opacity: opacity / 100});
+		},
 	},
 });
 
@@ -73,6 +89,13 @@ export default {
 				cellHeight: state.dungeon.cellHeight,
 			};
 		},
+		getGrid: (state) =>
+		{
+			return {
+				enabled: state.dungeon.gridEnabled,
+				opacity: state.dungeon.gridOpacity,
+			};
+		},
 	},
 	enums: {
 		size: {
@@ -80,6 +103,10 @@ export default {
 			HEIGHT: 'height',
 			CELL_WIDTH: 'cellWidth',
 			CELL_HEIGHT: 'cellHeight',
+		},
+		grid: {
+			ENABLED: 'enabled',
+			OPACITY: 'opacity',
 		},
 	},
 };

@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="410c6424-5c64-492c-952d-7da9157cc455" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/tabs/panels/GridPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/tabs/panels/GridPanel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dungeon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/resources/sass/index.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/sass/index.sass" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +78,7 @@
       <workItem from="1597583407585" duration="5267000" />
       <workItem from="1597654391724" duration="24408000" />
       <workItem from="1597770635686" duration="1202000" />
-      <workItem from="1597835906954" duration="6072000" />
+      <workItem from="1597835906954" duration="8969000" />
     </task>
     <servers />
   </component>
@@ -109,9 +106,9 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="581" y="221" width="758" height="638" key="find.popup/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597667520104" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1597690839826">
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1597849245133">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597690839826" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597849245133" />
   </component>
 </project>
