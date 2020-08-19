@@ -8,12 +8,13 @@ class Dungeon
 		cellWidth = 100,
 		cellHeight = 50,
 		onClickCallback = null,
-		data = {tile: {}, entity: [], entityCounter: 0, background: null},
+		data = {tile: {}, entity: [], entityCounter: 0},
 		imageLoader = false,
 
 		gridEnabled = true,
 		gridOpacity = 0.5,
 
+		backgroundData = null,
 		backgroundEnabled = true,
 		backgroundOpacity = 0.5,
 		backgroundRepeat = false,
@@ -40,6 +41,7 @@ class Dungeon
 		this.gridOpacity = gridOpacity;
 
 		// Background
+		this.backgroundData = backgroundData;
 		this.backgroundEnabled = backgroundEnabled;
 		this.backgroundOpacity = backgroundOpacity;
 		this.backgroundRepeat = backgroundRepeat;
@@ -121,14 +123,14 @@ class Dungeon
 		              enabled = this.backgroundEnabled,
 		              repeat = this.backgroundRepeat,
 		              opacity = this.backgroundOpacity,
-		              url = this.data.background,
+		              data = this.backgroundData, // Data Url
 		              draw = true,
 	              } = {})
 	{
 		this.backgroundEnabled = enabled;
 		this.backgroundRepeat = repeat;
 		this.backgroundOpacity = opacity;
-		this.data.background = url;
+		this.backgroundData = data;
 		if (draw)
 		{
 			this.drawBackground();
@@ -310,9 +312,9 @@ class Dungeon
 
 	drawBackground = () =>
 	{
-		return new Promise((resolve, reject) =>
+		return new Promise(async(resolve, reject) =>
 		{
-			const {width, height, cellWidth, cellHeight, backgroundEnabled, backgroundOpacity, backgroundRepeat} = this;
+			const {width, height, cellWidth, cellHeight, backgroundEnabled, backgroundOpacity, backgroundRepeat, backgroundData} = this;
 			this.clearCanvas(this.background);
 
 			if (!backgroundEnabled)
@@ -321,35 +323,29 @@ class Dungeon
 				return;
 			}
 
-			if (!this.data.background)
+			if (!backgroundData)
 			{
 				resolve(false);
 				return;
 			}
 
-			let img = new Image();
-			img.src = this.data.background;
-
 			const canvasWidth = width * cellWidth;
 			const canvasHeight = height * cellHeight * 0.5;
+			const img = await this.imageLoader.getBackground(backgroundData);
 
-			img.onload = function ()
+			this.background.context.globalAlpha = backgroundOpacity;
+
+			if (backgroundRepeat)
 			{
-
-				if (backgroundRepeat)
-				{
-					const pattern = this.background.context.createPattern(img, 'repeat');
-					this.background.context.fillStyle = pattern;
-					this.background.context.globalAlpha = backgroundOpacity;
-					this.background.context.fillRect(0, 0, canvasWidth, canvasHeight);
-					resolve(true);
-					return;
-				}
-
-				this.background.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvasWidth, canvasHeight);
+				const pattern = this.background.context.createPattern(img, 'repeat');
+				this.background.context.fillStyle = pattern;
+				this.background.context.fillRect(0, 0, canvasWidth, canvasHeight);
 				resolve(true);
+				return;
+			}
 
-			}.bind(this);
+			this.background.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvasWidth, canvasHeight);
+			resolve(true);
 
 		});
 	};

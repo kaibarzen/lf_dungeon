@@ -10,6 +10,9 @@ const initialState = {
 	cellHeight: 0,
 	gridOpacity: 0,
 	gridEnabled: true,
+	backgroundEnabled: true,
+	backgroundRepeat: true,
+	backgroundOpacity: 1.0,
 };
 
 // Because of how redux works we cant pass it into the store and have more then 1 fps, instead we pass a ref into the store.
@@ -30,6 +33,9 @@ const slice = createSlice({
 			state.cellHeight = dungeon.cellHeight;
 			state.gridOpacity = dungeon.gridOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
 			state.gridEnabled = dungeon.gridEnabled;
+			state.backgroundNode = dungeon.backgroundEnabled;
+			state.backgroundRepeat = dungeon.backgroundRepeat;
+			state.backgroundOpacity = dungeon.backgroundOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
 		},
 		setSize: (state, action) =>
 		{
@@ -69,6 +75,26 @@ const slice = createSlice({
 
 			state.dungeon.setGrid({enabled, opacity: opacity / 100});
 		},
+		setBackground: (state, action) =>
+		{
+			const {
+				enabled = state.backgroundEnabled,
+				repeat = state.backgroundRepeat,
+				opacity = state.backgroundOpacity,
+				data,
+			} = action.payload;
+
+			state.backgroundEnabled = enabled;
+			state.backgroundRepeat = repeat;
+			state.backgroundOpacity = opacity;
+
+			if (data)
+			{
+				state.dungeon.setBackground({enabled, repeat, opacity: opacity / 100, data});
+				return;
+			}
+			state.dungeon.setBackground({enabled, repeat, opacity: opacity / 100});
+		},
 	},
 });
 
@@ -96,6 +122,14 @@ export default {
 				opacity: state.dungeon.gridOpacity,
 			};
 		},
+		getBackground: (state) =>
+		{
+			return {
+				enabled: state.dungeon.backgroundEnabled,
+				opacity: state.dungeon.backgroundOpacity,
+				repeat: state.dungeon.backgroundRepeat,
+			};
+		},
 	},
 	enums: {
 		size: {
@@ -107,6 +141,11 @@ export default {
 		grid: {
 			ENABLED: 'enabled',
 			OPACITY: 'opacity',
+		},
+		background: {
+			ENABLED: 'enabled',
+			OPACITY: 'opacity',
+			REPEAT: 'repeat',
 		},
 	},
 };

@@ -9,8 +9,6 @@ const GridPanel = (props) =>
 	const size = useSelector(redux.dungeon.selectors.getSize);
 	const grid = useSelector(redux.dungeon.selectors.getGrid);
 
-	console.log("GRID", grid)
-
 	const onChangeSize = (value, string, node) =>
 	{
 		redux.dispatch(redux.dungeon.actions.setSize({[node.name]: value}));
@@ -29,7 +27,7 @@ const GridPanel = (props) =>
 	};
 
 	return (
-		<div>
+		<div className={"editor_panel"}>
 			<H2> Grid Settings</H2>
 
 			<FormGroup
@@ -88,7 +86,7 @@ const GridPanel = (props) =>
 			<H2> Cell Settings</H2>
 
 			<FormGroup
-				helperText="Size in Pixel's"
+				helperText="Size in Pixels"
 				label='Cell Size'
 			>
 				<div className={'editor_panel_input_horizontal'}>

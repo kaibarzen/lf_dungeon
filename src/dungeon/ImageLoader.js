@@ -1,13 +1,18 @@
+import md5 from 'md5';
+
 class ImageLoader
 {
 	constructor(themeIndex)
 	{
 		this.loaded = {};
 		this.themeIndex = themeIndex;
+		this.backgroundNode = null;
+		this.backgroundHash = null;
 
 		// We currently have 1 theme, so no worries about performance
-		for(const themeId in themeIndex){
-			this.loadTheme(themeId)
+		for (const themeId in themeIndex)
+		{
+			this.loadTheme(themeId);
 		}
 
 	}
@@ -64,6 +69,29 @@ class ImageLoader
 			offsetY: 0,
 			...image,
 		};
+	}
+
+	async getBackground(dataUrl)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			const hash = md5(dataUrl);
+
+			if (hash === this.backgroundHash)
+			{
+				resolve(this.backgroundNode);
+				return;
+			}
+
+			let node = new Image();
+			node.src = dataUrl;
+			node.onload = function ()
+			{
+				this.backgroundNode = node;
+				resolve(this.backgroundNode);
+			}.bind(this);
+
+		});
 	}
 
 }

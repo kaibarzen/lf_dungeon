@@ -41,7 +41,8 @@ export default {
 		activeTab: {
 			"WELCOME": "welcome",
 			"SPRITES": "sprites",
-			"GRID": "grid"
+			"GRID": "grid",
+			"BACKGROUND": "background"
 		},
 	},
 	dialog: {

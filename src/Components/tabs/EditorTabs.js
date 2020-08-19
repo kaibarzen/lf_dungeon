@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {Tab, Tabs, Icon,} from '@blueprintjs/core';
 import { IconNames } from "@blueprintjs/icons";
 import GridPanel from './panels/GridPanel';
+import BackgroundPanel from './panels/BackgroundPanel';
 
 const EditorTabs = (props) =>
 {
@@ -35,9 +36,14 @@ const EditorTabs = (props) =>
 					id={redux.editor.enums.activeTab.GRID}
 					panel={<GridPanel />}
 				>
-					<Icon icon={IconNames.GRID}/> Grid
+					<Icon icon={IconNames.GRID_VIEW}/> Grid
 				</Tab>
-
+				<Tab
+					id={redux.editor.enums.activeTab.BACKGROUND}
+					panel={<BackgroundPanel />}
+				>
+					<Icon icon={IconNames.STYLE}/> Background
+				</Tab>
 			</Tabs>
 		</div>
 	);
