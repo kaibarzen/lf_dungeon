@@ -1,10 +1,10 @@
 import React from 'react';
 import Navigation from './Navigation';
-import {Button} from '@blueprintjs/core';
+import {Button, Card, Elevation} from '@blueprintjs/core';
 import redux from '../redux/index';
 import {useSelector} from 'react-redux';
-import themes from '../dungeon/img/themes';
-import Dungeon from '../dungeon/Dungeon';
+import SettingsDialog from './settings/SettingsDialog';
+import EditorTabs from './tabs/EditorTabs';
 
 const Editor = (props) =>
 {
@@ -13,12 +13,15 @@ const Editor = (props) =>
 	return (
 		<div className={'editor_container'}>
 
+			<SettingsDialog/>
 			<Navigation />
 
 			<div className={'editor_sub_container'}>
 
 				<div>
-					toolstoolstoolstoolstools
+					<Card elevation={Elevation.ONE} className={"panelcard"}>
+						<EditorTabs />
+					</Card>
 				</div>
 
 				<div className={'editor_canvas_container'}>

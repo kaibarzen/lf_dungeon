@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Button, Icon, Menu, MenuItem, Navbar, Popover, Position} from '@blueprintjs/core';
 import {IconNames} from '@blueprintjs/icons';
-
 import lunar from '../resources/img/lunar.png';
-
-import {Classes} from '@blueprintjs/core';
+import redux from '../redux/index';
 
 const Navigation = (props) =>
 {
@@ -25,19 +22,38 @@ const Navigation = (props) =>
 
 				<Navbar.Group>
 					<Button
-						icon={'document'}
+						icon={IconNames.BUILD}
 						minimal
 					>
-						Document
+						Sprites
 					</Button>
+					<Navbar.Divider />
+				</Navbar.Group>
 
-					<Menu>
-						<MenuItem text='Submenu'>
-							<MenuItem text='Child one' />
-							<MenuItem text='Child two' />
-							<MenuItem text='Child three' />
-						</MenuItem>
-					</Menu>
+				<Navbar.Group>
+					<Popover
+						content={
+							<Menu>
+								<Menu.Divider title={'Settings'} />
+								<MenuItem
+									text='Grid'
+									icon={'grid'}
+									onClick={() =>
+									{
+										redux.dispatch(redux.editor.actions.setDialog({open: true, type: redux.editor.dialog.types.GRID}))
+									}}
+								/>
+							</Menu>
+						}
+						position={Position.BOTTOM_LEFT}
+					>
+						<Button
+							icon={IconNames.DOCUMENT}
+							minimal
+						>
+							Document...
+						</Button>
+					</Popover>
 
 					<Popover
 						content={
@@ -51,7 +67,7 @@ const Navigation = (props) =>
 						position={Position.RIGHT_BOTTOM}
 					>
 						<Button
-							icon={'export'}
+							icon={IconNames.EXPORT}
 							minimal
 						>
 							Export...

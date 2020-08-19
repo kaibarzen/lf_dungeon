@@ -1,21 +1,21 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import Editor from './Components/Editor';
+import {Classes} from '@blueprintjs/core';
 
 function App(props)
 {
 
 	/*
-	const test = useSelector((state) => {
-		return state.test.test;
-		console.log("WHOLdE STATE", state)
-	})
+	 const test = useSelector((state) => {
+	 return state.test.test;
+	 console.log("WHOLdE STATE", state)
+	 })
 
-	const dispatch = useDispatch()
+	 const dispatch = useDispatch()
 	 */
 
 	return (
-		<div className='App bp3-dark'>
+		<div className={Classes.DARK}>
 			<Editor />
 		</div>
 	);

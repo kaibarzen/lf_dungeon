@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import dungeon from './dungeon';
+import editor from './editor';
 
 const ownMiddleWare = store => next => action =>
 {
@@ -15,34 +16,14 @@ const ownMiddleWare = store => next => action =>
 	return next(action);
 };
 
-// AUTH STATE
-const testState = {
-	test: 'Nein',
-};
-
-const testSlice = createSlice({
-	name: 'test',
-	initialState: testState,
-	reducers: {
-		loginSuccess: (state, action) =>
-		{
-			state.token = action.payload;
-		},
-		set: (state, action) =>
-		{
-			state.test = action.payload;
-		},
-	},
-});
-
 const middleware = [
-	ownMiddleWare,
+	ownMiddleWare
 ];
 
 const store = configureStore({
 	reducer: {
-		test: testSlice.reducer,
 		dungeon: dungeon.slice.reducer,
+		editor: editor.slice.reducer,
 	},
 	middleware,
 });
@@ -50,5 +31,6 @@ const store = configureStore({
 export default {
 	store,
 	dispatch: store.dispatch,
-	dungeon
+	dungeon,
+	editor
 };

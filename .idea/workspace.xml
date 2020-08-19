@@ -3,8 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="410c6424-5c64-492c-952d-7da9157cc455" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dungeon/Dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/Dungeon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dungeon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/resources/sass/index.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/sass/index.sass" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,15 +39,16 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="editing.templates" />
+    <property name="settings.editor.selected.configurable" value="discord-application" />
     <property name="ts.external.directory.path" value="C:\Users\Kai Barzen\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\193.7288.28\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\Components\tabs\panels" />
+      <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\resources\img" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\resources\img" />
     </key>
   </component>
   <component name="RunManager" selected="npm.npm start">
@@ -75,7 +79,9 @@
       <workItem from="1597501653366" duration="7207000" />
       <workItem from="1597519672229" duration="1557000" />
       <workItem from="1597583407585" duration="5267000" />
-      <workItem from="1597654391724" duration="17115000" />
+      <workItem from="1597654391724" duration="24408000" />
+      <workItem from="1597770635686" duration="1202000" />
+      <workItem from="1597835906954" duration="6072000" />
     </task>
     <servers />
   </component>
@@ -91,21 +97,21 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="721" y="330" key="#com.intellij.fileTypes.FileTypeChooser/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597503957099" />
-    <state x="461" y="182" key="SettingsEditor" timestamp="1597586883915">
+    <state x="461" y="182" key="SettingsEditor" timestamp="1597690857660">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="461" y="182" key="SettingsEditor/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597586883915" />
-    <state x="767" y="452" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597668902037">
+    <state x="461" y="182" key="SettingsEditor/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597690857660" />
+    <state x="767" y="452" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597837851093">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="767" y="452" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597668902037" />
+    <state x="767" y="452" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597837851093" />
     <state x="581" y="221" width="758" height="638" key="find.popup" timestamp="1597667520104">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="581" y="221" width="758" height="638" key="find.popup/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597667520104" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1597586872513">
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1597690839826">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597586872513" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1080/0.0.1920.1080@0.0.1920.1080" timestamp="1597690839826" />
   </component>
 </project>
