@@ -1,6 +1,5 @@
 import moon_1 from './moon_1.png';
 import lunar_1 from './lunar_1.png';
-import galaxy_1 from './galaxy_1.png';
 import stars_1 from './stars_1.png';
 import stars_2 from './stars_2.png';
 import marble_1 from './marble_1.png';
@@ -8,6 +7,11 @@ import marble_2 from './marble_2.png';
 import metal_1 from './metal_1.png';
 import metal_2 from './metal_2.png';
 import wood_1 from './wood_1.png';
+import galaxy_1 from './galaxy_1.png';
+import galaxy_2 from './galaxy_2.png';
+import galaxy_2_flow_right from './galaxy_2_flow_right.png';
+
+import grass_1 from './grass_1.png';
 
 import {type, replace, group, tab} from '../../enums';
 
@@ -24,12 +28,6 @@ export default {
 		lunar_1: {
 			display: 'Moon',
 			src: lunar_1,
-			type: type.TILE,
-			replace: replace.FLOOR_OUTSIDE_PRIMARY,
-		},
-		galaxy_1: {
-			display: 'Galaxy',
-			src: galaxy_1,
 			type: type.TILE,
 			replace: replace.FLOOR_OUTSIDE_PRIMARY,
 		},
@@ -70,6 +68,27 @@ export default {
 			src: wood_1,
 			type: type.TILE,
 		},
+		galaxy_1: {
+			display: 'Galaxy 1',
+			src: galaxy_1,
+			type: type.TILE,
+		},
+		galaxy_2: {
+			display: 'Galaxy 2',
+			src: galaxy_2,
+			type: type.TILE,
+		},
+		galaxy_2_flow_right: {
+			display: 'Galaxy Flow Right',
+			src: galaxy_2_flow_right,
+			type: type.TILE,
+			height: 9 / 8,
+		},
+		grass_1: {
+			display: 'Grass',
+			src: grass_1,
+			type: type.TILE,
+		},
 	},
 	groups: [
 		{
@@ -84,14 +103,28 @@ export default {
 			tab: tab.TILES,
 			image: marble_1,
 			type: group.RANDOM,
-			data: ['marble_1', "marble_2", "metal_1", "metal_2", "wood_1"],
+			data: ['marble_1', 'marble_2', 'metal_1', 'metal_2', 'wood_1'],
 		},
 		{
 			display: 'Sky',
 			tab: tab.TILES,
 			image: stars_1,
 			type: group.CONTROLLED,
-			data: ['stars_1', 'stars_2'], // How about using sky/galaxys as a fluid?
+			data: ['stars_1', 'stars_2'],
+		},
+		{
+			display: 'Galaxy',
+			tab: tab.TILES,
+			image: galaxy_1,
+			type: group.CONTROLLED,
+			data: ['galaxy_1', 'galaxy_2', 'galaxy_2_flow_right'], // How about using sky/galaxys as a fluid?
+		},
+		{
+			display: 'Test',
+			tab: tab.TILES,
+			image: grass_1,
+			type: group.RANDOM,
+			data: ['grass_1'],
 		},
 	],
 };
