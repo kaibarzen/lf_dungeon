@@ -1,15 +1,18 @@
-import ImageLoader from './ImageLoader';
+import SpriteLoader from './SpriteLoader';
+import {getSprites} from './sprites/index';
 
 class Dungeon
 {
-	constructor(node, images, {
+	constructor(node, {
 		width = 30,
 		height = 20,
 		cellWidth = 100,
 		cellHeight = 50,
 		onClickCallback = null,
 		data = {tile: {}, entity: [], entityCounter: 0},
-		imageLoader = false,
+
+		spriteLoader = false,
+		sprites = getSprites(),
 
 		gridEnabled = true,
 		gridOpacity = 0.5,
@@ -24,7 +27,7 @@ class Dungeon
 	{
 		this.node = node;
 
-		this.node.style.display = "grid"
+		this.node.style.display = 'grid';
 
 		this.generateCanvas('background', {first: true});
 		this.generateCanvas('grid');
@@ -46,8 +49,8 @@ class Dungeon
 		this.backgroundOpacity = backgroundOpacity;
 		this.backgroundRepeat = backgroundRepeat;
 
-		// Image loader class which manages the loading of images... such wow
-		this.imageLoader = imageLoader ? imageLoader : new ImageLoader(images);
+		// Image loader class which manages the loading of images
+		this.spriteLoader = spriteLoader ? spriteLoader : new SpriteLoader(getSprites());
 
 		// Events, internal only
 		this.highlight.canvas.onmousemove = this.onmousemove;
@@ -75,8 +78,8 @@ class Dungeon
 		if (append)
 		{
 
-			canvas.style.gridColumn = "1";
-			canvas.style.gridRow = "1";
+			canvas.style.gridColumn = '1';
+			canvas.style.gridRow = '1';
 
 			this.node.appendChild(canvas);
 		}
@@ -166,7 +169,7 @@ class Dungeon
 	 * @param z
 	 * @param tick
 	 */
-	setTile(themeId, spriteId, x, y, z)
+	setTile(id, x, y, z)
 	{
 		const tile = this.data.tile;
 
@@ -186,7 +189,7 @@ class Dungeon
 		}
 
 		this.removeTile(x, y, {draw: false}); // We dont want different z level tiles on the same x y slot
-		tile[z][y][x] = {themeId, spriteId};
+		tile[z][y][x] = id;
 
 		this.drawTile();
 	}
@@ -312,7 +315,7 @@ class Dungeon
 
 	drawBackground = () =>
 	{
-		return new Promise(async(resolve, reject) =>
+		return new Promise(async (resolve, reject) =>
 		{
 			const {width, height, cellWidth, cellHeight, backgroundEnabled, backgroundOpacity, backgroundRepeat, backgroundData} = this;
 			this.clearCanvas(this.background);
@@ -331,7 +334,7 @@ class Dungeon
 
 			const canvasWidth = width * cellWidth;
 			const canvasHeight = height * cellHeight * 0.5;
-			const img = await this.imageLoader.getBackground(backgroundData);
+			const img = await this.spriteLoader.getBackground(backgroundData);
 
 			this.background.context.globalAlpha = backgroundOpacity;
 
@@ -375,7 +378,7 @@ class Dungeon
 	/**
 	 * Draws Tiles
 	 */
-	drawTile = () =>
+	drawTile = async() =>
 	{
 		const {data} = this;
 		this.clearCanvas(this.tile);
@@ -387,8 +390,10 @@ class Dungeon
 				for (const x in data.tile[z][y])
 				{
 					const cords = this.generateTileCords(x, y);
-					const sprite = this.imageLoader.getImage(data.tile[z][y][x].themeId, data.tile[z][y][x].spriteId);
-					this.drawSingleTile(sprite, cords.x, cords.y);
+					const sprite = await this.spriteLoader.getSprite(data.tile[z][y][x])
+					if(sprite){
+						this.drawSingleTile(sprite, cords.x, cords.y);
+					}
 				}
 			}
 		}
@@ -403,6 +408,7 @@ class Dungeon
 		const width = this.cellWidth * sprite.width;
 		const height = this.cellHeight * sprite.height;
 
+		console.log("DRAW", x, y, width, height, sprite)
 		this.tile.context.drawImage(sprite.node, x, y, width, height);
 	}
 
@@ -621,7 +627,7 @@ class Dungeon
 			cellWidth: cellWidth,
 			cellHeight: cellHeight,
 			data: this.data,
-			imageLoader: this.imageLoader,
+			spriteLoader: this.spriteLoader,
 			gridEnabled,
 			gridOpacity,
 		});

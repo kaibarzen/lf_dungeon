@@ -3,15 +3,23 @@
   <component name="ChangeListManager">
     <list default="true" id="410c6424-5c64-492c-952d-7da9157cc455" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Navigation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/tabs/EditorTabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/tabs/EditorTabs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/tabs/panels/GridPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/tabs/panels/GridPanel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dungeon/Dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/Dungeon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dungeon/ImageLoader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/ImageLoader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/ImageLoader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/pastel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/pastel/tiles/grass1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/pastel/tiles/normal1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/pastel/tiles/water1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/programmer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/programmer/grass.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/sprites/moon/grass.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/programmer/grass2.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/programmer/stairs1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/programmer/wallLeft1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/img/themes/programmer/waterfall.svg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dungeon.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/sass/index.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/sass/index.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +55,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\dungeon" />
+      <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\dungeon\sprites\moon" />
+      <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\dungeon\sprites" />
       <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\Components\tabs\panels" />
       <recent name="C:\Users\Kai Barzen\Projects\lf_dungeon\src\resources\img" />
     </key>
@@ -85,7 +96,9 @@
       <workItem from="1597654391724" duration="24408000" />
       <workItem from="1597770635686" duration="1202000" />
       <workItem from="1597835906954" duration="10033000" />
-      <workItem from="1597869901698" duration="5577000" />
+      <workItem from="1597869901698" duration="6158000" />
+      <workItem from="1597934660806" duration="3155000" />
+      <workItem from="1597937840083" duration="1033000" />
     </task>
     <servers />
   </component>

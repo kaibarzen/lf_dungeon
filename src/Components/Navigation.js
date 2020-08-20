@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Icon, Menu, MenuItem, Navbar, Popover, Position} from '@blueprintjs/core';
+import {Button, Icon, IconName, Menu, MenuItem, Navbar, Popover, Position} from '@blueprintjs/core';
 import {IconNames} from '@blueprintjs/icons';
 import lunar from '../resources/img/lunar.png';
 import redux from '../redux/index';
@@ -58,13 +58,11 @@ const Navigation = (props) =>
 					<Popover
 						content={
 							<Menu>
-								<MenuItem text='Child one' />
-								<MenuItem text='Child two' />
-								<Menu.Divider title={'Header'}></Menu.Divider>
-								<MenuItem text='Child three' />
+								<MenuItem icon={IconNames.FAST_FORWARD} text='Quick-Export' />
+								<MenuItem icon={IconNames.EXPORT} text='Export' />
 							</Menu>
 						}
-						position={Position.RIGHT_BOTTOM}
+						position={Position.BOTTOM_LEFT}
 					>
 						<Button
 							icon={IconNames.EXPORT}

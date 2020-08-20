@@ -5,6 +5,7 @@ import {Tab, Tabs, Icon,} from '@blueprintjs/core';
 import { IconNames } from "@blueprintjs/icons";
 import GridPanel from './panels/GridPanel';
 import BackgroundPanel from './panels/BackgroundPanel';
+import TilePanel from './panels/TilePanel';
 
 const EditorTabs = (props) =>
 {
@@ -23,14 +24,15 @@ const EditorTabs = (props) =>
 				vertical={false}
 			>
 				<Tab
-					id={redux.editor.enums.activeTab.WELCOME}
+					id={redux.editor.enums.activeTab.TILES}
+					panel={<TilePanel/>}
 				>
-					<Icon icon={IconNames.BOOKMARK}/> Welcome
+					<Icon icon={IconNames.BUILD}/> Tiles
 				</Tab>
 				<Tab
-					id={redux.editor.enums.activeTab.SPRITES}
+					id={redux.editor.enums.activeTab.ENTITYS}
 				>
-					<Icon icon={IconNames.BUILD}/> Sprites
+					<Icon icon={IconNames.PERSON}/> Entitys
 				</Tab>
 				<Tab
 					id={redux.editor.enums.activeTab.GRID}

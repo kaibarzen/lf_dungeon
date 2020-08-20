@@ -39,8 +39,8 @@ export default {
 	},
 	enums: {
 		activeTab: {
-			"WELCOME": "welcome",
-			"SPRITES": "sprites",
+			"TILES": "tiles",
+			"ENTITYS": "entitys",
 			"GRID": "grid",
 			"BACKGROUND": "background"
 		},

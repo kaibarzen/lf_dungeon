@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
 import Dungeon from '../dungeon/Dungeon';
-import themes from '../dungeon/img/themes';
 
 const initialState = {
 	dungeon: null,
@@ -25,7 +24,7 @@ const slice = createSlice({
 	reducers: {
 		init: (state, action) =>
 		{
-			dungeon = new Dungeon(action.payload.node, themes);
+			dungeon = new Dungeon(action.payload.node);
 			state.dungeon = dungeon;
 			state.width = dungeon.width;
 			state.height = dungeon.height;
