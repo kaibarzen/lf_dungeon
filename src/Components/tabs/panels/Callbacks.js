@@ -18,7 +18,6 @@ const Callbacks = (props) =>
 	const onClickCallback = (e) =>
 	{
 		const {x, y, event} = e;
-		console.log("FUUUUUUUU", activeSprite.type, redux.editor.enums.sprites.active.RANDOM);
 
 		switch (activeTool)
 		{

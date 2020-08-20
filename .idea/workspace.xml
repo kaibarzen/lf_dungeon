@@ -3,13 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="410c6424-5c64-492c-952d-7da9157cc455" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/tabs/panels/TilePanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/tabs/panels/TilePanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dungeon/enums.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/enums.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dungeon/sprites/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/sprites/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/tabs/panels/tilePanel/Sprites.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/tabs/panels/tilePanel/Sprites.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/Dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/Dungeon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dungeon/sprites/moon/grass.svg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dungeon/sprites/moon/moon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/dungeon/sprites/moon/moon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/dungeon.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dungeon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/resources/sass/index.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/sass/index.sass" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,7 +86,7 @@
       <workItem from="1597835906954" duration="10033000" />
       <workItem from="1597869901698" duration="6158000" />
       <workItem from="1597934660806" duration="3155000" />
-      <workItem from="1597937840083" duration="15387000" />
+      <workItem from="1597937840083" duration="18216000" />
     </task>
     <servers />
   </component>

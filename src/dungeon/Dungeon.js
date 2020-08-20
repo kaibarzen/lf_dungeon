@@ -205,7 +205,7 @@ class Dungeon
 	{
 		const tile = this.data.tile;
 
-		for (const z in tile.z)
+		for (const z in tile)
 		{
 			if (!tile[z][y])
 			{
@@ -378,7 +378,7 @@ class Dungeon
 	/**
 	 * Draws Tiles
 	 */
-	drawTile = async() =>
+	drawTile = async () =>
 	{
 		const {data} = this;
 		this.clearCanvas(this.tile);
@@ -390,8 +390,9 @@ class Dungeon
 				for (const x in data.tile[z][y])
 				{
 					const cords = this.generateTileCords(x, y);
-					const sprite = await this.spriteLoader.getSprite(data.tile[z][y][x])
-					if(sprite){
+					const sprite = await this.spriteLoader.getSprite(data.tile[z][y][x]);
+					if (sprite)
+					{
 						this.drawSingleTile(sprite, cords.x, cords.y);
 					}
 				}
@@ -408,7 +409,6 @@ class Dungeon
 		const width = this.cellWidth * sprite.width;
 		const height = this.cellHeight * sprite.height;
 
-		console.log("DRAW", x, y, width, height, sprite)
 		this.tile.context.drawImage(sprite.node, x, y, width, height);
 	}
 

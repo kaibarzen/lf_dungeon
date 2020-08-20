@@ -3,6 +3,12 @@ import lunar_1 from './lunar_1.png';
 import galaxy_1 from './galaxy_1.png';
 import stars_1 from './stars_1.png';
 import stars_2 from './stars_2.png';
+import marble_1 from './marble_1.png';
+import marble_2 from './marble_2.png';
+import metal_1 from './metal_1.png';
+import metal_2 from './metal_2.png';
+import wood_1 from './wood_1.png';
+
 import {type, replace, group, tab} from '../../enums';
 
 export default {
@@ -10,6 +16,11 @@ export default {
 	display: 'Moon',
 	desc: 'Lunar Sprites',
 	sprites: {
+		moon_1: {
+			display: 'Old Moon Tile',
+			src: moon_1,
+			type: type.TILE,
+		},
 		lunar_1: {
 			display: 'Moon',
 			src: lunar_1,
@@ -34,21 +45,53 @@ export default {
 			type: type.TILE,
 			replace: replace.FLOOR_OUTSIDE_PRIMARY,
 		},
+		marble_1: {
+			display: 'Light Marble',
+			src: marble_1,
+			type: type.TILE,
+		},
+		marble_2: {
+			display: 'Dark Marble',
+			src: marble_2,
+			type: type.TILE,
+		},
+		metal_1: {
+			display: 'Metal Walkway Dark',
+			src: metal_1,
+			type: type.TILE,
+		},
+		metal_2: {
+			display: 'Metal Walkway Light',
+			src: metal_2,
+			type: type.TILE,
+		},
+		wood_1: {
+			display: 'Dark Laminate',
+			src: wood_1,
+			type: type.TILE,
+		},
 	},
 	groups: [
 		{
 			display: 'Outdoor',
 			tab: tab.TILES,
 			image: lunar_1,
-			type: group.CONTROLLED,
-			data: ['lunar_1'],
+			type: group.RANDOM,
+			data: ['moon_1', 'lunar_1'],
+		},
+		{
+			display: 'Indoor',
+			tab: tab.TILES,
+			image: marble_1,
+			type: group.RANDOM,
+			data: ['marble_1', "marble_2", "metal_1", "metal_2", "wood_1"],
 		},
 		{
 			display: 'Sky',
 			tab: tab.TILES,
 			image: stars_1,
 			type: group.CONTROLLED,
-			data: ['stars_1', 'stars_2'],
+			data: ['stars_1', 'stars_2'], // How about using sky/galaxys as a fluid?
 		},
 	],
 };

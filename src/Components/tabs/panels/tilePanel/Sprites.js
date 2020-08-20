@@ -10,9 +10,9 @@ const Sprites = (props) =>
 {
 	const activeTheme = useSelector(redux.editor.selectors.getSpritesTheme);
 	const group = useSelector(redux.editor.selectors.getSpritesGroup);
-	const activeSprite = useSelector(redux.editor.selectors.getActiveSprite)
+	const activeSprite = useSelector(redux.editor.selectors.getActiveSprite);
 
-	console.log("A", activeSprite)
+	console.log('A', activeSprite);
 	const theme = register[activeTheme];
 
 	const onChangeSprite = (sprite) =>
@@ -47,17 +47,22 @@ const Sprites = (props) =>
 			<H2>Tiles - {group.display}</H2>
 			<div className={'editor_tiles_group'}>
 
-				<Tooltip content={'Random'}>
-					<img
-						src={random}
-						alt={''}
-						onClick={() =>
-						{
-							onChangeSprite({type: redux.editor.enums.sprites.active.RANDOM});
-						}}
-						className={activeSprite.type === "random" ? "selected" : ""}
-					/>
-				</Tooltip>
+				{
+					group.type === "random" ?
+						<Tooltip content={'Random'}>
+							<img
+								src={random}
+								alt={''}
+								onClick={() =>
+								{
+									onChangeSprite({type: redux.editor.enums.sprites.active.RANDOM});
+								}}
+								className={activeSprite.type === 'random' ? 'selected' : ''}
+							/>
+						</Tooltip>
+						:
+						<div></div>
+				}
 
 				{
 					group.data.map((item, i) =>
@@ -76,7 +81,7 @@ const Sprites = (props) =>
 									{
 										onChangeSprite(sprite);
 									}}
-									className={activeSprite.id === [theme.id, item].join('/') ? "selected" : ""}
+									className={activeSprite.id === [theme.id, item].join('/') ? 'selected' : ''}
 								/>
 							</Tooltip>
 						);
