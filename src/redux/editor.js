@@ -6,7 +6,7 @@ const initialState = {
 	activeTab: 'tiles',
 	spritesTheme: 'moon',
 	spritesGroup: null,
-	spritesTool: "single",
+	spritesTool: 'single',
 	activeSprite: {},
 };
 
@@ -23,7 +23,6 @@ const slice = createSlice({
 		{
 			const {activeTab = state.activeTab} = action.payload;
 			state.activeTab = activeTab;
-			console.log('active', activeTab);
 		},
 		setSpritesTool: (state, action) =>
 		{
@@ -37,10 +36,33 @@ const slice = createSlice({
 		},
 		setActiveSprite: (state, action) =>
 		{
-			state.activeSprite = action.payload
+			state.activeSprite = action.payload;
+			if (state.spritesTool === enums.sprites.tools.REMOVE)
+			{
+				state.spritesTool = enums.sprites.tools.SINGLE;
+			}
 		},
 	},
 });
+
+const enums = {
+	activeTab: {
+		'TILES': 'tiles',
+		'ENTITYS': 'entitys',
+		'GRID': 'grid',
+		'BACKGROUND': 'background',
+	},
+	sprites: {
+		tools: {
+			SINGLE: 'single',
+			PLANE: 'plane',
+			REMOVE: 'remove',
+		},
+		active: {
+			RANDOM: 'random',
+		},
+	},
+};
 
 export default {
 	slice,
@@ -71,24 +93,7 @@ export default {
 			return state.editor.activeSprite;
 		},
 	},
-	enums: {
-		activeTab: {
-			'TILES': 'tiles',
-			'ENTITYS': 'entitys',
-			'GRID': 'grid',
-			'BACKGROUND': 'background',
-		},
-		sprites: {
-			tools: {
-				SINGLE: 'single',
-				PLANE: 'plane',
-				REMOVE: 'remove',
-			},
-			active: {
-				RANDOM: "random"
-			}
-		},
-	},
+	enums,
 	dialog: {
 		types: {
 			GRID: 'grid',
