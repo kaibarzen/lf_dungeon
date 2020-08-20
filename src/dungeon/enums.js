@@ -12,3 +12,8 @@ export const group = {
 	'RANDOM': 'random',
 	'CONTROLLED': 'controlled',
 };
+
+export const tab = {
+	"TILES": "tiles",
+	"SPRITES": "sprites"
+}

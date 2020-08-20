@@ -12,6 +12,7 @@ const initialState = {
 	backgroundEnabled: true,
 	backgroundRepeat: true,
 	backgroundOpacity: 1.0,
+	onClickCallback: null,
 };
 
 // Because of how redux works we cant pass it into the store and have more then 1 fps, instead we pass a ref into the store.
@@ -35,6 +36,7 @@ const slice = createSlice({
 			state.backgroundNode = dungeon.backgroundEnabled;
 			state.backgroundRepeat = dungeon.backgroundRepeat;
 			state.backgroundOpacity = dungeon.backgroundOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
+			state.onClickCallback = dungeon.onClickCallback;
 		},
 		setSize: (state, action) =>
 		{
@@ -93,6 +95,15 @@ const slice = createSlice({
 				return;
 			}
 			state.dungeon.setBackground({enabled, repeat, opacity: opacity / 100});
+		},
+		setCallbacks: (state, action) =>
+		{
+			const {
+				onClickCallback = state.onClickCallback
+			} = action.payload;
+			if(dungeon){
+				dungeon.onClickCallback = onClickCallback;
+			}
 		},
 	},
 });

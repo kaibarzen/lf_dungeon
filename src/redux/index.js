@@ -1,9 +1,6 @@
 import {
 	configureStore,
-	getDefaultMiddleware,
-	createSlice,
 } from '@reduxjs/toolkit';
-import logger from 'redux-logger';
 import dungeon from './dungeon';
 import editor from './editor';
 

@@ -3,7 +3,11 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
 	dialogType: null,
 	dialogOpen: false,
-	activeTab: null,
+	activeTab: 'tiles',
+	spritesTheme: 'moon',
+	spritesGroup: null,
+	spritesTool: "single",
+	activeSprite: {},
 };
 
 const slice = createSlice({
@@ -19,7 +23,21 @@ const slice = createSlice({
 		{
 			const {activeTab = state.activeTab} = action.payload;
 			state.activeTab = activeTab;
-			console.log("active", activeTab)
+			console.log('active', activeTab);
+		},
+		setSpritesTool: (state, action) =>
+		{
+			const {tool = state.spritesTool} = action.payload;
+			state.spritesTool = tool;
+		},
+		setSpritesGroup: (state, action) =>
+		{
+			const {group = state.spritesGroup} = action.payload;
+			state.spritesGroup = group;
+		},
+		setActiveSprite: (state, action) =>
+		{
+			state.activeSprite = action.payload
 		},
 	},
 });
@@ -34,15 +52,41 @@ export default {
 		},
 		getActiveTab: (state) =>
 		{
-			return state.activeTab;
+			return state.editor.activeTab;
+		},
+		getSpritesTheme: (state) =>
+		{
+			return state.editor.spritesTheme;
+		},
+		getSpritesGroup: (state) =>
+		{
+			return state.editor.spritesGroup;
+		},
+		getSpritesTool: (state) =>
+		{
+			return state.editor.spritesTool;
+		},
+		getActiveSprite: (state) =>
+		{
+			return state.editor.activeSprite;
 		},
 	},
 	enums: {
 		activeTab: {
-			"TILES": "tiles",
-			"ENTITYS": "entitys",
-			"GRID": "grid",
-			"BACKGROUND": "background"
+			'TILES': 'tiles',
+			'ENTITYS': 'entitys',
+			'GRID': 'grid',
+			'BACKGROUND': 'background',
+		},
+		sprites: {
+			tools: {
+				SINGLE: 'single',
+				PLANE: 'plane',
+				REMOVE: 'remove',
+			},
+			active: {
+				RANDOM: "random"
+			}
 		},
 	},
 	dialog: {
