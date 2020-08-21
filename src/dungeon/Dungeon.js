@@ -8,7 +8,10 @@ class Dungeon
 		height = 20,
 		cellWidth = 100,
 		cellHeight = 50,
+
 		onClickCallback = null,
+		onMouseMoveCallback = null,
+
 		data = {tile: {}, entity: [], entityCounter: 0},
 
 		spriteLoader = false,
@@ -34,7 +37,10 @@ class Dungeon
 		this.generateCanvas('entity');
 		this.generateCanvas('highlight');
 
-		this.generateCanvas('hitTile', {append: false});
+		this.generateCanvas('hitTile', {
+			append: false,
+			imageSmoothingEnabled: false,
+		});
 		this.generateCanvas('hitEntity', {append: false});
 
 		// current highlight position
@@ -54,10 +60,11 @@ class Dungeon
 		// Events, internal only
 		this.highlight.canvas.onmousemove = this.onmousemove;
 		this.highlight.canvas.onmouseleave = this.onmouseleave;
-		this.highlight.canvas.onclick = this.onclick;
+		this.highlight.canvas.onmousedown = this.onclick;
 
 		// Use this for outside stuff
 		this.onClickCallback = onClickCallback;
+		this.onMouseMoveCallback = onMouseMoveCallback;
 
 		this.data = data; // {tile, entity}
 		this.dev = dev; // Dev mode
@@ -70,7 +77,7 @@ class Dungeon
 		});
 	}
 
-	generateCanvas = (name, {append = true, first = false} = {}) =>
+	generateCanvas = (name, {append = true, first = false, imageSmoothingEnabled = true} = {}) =>
 	{
 		let canvas = document.createElement('canvas');
 
@@ -84,8 +91,10 @@ class Dungeon
 		}
 
 		this[name] = {canvas: canvas};
-		this[name].context = this[name].canvas.getContext('2d');
 
+		let context = this[name].canvas.getContext('2d');
+		context.imageSmoothingEnabled = imageSmoothingEnabled;
+		this[name].context = context;
 	};
 
 	onmousemove = (e) =>
@@ -95,8 +104,20 @@ class Dungeon
 		const y = Math.round(e.clientY - rect.top);
 		const cords = this.getTileCords(x, y);
 
+		/**
+		 * If we dont hover over a 100% valid color/tile, dont move the highlighted section
+		 */
+		if (!cords)
+		{
+			return;
+		}
+
 		if (this.highlightPos.x !== cords.x || this.highlightPos.y !== cords.y)
 		{
+			if (this.onMouseMoveCallback)
+			{
+				this.onMouseMoveCallback({x: cords.x, y: cords.y, event: e});
+			}
 			this.highlightPos = cords;
 			this.drawHighlight();
 		}
@@ -110,15 +131,22 @@ class Dungeon
 
 	onclick = (e) =>
 	{
+		if(!this.onClickCallback){
+			return;
+		}
+
 		const rect = this.highlight.canvas.getBoundingClientRect();
 		const x = Math.round(e.clientX - rect.left);
 		const y = Math.round(e.clientY - rect.top);
-		const cords = this.getTileCords(x, y);
 
-		if (this.onClickCallback)
+		// If our hitcanvas is not 100% sure it returns false, use highlighted tile instead
+		const hitCords = this.getTileCords(x, y);
+		if (!hitCords)
 		{
-			this.onClickCallback({x: cords.x, y: cords.y, event: e});
+			this.onClickCallback({x: hitCords.x, y: hitCords.y, event: e});
+			return;
 		}
+		this.onClickCallback({x: this.highlightPos.x, y: this.highlightPos.y, event: e});
 	};
 
 	setBackground({
@@ -224,7 +252,7 @@ class Dungeon
 	}
 
 	/**
-	 * get the tile cord from x,y cords of the canvas
+	 * get the tile cord from x,y cords of the canvas, returns color object or false
 	 * @param x
 	 * @param y
 	 */
@@ -319,7 +347,7 @@ class Dungeon
 			const {width, height, cellWidth, cellHeight, backgroundEnabled, backgroundOpacity, backgroundRepeat, backgroundData} = this;
 			this.clearCanvas(this.background);
 
-			console.log("BACKDATA", !!backgroundData)
+			console.log('BACKDATA', !!backgroundData);
 
 			if (!backgroundEnabled)
 			{
@@ -442,6 +470,20 @@ class Dungeon
 		this.drawEntity();
 	}
 
+	/**
+	 * Do not set your own mouse events, use this callbacks instead
+	 * @param onClickCallback
+	 * @param onMouseMoveCallback
+	 */
+	setCallbacks({
+		             onClickCallback = this.onClickCallback,
+		             onMouseMoveCallback = this.onMouseMoveCallback,
+	             } = {})
+	{
+		this.onClickCallback = onClickCallback;
+		this.onMouseMoveCallback = onMouseMoveCallback;
+	}
+
 	removeEntity(color)
 	{
 		return this.removeEntityById(this.colorToEntityId(color));
@@ -497,7 +539,7 @@ class Dungeon
 			for (let x = 0; x < width + 1; x++)
 			{
 				hitTile.context.fillStyle = tileCordsToColor(x, y);
-				hitTile.context.fill(this.generateTileRegion(x, y, {grow: 1}));
+				hitTile.context.fill(this.generateTileRegion(x, y, {grow: -1}));
 			}
 		}
 	};
@@ -570,20 +612,24 @@ class Dungeon
 			throw new Error('Width/Height Must be larger then -1');
 		}
 
-		return `rgb(${x}, ${y}, 0)`;
+		return `rgba(${x}, ${y}, 0, 255)`;
 	}
 
 	/**
 	 * Transform context.getImageData array to cords
-	 * Use this function, in the future it will be replaced with a more complicated one
+	 * Either returns cords object or false
 	 * @param color
 	 */
 	colorToTileCords(color)
 	{
-		return {
-			x: color[0],
-			y: color[1],
-		};
+		if (color[3] === 255)
+		{
+			return {
+				x: color[0],
+				y: color[1],
+			};
+		}
+		return false;
 	}
 
 	/**
@@ -643,7 +689,7 @@ class Dungeon
 			backgroundOpacity: this.backgroundOpacity,
 			backgroundRepeat: this.backgroundRepeat,
 		});
-		await renderDungeon.drawAll()
+		await renderDungeon.drawAll();
 		renderDungeon.renderHere({mimeType, extension});
 	}
 
