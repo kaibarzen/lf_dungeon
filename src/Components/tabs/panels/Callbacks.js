@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 import redux from '../../../redux';
 
-const Callbacks = (props) =>
+const Callbacks = () =>
 {
 	// Its 23:20 i know i fucked up but im tired, so i just smack that down here, sorry future me
 
@@ -49,9 +48,5 @@ const Callbacks = (props) =>
 		</div>
 	);
 };
-
-Callbacks.defaultProps = {};
-
-Callbacks.propTypes = {};
 
 export default Callbacks;

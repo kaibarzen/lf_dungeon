@@ -1,8 +1,6 @@
 import React from 'react';
 import {
 	H2,
-	Tooltip,
-	Position,
 	Card,
 	H6,
 } from '@blueprintjs/core';
@@ -48,6 +46,7 @@ const TilePanel = (props) =>
 								{
 									onChangeGroup(item);
 								}}
+								key={i}
 							>
 								<img
 									src={item.image}
@@ -63,9 +62,5 @@ const TilePanel = (props) =>
 		</div>
 	);
 };
-
-TilePanel.defaultProps = {};
-
-TilePanel.propTypes = {};
 
 export default TilePanel;

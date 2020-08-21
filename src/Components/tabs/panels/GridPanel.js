@@ -1,5 +1,5 @@
 import React from 'react';
-import {Callout, FormGroup, H1, H2, H3, InputGroup, Intent, NumericInput, Switch} from '@blueprintjs/core';
+import {Callout, FormGroup, H2, Intent, NumericInput, Switch} from '@blueprintjs/core';
 import {useSelector} from 'react-redux';
 import redux from '../../../redux/index';
 import {IconNames} from '@blueprintjs/icons';
@@ -16,18 +16,18 @@ const GridPanel = (props) =>
 
 	const onChangeGrid = (value, string, node) =>
 	{
-		redux.dispatch(redux.dungeon.actions.setGrid({[node.name]: value}))
+		redux.dispatch(redux.dungeon.actions.setGrid({[node.name]: value}));
 	};
 
 	const onChangeGridSwitch = (e) =>
 	{
 		const name = e.target.name;
 		const value = e.target.checked;
-		redux.dispatch(redux.dungeon.actions.setGrid({[name]: value}))
+		redux.dispatch(redux.dungeon.actions.setGrid({[name]: value}));
 	};
 
 	return (
-		<div className={"editor_panel"}>
+		<div className={'editor_panel'}>
 			<H2> Grid Settings</H2>
 
 			<FormGroup
@@ -86,7 +86,7 @@ const GridPanel = (props) =>
 			<H2> Cell Settings</H2>
 
 			<FormGroup
-				helperText="Size in Pixels"
+				helperText='Size in Pixels'
 				label='Cell Size'
 			>
 				<div className={'editor_panel_input_horizontal'}>

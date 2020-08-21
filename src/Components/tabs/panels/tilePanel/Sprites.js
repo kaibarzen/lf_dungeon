@@ -12,7 +12,6 @@ const Sprites = (props) =>
 	const group = useSelector(redux.editor.selectors.getSpritesGroup);
 	const activeSprite = useSelector(redux.editor.selectors.getActiveSprite);
 
-	console.log('A', activeSprite);
 	const theme = register[activeTheme];
 
 	const onChangeSprite = (sprite) =>
@@ -48,7 +47,7 @@ const Sprites = (props) =>
 			<div className={'editor_tiles_group'}>
 
 				{
-					group.type === "random" ?
+					group.type === 'random' ?
 						<Tooltip content={'Random'}>
 							<img
 								src={random}
@@ -70,10 +69,18 @@ const Sprites = (props) =>
 						const sprite = getSprite(item);
 						if (!sprite)
 						{
-							return <div></div>;
+							return (
+								<div
+									key={i}
+								>
+								</div>
+							);
 						}
 						return (
-							<Tooltip content={sprite.display}>
+							<Tooltip
+								content={sprite.display}
+								key={i}
+							>
 								<img
 									src={sprite.src}
 									alt={''}

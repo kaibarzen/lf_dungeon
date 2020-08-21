@@ -1,11 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {FileInput, FormGroup, H2, NumericInput, Switch} from '@blueprintjs/core';
 import redux from '../../../redux/index';
 import {IconNames} from '@blueprintjs/icons';
 import {useSelector} from 'react-redux';
 
-const BackgroundPanel = (props) =>
+const BackgroundPanel = () =>
 {
 
 	const background = useSelector(redux.dungeon.selectors.getBackground);
@@ -94,9 +93,5 @@ const BackgroundPanel = (props) =>
 		</div>
 	);
 };
-
-BackgroundPanel.defaultProps = {};
-
-BackgroundPanel.propTypes = {};
 
 export default BackgroundPanel;

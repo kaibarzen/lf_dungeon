@@ -1,8 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-	dialogType: null,
-	dialogOpen: false,
+	dialog: null,
 	activeTab: 'tiles',
 	spritesTheme: 'moon',
 	spritesGroup: null,
@@ -16,8 +15,11 @@ const slice = createSlice({
 	reducers: {
 		setDialog: (state, action) =>
 		{
-			state.dialogType = action.payload.type || state.dialogType;
-			state.dialogOpen = action.payload.open;
+			state.dialog = action.payload.type;
+		},
+		closeDialog: (state, action) =>
+		{
+			state.dialog = null;
 		},
 		setActiveTab: (state, action) =>
 		{
@@ -62,6 +64,9 @@ const enums = {
 			RANDOM: 'random',
 		},
 	},
+	dialog: {
+		'EXPORT': 'export',
+	},
 };
 
 export default {
@@ -70,7 +75,7 @@ export default {
 	selectors: {
 		getDialog: (state) =>
 		{
-			return {type: state.editor.dialogType, open: state.editor.dialogOpen};
+			return state.editor.dialog
 		},
 		getActiveTab: (state) =>
 		{
@@ -94,9 +99,4 @@ export default {
 		},
 	},
 	enums,
-	dialog: {
-		types: {
-			GRID: 'grid',
-		},
-	},
 };

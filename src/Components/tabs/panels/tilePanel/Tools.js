@@ -1,11 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Button, ButtonGroup, H2, Intent} from '@blueprintjs/core';
 import {IconNames} from '@blueprintjs/icons';
 import redux from '../../../../redux';
 import {useSelector} from 'react-redux';
 
-const Tools = (props) =>
+const Tools = () =>
 {
 	const activeTool = useSelector(redux.editor.selectors.getSpritesTool);
 
@@ -57,9 +56,5 @@ const Tools = (props) =>
 		</div>
 	);
 };
-
-Tools.defaultProps = {};
-
-Tools.propTypes = {};
 
 export default Tools;

@@ -1,11 +1,23 @@
 import React from 'react';
-import {Button, Icon, IconName, Menu, MenuItem, Navbar, Popover, Position} from '@blueprintjs/core';
+import {Button, Menu, MenuItem, Navbar, Popover, Position} from '@blueprintjs/core';
 import {IconNames} from '@blueprintjs/icons';
 import lunar from '../resources/img/lunar.png';
 import redux from '../redux/index';
 
 const Navigation = (props) =>
 {
+
+	const renderHere = () =>
+	{
+		redux.dispatch(redux.dungeon.actions.renderHere());
+	};
+
+	const openDialog = (type) =>
+	{
+		redux.dispatch(redux.editor.actions.setDialog({
+			type,
+		}));
+	};
 
 	return (
 		<div>
@@ -34,32 +46,19 @@ const Navigation = (props) =>
 					<Popover
 						content={
 							<Menu>
-								<Menu.Divider title={'Settings'} />
 								<MenuItem
-									text='Grid'
-									icon={'grid'}
+									icon={IconNames.FAST_FORWARD}
+									text='Quick-Export'
+									onClick={renderHere}
+								/>
+								<MenuItem
+									icon={IconNames.EXPORT}
+									text='Export'
 									onClick={() =>
 									{
-										redux.dispatch(redux.editor.actions.setDialog({open: true, type: redux.editor.dialog.types.GRID}))
+										openDialog(redux.editor.enums.dialog.EXPORT)
 									}}
 								/>
-							</Menu>
-						}
-						position={Position.BOTTOM_LEFT}
-					>
-						<Button
-							icon={IconNames.DOCUMENT}
-							minimal
-						>
-							Document...
-						</Button>
-					</Popover>
-
-					<Popover
-						content={
-							<Menu>
-								<MenuItem icon={IconNames.FAST_FORWARD} text='Quick-Export' />
-								<MenuItem icon={IconNames.EXPORT} text='Export' />
 							</Menu>
 						}
 						position={Position.BOTTOM_LEFT}

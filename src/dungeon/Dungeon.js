@@ -4,7 +4,7 @@ import {getSprites} from './sprites/index';
 class Dungeon
 {
 	constructor(node, {
-		width = 30,
+		width = 10,
 		height = 20,
 		cellWidth = 100,
 		cellHeight = 50,
@@ -12,7 +12,6 @@ class Dungeon
 		data = {tile: {}, entity: [], entityCounter: 0},
 
 		spriteLoader = false,
-		sprites = getSprites(),
 
 		gridEnabled = true,
 		gridOpacity = 0.5,
@@ -320,6 +319,8 @@ class Dungeon
 			const {width, height, cellWidth, cellHeight, backgroundEnabled, backgroundOpacity, backgroundRepeat, backgroundData} = this;
 			this.clearCanvas(this.background);
 
+			console.log("BACKDATA", !!backgroundData)
+
 			if (!backgroundEnabled)
 			{
 				resolve(false);
@@ -538,15 +539,17 @@ class Dungeon
 	/**
 	 * Wrapper to call all draw* functions
 	 */
-	drawAll = () =>
+	drawAll = async () =>
 	{
-		this.drawBackground();
+		const res1 = this.drawBackground();
 		this.drawGrid();
-		this.drawTile();
+		const res = this.drawTile();
 		this.drawEntity();
 		this.drawHighlight();
 		this.drawHitTile();
 		this.drawDev();
+		const wait = await res;
+		const wair2 = await res1;
 	};
 
 	/**
@@ -588,10 +591,19 @@ class Dungeon
 	 */
 	renderHere({mimeType = 'image/png', extension = 'png'} = {})
 	{
-		console.error('NOPE EXPORT NOT READY');
-		return;
-		const img = this.canvas.toDataURL(mimeType);
+		let exportCanvas = document.createElement('canvas');
+		let exportContext = exportCanvas.getContext(('2d'));
 
+		exportCanvas.width = this.width * this.cellWidth;
+		exportCanvas.height = this.height * this.cellHeight * 0.5;
+
+		const draw = ['background', 'grid', 'tile', 'entity'];
+		for (const item of draw)
+		{
+			exportContext.drawImage(this[item].canvas, 0, 0);
+		}
+
+		const img = exportCanvas.toDataURL(mimeType);
 		let link = document.createElement('a');
 		link.download = 'Dungeon.' + extension;
 		link.href = img;
@@ -607,30 +619,31 @@ class Dungeon
 	 * @param mimeType
 	 * @param extension
 	 */
-	renderAs({
-		         cellWidth = this.cellWidth,
-		         cellHeight = this.cellHeight,
-		         mimeType = 'image/png',
-		         extension = 'png',
-		         gridEnabled = this.gridEnabled,
-		         gridOpacity = this.gridOpacity,
-	         } = {})
+	async renderAs({
+		               cellWidth = this.cellWidth,
+		               cellHeight = this.cellHeight,
+		               mimeType = 'image/png',
+		               extension = 'png',
+	               } = {})
 	{
-
-		console.error('NOPE EXPORT NOT READY');
-		return;
-
-		let canvas = document.createElement('canvas');
-		let renderDungeon = new Dungeon(canvas, null, {
-			height: this.height,
+		let node = document.createElement('div');
+		let renderDungeon = new Dungeon(node, {
+			cellWidth,
+			cellHeight,
 			width: this.width,
-			cellWidth: cellWidth,
-			cellHeight: cellHeight,
+			height: this.height,
 			data: this.data,
 			spriteLoader: this.spriteLoader,
-			gridEnabled,
-			gridOpacity,
+
+			gridEnabled: this.gridEnabled,
+			gridOpacity: this.gridOpacity,
+
+			backgroundData: this.backgroundData,
+			backgroundEnabled: this.backgroundEnabled,
+			backgroundOpacity: this.backgroundOpacity,
+			backgroundRepeat: this.backgroundRepeat,
 		});
+		await renderDungeon.drawAll()
 		renderDungeon.renderHere({mimeType, extension});
 	}
 
