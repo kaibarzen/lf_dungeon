@@ -14,10 +14,8 @@ const Callbacks = () =>
 	// Update on dungeon
 	const dungeon = useSelector(redux.dungeon.selectors.getDungeon);
 
-	const onClickCallback = (e) =>
+	const place = ({x, y}) =>
 	{
-		const {x, y, event} = e;
-
 		switch (activeTool)
 		{
 			case redux.editor.enums.sprites.tools.SINGLE:
@@ -40,8 +38,26 @@ const Callbacks = () =>
 		}
 	};
 
+	const onClickCallback = (e) =>
+	{
+		place(e)
+	};
+
+	const onMouseMoveCallback = (e) =>
+	{
+		if (e.event.buttons === 1)
+		{
+			place(e)
+		}
+	};
+
 	// Still use redux since we change a "permanent" property
-	redux.dispatch(redux.dungeon.actions.setCallbacks({onClickCallback}));
+	redux.dispatch(redux.dungeon.actions.setCallbacks(
+		{
+			onClickCallback,
+			onMouseMoveCallback,
+		},
+	));
 
 	return (
 		<div>

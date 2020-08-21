@@ -98,12 +98,9 @@ const slice = createSlice({
 		},
 		setCallbacks: (state, action) =>
 		{
-			const {
-				onClickCallback = state.onClickCallback,
-			} = action.payload;
 			if (dungeon)
 			{
-				dungeon.onClickCallback = onClickCallback;
+				dungeon.setCallbacks(action.payload)
 			}
 		},
 		renderHere: (state, action) =>
