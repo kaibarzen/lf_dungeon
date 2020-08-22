@@ -17,7 +17,10 @@ const BackgroundPanel = () =>
 		{
 			redux.dispatch(redux.dungeon.actions.setBackground({data: event.target.result}));
 		});
-		reader.readAsDataURL(file);
+		if (file)
+		{
+			reader.readAsDataURL(file);
+		}
 	};
 
 	const onChangeBackground = (value, string, node) =>
