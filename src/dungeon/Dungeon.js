@@ -334,7 +334,7 @@ class Dungeon
 	 * @param cellWidth
 	 * @param cellHeight
 	 */
-	resize({
+	async resize({
 		       width = this.width,
 		       height = this.height,
 		       cellWidth = this.cellWidth,
@@ -354,6 +354,14 @@ class Dungeon
 		{
 			item.canvas.width = canvasWidth;
 			item.canvas.height = canvasHeight;
+		}
+
+		for (const key in this.heatData)
+		{
+			const item = this.heatData[key];
+			await this.setHeatCanvas({...item, draw: false});
+			// Force to redraw the background and all without updating
+			// await for it bcs of image load on renderHEre
 		}
 
 		this.drawAll();
@@ -455,7 +463,7 @@ class Dungeon
 
 	};
 
-	async drawSingleHeatTile(sprite, x, y, id)
+	drawSingleHeatTile(sprite, x, y, id)
 	{
 		const heat = this.heatData[id];
 		this.clearCanvas(heat.merge);
@@ -483,7 +491,7 @@ class Dungeon
 	{
 		if (!id)
 		{
-			console.error('setHeatCanvas no id supplied');
+			console.error('addHeadCanvas no id supplied');
 			return false;
 		}
 
@@ -544,7 +552,6 @@ class Dungeon
 		const canvasWidth = this.width * this.cellWidth;
 		const canvasHeight = this.height * this.cellHeight * 0.5;
 		this.clearCanvas(heat.background);
-		console.log("OPACITY", opacity)
 		heat.background.context.globalAlpha = opacity;
 
 		if (repeat)
@@ -778,8 +785,10 @@ class Dungeon
 	/**
 	 * Download the currently displayed canvas
 	 */
-	renderHere({mimeType = 'image/png', extension = 'png'} = {})
+	async renderHere({mimeType = 'image/png', extension = 'png'} = {})
 	{
+		await this.drawAll();
+
 		let exportCanvas = document.createElement('canvas');
 		let exportContext = exportCanvas.getContext(('2d'));
 
@@ -831,8 +840,9 @@ class Dungeon
 			backgroundEnabled: this.backgroundEnabled,
 			backgroundOpacity: this.backgroundOpacity,
 			backgroundRepeat: this.backgroundRepeat,
+
+			heatData: this.heatData,
 		});
-		await renderDungeon.drawAll();
 		renderDungeon.renderHere({mimeType, extension});
 	}
 
