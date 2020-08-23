@@ -1,6 +1,7 @@
 import moon from './moon/moon';
+import heat from "./heat/heat"
 
-export const register = {moon};
+export const register = {moon, heat};
 
 export const getSprites = () =>
 {

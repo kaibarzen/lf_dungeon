@@ -31,14 +31,14 @@ const Tools = () =>
 					}}
 				/>
 				<Button
-					icon={IconNames.SQUARE}
+					icon={IconNames.SEGMENTED_CONTROL}
 					intent={Intent.SUCCESS}
-					text={'Plane'}
-					name={redux.editor.enums.sprites.tools.PLANE}
-					disabled={redux.editor.enums.sprites.tools.PLANE === activeTool}
+					text={'Heat'}
+					name={redux.editor.enums.sprites.tools.HEAT}
+					disabled={redux.editor.enums.sprites.tools.HEAT === activeTool}
 					onClick={() =>
 					{
-						onChangeTool(redux.editor.enums.sprites.tools.PLANE); // Otherwise Bugged
+						onChangeTool(redux.editor.enums.sprites.tools.HEAT); // Otherwise Bugged
 					}}
 				/>
 				<Button

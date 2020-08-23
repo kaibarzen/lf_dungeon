@@ -100,7 +100,7 @@ const slice = createSlice({
 		{
 			if (dungeon)
 			{
-				dungeon.setCallbacks(action.payload)
+				dungeon.setCallbacks(action.payload);
 			}
 		},
 		renderHere: (state, action) =>
@@ -114,6 +114,10 @@ const slice = createSlice({
 				cellHeight = dungeon.cellHeight,
 			} = action.payload;
 			dungeon.renderAs({cellWidth, cellHeight});
+		},
+		setHeatCanvas: (state, action) =>
+		{
+			dungeon.setHeatCanvas(action.payload);
 		},
 	},
 });

@@ -10,54 +10,31 @@ import redux from '../../../redux/index';
 import Sprites from './tilePanel/Sprites';
 import Tools from './tilePanel/Tools';
 import Callbacks from './Callbacks';
+import Group from './tilePanel/Groups';
+import Heat from './tilePanel/Heat';
 
 const TilePanel = (props) =>
 {
 
-	const activeTheme = useSelector(redux.editor.selectors.getSpritesTheme);
-
-	const onChangeGroup = (group) =>
-	{
-		redux.dispatch(redux.editor.actions.setSpritesGroup({group}));
-	};
-
-	const theme = register[activeTheme];
+	const activeTool = useSelector(redux.editor.selectors.getSpritesTool)
 
 	return (
 		<div className={'editor_panel'}>
 
 			<Callbacks/>
-
 			<Tools/>
 
+			{
+				activeTool === redux.editor.enums.sprites.tools.HEAT ?
+					<div>
+						<Heat/>
+					</div>
+					:
+					<div>
+					</div>
+			}
 			<Sprites />
-
-			<H2>Groups</H2>
-			<div className={'editor_tiles_group'}>
-				{
-					theme.groups.map((item, i) =>
-					{
-						return (
-							<Card
-								interactive={true}
-								elevation={1}
-								className={'editor_tiles_group_card'}
-								onClick={(e) =>
-								{
-									onChangeGroup(item);
-								}}
-								key={i}
-							>
-								<img
-									src={item.image}
-									alt={''}
-								/>
-								<H6> {item.display} </H6>
-							</Card>
-						);
-					})
-				}
-			</div>
+			<Group/>
 
 		</div>
 	);

@@ -24,6 +24,8 @@ class Dungeon
 		backgroundOpacity = 0.5,
 		backgroundRepeat = false,
 
+		heatData = {}, // Source in Tile Data
+
 		dev = false,
 	} = {})
 	{
@@ -68,6 +70,15 @@ class Dungeon
 
 		this.data = data; // {tile, entity}
 		this.dev = dev; // Dev mode
+
+		this.heatData = heatData;
+
+		this.enums = {
+			tile: {
+				'NORMAL': 'normal',
+				'HEAT': 'heat',
+			},
+		};
 
 		this.resize({
 			width,
@@ -131,7 +142,8 @@ class Dungeon
 
 	onclick = (e) =>
 	{
-		if(!this.onClickCallback){
+		if (!this.onClickCallback)
+		{
 			return;
 		}
 
@@ -196,7 +208,14 @@ class Dungeon
 	 * @param z
 	 * @param tick
 	 */
-	setTile(id, x, y, z)
+	setTile({
+		        id,
+		        x = -1,
+		        y = -1,
+		        z = 100,
+		        overwrite = true, // TOdo implement overwrite opt
+		        heat = -1, // Heat Canvas ID
+	        } = {})
 	{
 		const tile = this.data.tile;
 
@@ -216,7 +235,7 @@ class Dungeon
 		}
 
 		this.removeTile(x, y, {draw: false}); // We dont want different z level tiles on the same x y slot
-		tile[z][y][x] = id;
+		tile[z][y][x] = {id, heat};
 
 		this.drawTile();
 	}
@@ -419,10 +438,16 @@ class Dungeon
 				for (const x in data.tile[z][y])
 				{
 					const cords = this.generateTileCords(x, y);
-					const sprite = await this.spriteLoader.getSprite(data.tile[z][y][x]);
+					const sprite = await this.spriteLoader.getSprite(data.tile[z][y][x].id);
 					if (sprite)
 					{
-						this.drawSingleTile(sprite, cords.x, cords.y);
+						if (data.tile[z][y][x].heat === -1) // Not a heat sprite
+						{
+							this.drawSingleTile({sprite, x: cords.x, y: cords.y});
+						} else
+						{
+							this.drawSingleHeatTile(sprite, cords.x, cords.y, data.tile[z][y][x].heat);
+						}
 					}
 				}
 			}
@@ -430,7 +455,125 @@ class Dungeon
 
 	};
 
-	drawSingleTile(sprite, x, y)
+	async drawSingleHeatTile(sprite, x, y, id)
+	{
+		const heat = this.heatData[id];
+		this.clearCanvas(heat.merge);
+
+		heat.merge.context.save();
+		heat.merge.context.drawImage(heat.background.canvas, 0, 0);
+		heat.merge.context.globalCompositeOperation = 'destination-in';
+
+		this.drawSingleTile({
+			sprite, x, y,
+			context: heat.merge.context,
+		});
+
+		heat.merge.context.restore();
+		this.tile.context.drawImage(heat.merge.canvas, 0, 0);
+	}
+
+	addHeatCanvas({
+		              id = false,
+		              repeat = false,
+		              opacity = 0.5,
+		              data = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAIAAABLixI0AAAAI0lEQVQ4y2P8//8/A5UAE7UMGjVr1KxRs0bNGjVr1KxhZBYA6gQDLzNXWhsAAAAASUVORK5CYII=',
+		              draw = true,
+	              } = {})
+	{
+		if (!id)
+		{
+			console.error('setHeatCanvas no id supplied');
+			return false;
+		}
+
+		const generateCanvas = () =>
+		{
+			let canvas = document.createElement('canvas');
+			canvas.width = this.width * this.cellWidth;
+			canvas.height = this.height * this.cellHeight * 0.5;
+			return {
+				canvas,
+				context: canvas.getContext('2d'),
+			};
+		};
+
+		this.heatData[id] = {
+			repeat,
+			opacity,
+			data, // data === dataurl
+			amount: 0, // amount of placed tiles for safedelete
+			background: generateCanvas(),
+			merge: generateCanvas(),
+		};
+
+		this.setHeatCanvas({id, repeat, opacity, draw: false});
+	}
+
+	async setHeatCanvas({
+		                    id = false,
+		                    repeat = this.heatData[id] ? this.heatData[id].repeat : undefined,
+		                    opacity = this.heatData[id] ? this.heatData[id].opacity : undefined,
+		                    data = this.heatData[id] ? this.heatData[id].data : undefined,
+		                    draw = true,
+	                    } = {})
+	{
+		if (!id)
+		{
+			console.error('setHeatCanvas no id supplied');
+			return false;
+		}
+
+		if (!this.heatData[id])
+		{
+			// Create new if it does not exist
+			this.addHeatCanvas({id, repeat, opacity, data});
+			return;
+		}
+
+		this.heatData[id] = {
+			...this.heatData[id],
+			repeat,
+			opacity,
+			data,
+		};
+
+		let heat = this.heatData[id];
+
+		const background = await this.spriteLoader.getBackground(heat.data);
+		const canvasWidth = this.width * this.cellWidth;
+		const canvasHeight = this.height * this.cellHeight * 0.5;
+		this.clearCanvas(heat.background);
+		console.log("OPACITY", opacity)
+		heat.background.context.globalAlpha = opacity;
+
+		if (repeat)
+		{
+			const pattern = heat.background.context.createPattern(background, 'repeat');
+			heat.background.context.fillStyle = pattern;
+			heat.background.context.fillRect(0, 0, canvasWidth, canvasHeight);
+		} else
+		{
+			heat.background.context.drawImage(background, 0, 0, background.width, background.height, 0, 0, canvasWidth, canvasHeight);
+		}
+
+		if (draw)
+		{
+			this.drawTile();
+		}
+	}
+
+	removeHeatCanvas({id})
+	{
+		console.warn('removeHeadCanvas WIP');
+	}
+
+	drawSingleTile({
+		               sprite,
+		               x,
+		               y,
+		               context = this.tile.context,
+	               })
 	{
 		x += Math.floor(sprite.offsetX * this.cellWidth);
 		y += Math.floor(sprite.offsetY * this.cellHeight);
@@ -438,7 +581,7 @@ class Dungeon
 		const width = this.cellWidth * sprite.width;
 		const height = this.cellHeight * sprite.height;
 
-		this.tile.context.drawImage(sprite.node, x, y, width, height);
+		context.drawImage(sprite.node, x, y, width, height);
 	}
 
 	/**
