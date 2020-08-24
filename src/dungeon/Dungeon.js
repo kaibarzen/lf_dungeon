@@ -466,6 +466,11 @@ class Dungeon
 	drawSingleHeatTile(sprite, x, y, id)
 	{
 		const heat = this.heatData[id];
+		// If heat doesnt exist no image got selected yet
+		if(!heat){
+			return this.drawSingleTile({sprite, x, y})
+		}
+
 		this.clearCanvas(heat.merge);
 
 		heat.merge.context.save();
