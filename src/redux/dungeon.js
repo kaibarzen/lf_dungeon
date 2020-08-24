@@ -28,7 +28,7 @@ const slice = createSlice({
 			dungeon = new Dungeon(action.payload.node);
 			state.dungeon = dungeon;
 			state.width = dungeon.width;
-			state.height = dungeon.height;
+			state.height = dungeon.height / 2;
 			state.cellWidth = dungeon.cellWidth;
 			state.cellHeight = dungeon.cellHeight;
 			state.gridOpacity = dungeon.gridOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
@@ -62,7 +62,7 @@ const slice = createSlice({
 			state.cellWidth = cellWidth;
 			state.cellHeight = cellHeight;
 
-			state.dungeon.resize({width, height, cellWidth, cellHeight});
+			state.dungeon.resize({width, height: height * 2, cellWidth, cellHeight});
 		},
 		setGrid: (state, action) =>
 		{
