@@ -11,6 +11,11 @@ import galaxy_1 from './galaxy_1.png';
 import galaxy_2 from './galaxy_2.png';
 import galaxy_2_flow_right from './galaxy_2_flow_right.png';
 
+import heat_full from './heat/heat_full.svg';
+import heat_flow_right from './heat/heat_flow_right.svg';
+import heat_flow_right_full from './heat/heat_flow_right_full.svg';
+import heat_flow_right_semi from "./heat/heat_flow_right_semi.svg"
+
 import grass_1 from './grass_1.png';
 
 import {type, replace, group, tab} from '../../enums';
@@ -89,6 +94,32 @@ export default {
 			src: grass_1,
 			type: type.TILE,
 		},
+		heat_full: {
+			display: 'Heat Tile',
+			src: heat_full,
+			type: type.TILE,
+		},
+		heat_flow_right: {
+			display: 'Heat Fluid Right',
+			src: heat_flow_right,
+			type: type.TILE,
+			width: 8/16,
+			height: 11/8,
+		},
+		heat_flow_right_full: {
+			display: 'Heat Fluid Right',
+			src: heat_flow_right_full,
+			type: type.TILE,
+			width: 8/16,
+			height: 12/8,
+		},
+		heat_flow_right_semi: {
+			display: 'Heat Fluid Semi',
+			src: heat_flow_right_semi,
+			type: type.TILE,
+			width: 8/16,
+			height: 12/8,
+		}
 	},
 	groups: [
 		{
@@ -126,5 +157,11 @@ export default {
 			type: group.RANDOM,
 			data: ['grass_1'],
 		},
+		{
+			display: "Heat",
+			image: heat_flow_right,
+			tpe: group.CONTROLLED,
+			data: ["heat_full", "heat_flow_right", "heat_flow_right_full", "heat_flow_right_semi"]
+		}
 	],
 };

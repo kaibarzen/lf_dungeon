@@ -8,7 +8,8 @@ import random from '../../../../img/random.png';
 
 const Sprites = (props) =>
 {
-	const activeTheme = useSelector(redux.editor.selectors.getSpritesTheme);
+
+	const activeTheme =useSelector(redux.editor.selectors.getSpritesTheme);
 	const group = useSelector(redux.editor.selectors.getSpritesGroup);
 	const activeSprite = useSelector(redux.editor.selectors.getActiveSprite);
 

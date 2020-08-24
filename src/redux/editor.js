@@ -7,6 +7,9 @@ const initialState = {
 	spritesGroup: null,
 	spritesTool: 'single',
 	activeSprite: {},
+	heatSelected: false,
+	heatList: {}, // Not actual heat data but only for management
+	heatCounter: 0, // Key management
 };
 
 const slice = createSlice({
@@ -44,6 +47,27 @@ const slice = createSlice({
 				state.spritesTool = enums.sprites.tools.SINGLE;
 			}
 		},
+		setHeatSelected: (state, action) =>
+		{
+			const {selected = state.heatSelected} = action.payload;
+			state.heatSelected = selected;
+		},
+		newHeat: (state, action) =>
+		{
+			state.heatList[state.heatCounter] = {
+				id: state.heatCounter, // Lazy id
+				display: 'New Heat ID - ' + state.heatCounter,
+				opacity: 0.5,
+				repeat: false,
+			};
+			state.heatCounter++;
+		},
+		setHeat: (state, action) =>
+		{
+			const id = action.payload.id;
+			const item = state.heatList[id];
+			state.heatList[id] = {...item, ...action.payload}; // Lazy af
+		},
 	},
 });
 
@@ -59,6 +83,7 @@ const enums = {
 			SINGLE: 'single',
 			PLANE: 'plane',
 			REMOVE: 'remove',
+			HEAT: 'heat',
 		},
 		active: {
 			RANDOM: 'random',
@@ -75,7 +100,7 @@ export default {
 	selectors: {
 		getDialog: (state) =>
 		{
-			return state.editor.dialog
+			return state.editor.dialog;
 		},
 		getActiveTab: (state) =>
 		{
@@ -96,6 +121,17 @@ export default {
 		getActiveSprite: (state) =>
 		{
 			return state.editor.activeSprite;
+		},
+		getHeat: (state) =>
+		{
+			return {
+				selected: state.editor.heatSelected,
+				list: state.editor.heatList,
+			};
+		},
+		getHeatSelected: (state) =>
+		{
+			return state.editor.heatSelected
 		},
 	},
 	enums,
