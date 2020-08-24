@@ -33,16 +33,6 @@ const Navigation = (props) =>
 				</Navbar.Group>
 
 				<Navbar.Group>
-					<Button
-						icon={IconNames.BUILD}
-						minimal
-					>
-						Sprites
-					</Button>
-					<Navbar.Divider />
-				</Navbar.Group>
-
-				<Navbar.Group>
 					<Popover
 						content={
 							<Menu>
