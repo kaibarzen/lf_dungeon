@@ -86,6 +86,8 @@ class Dungeon
 			cellWidth,
 			cellHeight,
 		});
+
+		window.dungeon = this;
 	}
 
 	generateCanvas = (name, {append = true, first = false, imageSmoothingEnabled = true} = {}) =>
@@ -359,7 +361,13 @@ class Dungeon
 		for (const key in this.heatData)
 		{
 			const item = this.heatData[key];
-			await this.setHeatCanvas({...item, draw: false});
+
+			item.background.canvas.width = canvasWidth;
+			item.background.canvas.height = canvasHeight;
+			item.merge.canvas.width = canvasWidth;
+			item.merge.canvas.height = canvasHeight;
+
+			await this.setHeatCanvas({...item, draw: false,});
 			// Force to redraw the background and all without updating
 			// await for it bcs of image load on renderHEre
 		}
@@ -373,8 +381,6 @@ class Dungeon
 		{
 			const {width, height, cellWidth, cellHeight, backgroundEnabled, backgroundOpacity, backgroundRepeat, backgroundData} = this;
 			this.clearCanvas(this.background);
-
-			console.log('BACKDATA', !!backgroundData);
 
 			if (!backgroundEnabled)
 			{
@@ -512,6 +518,7 @@ class Dungeon
 		};
 
 		this.heatData[id] = {
+			id,
 			repeat,
 			opacity,
 			data, // data === dataurl
