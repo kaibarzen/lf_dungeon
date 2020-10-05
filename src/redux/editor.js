@@ -74,7 +74,7 @@ const slice = createSlice({
 const enums = {
 	activeTab: {
 		'TILES': 'tiles',
-		'ENTITYS': 'entitys',
+		'LAYERS': 'LAYERS',
 		'GRID': 'grid',
 		'BACKGROUND': 'background',
 	},

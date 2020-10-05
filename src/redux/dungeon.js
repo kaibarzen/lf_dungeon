@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import Dungeon from '../dungeon/Dungeon';
+import {Dungeon} from '../dungeon/Dungeon';
 
 const initialState = {
 	dungeon: null,
@@ -20,23 +20,15 @@ const initialState = {
 let dungeon = null;
 
 const slice = createSlice({
-	name: 'dungeon',
+	name: 'dungeonOLD',
 	initialState,
 	reducers: {
 		init: (state, action) =>
 		{
-			dungeon = new Dungeon(action.payload.node);
-			state.dungeon = dungeon;
-			state.width = dungeon.width;
-			state.height = dungeon.height / 2;
-			state.cellWidth = dungeon.cellWidth;
-			state.cellHeight = dungeon.cellHeight;
-			state.gridOpacity = dungeon.gridOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
-			state.gridEnabled = dungeon.gridEnabled;
-			state.backgroundNode = dungeon.backgroundEnabled;
-			state.backgroundRepeat = dungeon.backgroundRepeat;
-			state.backgroundOpacity = dungeon.backgroundOpacity * 100; // Dungeon.js uses 0-1 we use 0-100
-			state.onClickCallback = dungeon.onClickCallback;
+			if(action.payload.node){
+				dungeon = new Dungeon(action.payload.node);
+				window.dungeon = dungeon;
+			}
 		},
 		setSize: (state, action) =>
 		{
@@ -98,10 +90,11 @@ const slice = createSlice({
 		},
 		setCallbacks: (state, action) =>
 		{
-			if (dungeon)
+
+			/*if (dungeon)
 			{
 				dungeon.setCallbacks(action.payload);
-			}
+			}*/
 		},
 		renderHere: (state, action) =>
 		{
@@ -118,6 +111,10 @@ const slice = createSlice({
 		setHeatCanvas: (state, action) =>
 		{
 			dungeon.setHeatCanvas(action.payload);
+		},
+		setTest: (state, action) =>
+		{
+			state = {...state}; // Apply an update to "all", next see Test selecotr
 		},
 	},
 });
@@ -153,6 +150,13 @@ export default {
 				opacity: state.dungeon.backgroundOpacity,
 				repeat: state.dungeon.backgroundRepeat,
 			};
+		},
+		getTest: (state) =>
+		{
+			// redux realizes this one is different and gives react an update
+			// TODO we basically now need one storage for "updating" and thats it.
+			// we missuse redux as bridge and keep our values in a js class
+			return dungeon?.width;
 		},
 	},
 	enums: {

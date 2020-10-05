@@ -10,6 +10,8 @@ const Editor = (props) =>
 {
 	const dungeon = useSelector(redux.dungeon.selectors.getDungeon);
 
+	console.log('TEST', useSelector(redux.dungeon.selectors.getTest));
+
 	return (
 		<div className={'editor_container'}>
 
@@ -29,7 +31,7 @@ const Editor = (props) =>
 
 				<div className={'editor_canvas_container'}>
 					<div className={'editor_canvas'}>
-						<div
+						<canvas
 							ref={(ref) =>
 							{
 								if (dungeon || !ref)
@@ -38,8 +40,7 @@ const Editor = (props) =>
 								}
 								redux.dispatch(redux.dungeon.actions.init({node: ref}));
 							}}
-						>
-						</div>
+						/>
 					</div>
 				</div>
 

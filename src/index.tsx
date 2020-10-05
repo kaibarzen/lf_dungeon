@@ -20,7 +20,7 @@ ReactDOM.render(
 	document.getElementById('root'),
 );
 
-window.redux = redux;
-// window.store.dispatch(window.testSlice.actions.set("JA"))
+// @ts-ignore
+window.redux = redux; 
 
 serviceWorker.unregister();

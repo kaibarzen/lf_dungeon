@@ -1,7 +1,8 @@
 import SpriteLoader from './SpriteLoader';
 import {getSprites} from './sprites/index';
 
-class Dungeon
+
+class DungeonOLD
 {
 	constructor(node, {
 		width = 10,
@@ -281,52 +282,6 @@ class Dungeon
 	{
 		const color = this.hitTile.context.getImageData(x, y, 1, 1).data;
 		return this.colorToTileCords(color);
-	}
-
-	/**
-	 * Generates an 2dPath
-	 * @param x tile x
-	 * @param y tile y
-	 * @param grow outline grow in px
-	 * @returns {Path2D}
-	 */
-	generateTileRegion(x, y, {grow = 0} = {})
-	{
-
-		const {cellWidth, cellHeight} = this;
-
-		const cords = this.generateTileCords(x, y);
-
-		let region = new Path2D();
-		region.moveTo(cords.x + Math.floor(cellWidth * 0.5), cords.y - grow);
-		region.lineTo(cords.x + cellWidth + grow, cords.y + Math.floor(cellHeight * 0.5));
-		region.lineTo(cords.x + Math.floor(cellWidth * 0.5), cords.y + cellHeight + grow);
-		region.lineTo(cords.x - grow, cords.y + Math.floor(cellHeight * 0.5));
-		region.closePath();
-
-		return region;
-	}
-
-	/**
-	 * Returns canvas cords from tile cords
-	 * @param x
-	 * @param y
-	 * @returns {{x: number, y: number}}
-	 */
-	generateTileCords(x, y)
-	{
-		const {cellWidth, cellHeight} = this;
-		if (y % 2 === 0)
-		{
-			return {
-				x: x * cellWidth,
-				y: Math.floor(y * 0.5) * cellHeight - Math.floor(cellHeight * 0.5),
-			};
-		}
-		return {
-			x: x * cellWidth - Math.floor(cellWidth * 0.5),
-			y: Math.floor(y * 0.5) * cellHeight,
-		};
 	}
 
 	/**
@@ -837,7 +792,7 @@ class Dungeon
 	               } = {})
 	{
 		let node = document.createElement('div');
-		let renderDungeon = new Dungeon(node, {
+		let renderDungeon = new DungeonOLD(node, {
 			cellWidth,
 			cellHeight,
 			width: this.width,
@@ -860,4 +815,4 @@ class Dungeon
 
 }
 
-export default Dungeon;
+export default DungeonOLD;

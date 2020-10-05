@@ -6,6 +6,7 @@ import { IconNames } from "@blueprintjs/icons";
 import GridPanel from './panels/GridPanel';
 import BackgroundPanel from './panels/BackgroundPanel';
 import TilePanel from './panels/TilePanel';
+import Layers from './panels/tilePanel/Layers';
 
 const EditorTabs = (props) =>
 {
@@ -30,9 +31,10 @@ const EditorTabs = (props) =>
 					<Icon icon={IconNames.BUILD}/> Tiles
 				</Tab>
 				<Tab
-					id={redux.editor.enums.activeTab.ENTITYS}
+					id={redux.editor.enums.activeTab.LAYERS}
+					panel={<Layers/>}
 				>
-					<Icon icon={IconNames.PERSON}/> Entitys
+					<Icon icon={IconNames.PERSON}/> Layers
 				</Tab>
 				<Tab
 					id={redux.editor.enums.activeTab.GRID}
