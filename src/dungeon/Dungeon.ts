@@ -1,6 +1,7 @@
 import {Layer} from './layer/Layer';
 import {DevLayer} from './layer/Dev';
 import {makeAutoObservable} from 'mobx';
+import {SolidLayer} from './layer/Solid';
 
 export interface Constructor
 {
@@ -19,6 +20,7 @@ export enum Layers
 	FOLDER,
 	GRID,
 	TILE,
+	SOLID,
 }
 
 interface TreeNode
@@ -35,9 +37,14 @@ export class Dungeon
 		return this._tree;
 	}
 
+	/**
+	 * Update the tree, calls dungeon.render
+	 * @param value
+	 */
 	set tree(value: TreeNode[])
 	{
 		this._tree = value;
+		this.render()
 	}
 
 	get height(): number
@@ -79,7 +86,6 @@ export class Dungeon
 
 	private idCounter: number = 0;
 
-	private canvas: HTMLCanvasElement | undefined;
 	private context: CanvasRenderingContext2D | undefined;
 
 	private layers: { [key: number]: Layer } = {};
@@ -102,7 +108,6 @@ export class Dungeon
 	 */
 	public setCanvas(canvas: HTMLCanvasElement)
 	{
-		this.canvas = canvas;
 		const context = canvas.getContext('2d');
 		if (!context)
 		{
@@ -112,12 +117,19 @@ export class Dungeon
 		this.resize();
 	}
 
-	public async setSize({
-		                     width = this._width,
-		                     height = this._height,
-		                     cellWidth = this._cellWidth,
-		                     cellHeight = this._cellHeight,
-	                     } = {}): Promise<void>
+	/**
+	 * Set's size variables in class and forces a resize()
+	 * @param width
+	 * @param height
+	 * @param cellWidth
+	 * @param cellHeight
+	 */
+	public setSize({
+		               width = this._width,
+		               height = this._height,
+		               cellWidth = this._cellWidth,
+		               cellHeight = this._cellHeight,
+	               } = {}): void
 	{
 		this._width = width;
 		this._height = height;
@@ -125,21 +137,27 @@ export class Dungeon
 		this._cellHeight = cellHeight;
 		this._totalWidth = width * cellWidth;
 		this._totalHeight = height * cellHeight * 0.5;
-		await this.resize();
+		this.resize();
 	}
 
 	/**
-	 * Resize all, force layers to rerender
+	 * Resize all, force layers to resize/rerender
 	 */
-	private async resize(): Promise<void>
+	private resize(): void
 	{
-		if (!this.canvas)
+		if (!this.context)
 		{
 			return;
 		}
-		this.canvas.width = this._totalWidth;
-		this.canvas.height = this._totalHeight;
+		this.context.canvas.width = this._totalWidth;
+		this.context.canvas.height = this._totalHeight;
+
+		for (const [key, layer] of Object.entries(this.layers))
+		{
+			layer.resize();
+		}
 	}
+
 
 	/**
 	 * Add a layer, returns the id
@@ -165,6 +183,9 @@ export class Dungeon
 				break;
 			case Layers.TILE:
 				break;
+			case Layers.SOLID:
+				newLayer = new SolidLayer(this, undefined);
+				break;
 			default:
 				throw new Error('Type of Layer does not exist');
 		}
@@ -183,7 +204,7 @@ export class Dungeon
 			key: this.idCounter,
 		});
 
-		newLayer.render()
+		newLayer.render();
 
 		return this.idCounter;
 	}
@@ -194,19 +215,17 @@ export class Dungeon
 	 */
 	public removeLayer(id: number): void
 	{
-
+		// TODO
 	}
 
 	/**
-	 * Render Class, gets callbacked by Layers
+	 * Render Class, gets callbacked by the layers itself if changes happen or by this class on tree changes
 	 */
 	render()
 	{
-		console.log("RENDER CALLED")
-
-		if (!this.canvas || !this.context)
+		if (!this.context)
 		{
-			console.warn('Dungeon render no canvas or context found');
+			console.warn('No context/canvas to render on');
 			return;
 		}
 

@@ -107,13 +107,23 @@ export abstract class Layer
 	}
 
 	/**
+	 * Called on resize, resized the canvas and calls render()
+	 */
+	public async resize(): Promise<void>
+	{
+		this.context.canvas.width = this.dungeon.totalWidth;
+		this.context.canvas.height = this.dungeon.totalHeight;
+		await this.render()
+	}
+
+	/**
 	 * Overrided by subclass, renders async
 	 */
 	public async render(): Promise<void>
 	{
 		// Render our canvas and notify our mainclass that we made changes.
 		// Render will be automatically called after everything got initialized in the mainclass
-		// so do not call this from the constructor
+		// (so do not call this from the constructor)
 		this.dungeon.render();
 	}
 

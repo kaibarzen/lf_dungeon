@@ -1,22 +1,26 @@
-import {Layer} from "./Layer";
+import {Layer} from './Layer';
 
-export class DevLayer extends Layer {
+export class DevLayer extends Layer
+{
 
-     public async render(): Promise<void> {
+	public async render(): Promise<void>
+	{
+		this.context.clearRect(0, 0, this.dungeon.totalWidth, this.dungeon.totalHeight);
+		for (let y = 0; y < this.dungeon.height + 1; y++)
+		{
+			for (let x = 0; x < this.dungeon.height + 1; x++)
+			{
 
-        for (let y = 0; y < this.dungeon.height + 1; y++) {
-            for (let x = 0; x < this.dungeon.height + 1; x++) {
+				const cords = this.generateTileCords(x, y);
 
-                const cords = this.generateTileCords(x, y);
-
-                this.context.lineWidth = 1;
-	            this.context.strokeStyle = y % 2 === 0 ? 'rgb(255,0,0)' : 'rgb(0,0,255)';
-	            this.context.fillStyle = y % 2 === 0 ? 'rgb(255,0,0)' : 'rgb(0,0,255)';
-	            this.context.strokeRect(cords.x, cords.y, this.dungeon.cellWidth, this.dungeon.cellHeight);
-	            this.context.fillRect(cords.x, cords.y, 8, 8);
-	            this.context.fillText(`${x} - ${y}`, cords.x, cords.y);
-            }
-        }
-        super.render()
-    }
+				this.context.lineWidth = 1;
+				this.context.strokeStyle = y % 2 === 0 ? 'rgb(255,0,0)' : 'rgb(0,0,255)';
+				this.context.fillStyle = y % 2 === 0 ? 'rgb(255,0,0)' : 'rgb(0,0,255)';
+				this.context.strokeRect(cords.x, cords.y, this.dungeon.cellWidth, this.dungeon.cellHeight);
+				this.context.fillRect(cords.x, cords.y, 8, 8);
+				this.context.fillText(`${x} - ${y}`, cords.x, cords.y);
+			}
+		}
+		super.render();
+	}
 }
