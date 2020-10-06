@@ -1,140 +1,136 @@
-import {Dungeon} from "../Dungeon";
+import {Dungeon} from '../Dungeon';
 
-export interface Canvas {
-    canvas: HTMLCanvasElement,
-    context: CanvasRenderingContext2D,
+export interface Cords
+{
+	x: number,
+	y: number,
 }
 
-export interface Cords {
-    x: number,
-    y: number,
-}
+export abstract class Layer
+{
 
-export abstract class Layer {
+	// Todo blending mode
+	// name
 
-    // Todo blending mode
+	protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
 
-    protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
+	protected data: any; // TODO Data Class
+	protected opacity: number;
+	protected enabled: boolean;
 
-    protected data: any; // TODO Data Class
-    protected opacity: number;
-    protected enabled: boolean;
+	protected context: CanvasRenderingContext2D; // Main Context
 
-    protected renderCanvas: Canvas | undefined;
+	constructor(
+		dungeon: Dungeon,
+		{
+			data = null,
+			opacity = 1.0,
+			enabled = true,
+		} = {})
+	{
 
-    constructor(
-        dungeon: Dungeon,
-        {
-            data = null,
-            opacity = 1.0,
-            enabled = true
-        } = {}) {
+		this.dungeon = dungeon;
+		this.data = data;
+		this.opacity = opacity;
+		this.enabled = enabled;
+		this.context = this.generateContext();
+	}
 
-        this.dungeon = dungeon;
-        this.data = data;
-        this.opacity = opacity;
-        this.enabled = enabled;
-        this.renderCanvas = this.generateCanvas()
-    }
+	public getOptions()
+	{
+		//TODO + name
+	}
 
-    public getOptions() {
-        //TODO + name
-    }
+	public setOptions()
+	{
 
-    public setOptions() {
+	}
 
-    }
+	/**
+	 * Generate an already resized context
+	 */
+	protected generateContext(): CanvasRenderingContext2D
+	{
+		let canvas = document.createElement('canvas');
+		canvas.width = this.dungeon.totalWidth;
+		canvas.height = this.dungeon.totalHeight;
+		const context = canvas.getContext('2d');
+		if (context === null)
+		{
+			throw new Error('Could not create 2d context of HTML Canvas');
+		}
+		return context;
+	}
 
-    /**
-     * Generate an already resized Canvas interface
-     */
-    protected generateCanvas(): Canvas {
-        let canvas = document.createElement('canvas');
-        canvas.width = this.dungeon.totalWidth;
-        canvas.height = this.dungeon.totalHeight;
-        const context = canvas.getContext('2d');
+	/**
+	 * Calculates the upper right px for a tile
+	 * @param x
+	 * @param y
+	 */
+	protected generateTileCords(x: number, y: number): Cords
+	{
+		const {cellWidth, cellHeight} = this.dungeon;
+		if (y % 2 === 0)
+		{
+			return {
+				x: x * cellWidth,
+				y: Math.floor(y * 0.5) * cellHeight - Math.floor(cellHeight * 0.5),
+			};
+		}
+		return {
+			x: x * cellWidth - Math.floor(cellWidth * 0.5),
+			y: Math.floor(y * 0.5) * cellHeight,
+		};
+	}
 
-        if (context === null) {
-            throw new Error("Could not create 2d context of HTML Canvas");
-        }
+	/**
+	 * Generates a 2d Path for the given tile cords
+	 * @param x
+	 * @param y
+	 * @param grow
+	 */
+	protected generateTileRegion(x: number, y: number, {grow = 0} = {}): Path2D
+	{
 
-        return {
-            canvas,
-            context,
-        };
-    }
+		const {cellWidth, cellHeight} = this.dungeon;
 
-    /**
-     * Calculates the upper right px for a tile
-     * @param x
-     * @param y
-     */
-    protected generateTileCords(x: number, y: number): Cords {
-        const {cellWidth, cellHeight} = this.dungeon;
-        if (y % 2 === 0) {
-            return {
-                x: x * cellWidth,
-                y: Math.floor(y * 0.5) * cellHeight - Math.floor(cellHeight * 0.5),
-            };
-        }
-        return {
-            x: x * cellWidth - Math.floor(cellWidth * 0.5),
-            y: Math.floor(y * 0.5) * cellHeight,
-        };
-    }
+		const cords = this.generateTileCords(x, y);
 
-    /**
-     * Generates a 2d Path for the given tile cords
-     * @param x
-     * @param y
-     * @param grow
-     */
-    protected generateTileRegion(x: number, y: number, {grow = 0} = {}): Path2D {
+		let region = new Path2D();
+		region.moveTo(cords.x + Math.floor(cellWidth * 0.5), cords.y - grow);
+		region.lineTo(cords.x + cellWidth + grow, cords.y + Math.floor(cellHeight * 0.5));
+		region.lineTo(cords.x + Math.floor(cellWidth * 0.5), cords.y + cellHeight + grow);
+		region.lineTo(cords.x - grow, cords.y + Math.floor(cellHeight * 0.5));
+		region.closePath();
 
-        const {cellWidth, cellHeight} = this.dungeon;
+		return region;
+	}
 
-        const cords = this.generateTileCords(x, y);
+	/**
+	 * Overrided by subclass, renders async
+	 */
+	public async render(): Promise<void>
+	{
+		// Render our canvas and notify our mainclass that we made changes.
+		// Render will be automatically called after everything got initialized in the mainclass
+		// so do not call this from the constructor
+		this.dungeon.render();
+	}
 
-        let region = new Path2D();
-        region.moveTo(cords.x + Math.floor(cellWidth * 0.5), cords.y - grow);
-        region.lineTo(cords.x + cellWidth + grow, cords.y + Math.floor(cellHeight * 0.5));
-        region.lineTo(cords.x + Math.floor(cellWidth * 0.5), cords.y + cellHeight + grow);
-        region.lineTo(cords.x - grow, cords.y + Math.floor(cellHeight * 0.5));
-        region.closePath();
+	/**
+	 * Return a canvas to merge, does not rerender any changes
+	 */
+	public getRender(): HTMLCanvasElement
+	{
+		return this.context.canvas;
+	}
 
-        return region;
-    }
+	/**
+	 * Export data for longtime storage
+	 */
+	public export()
+	{
 
-    /**
-     * Overrided by subclass, renders and returns async
-     */
-    public async render(): Promise<HTMLCanvasElement> {
-        console.warn("Render not implemented by subclass.")
-
-        if (!this.renderCanvas) {
-            throw new Error("abstract Layer could not generate an Canvas")
-        }
-
-        return this.renderCanvas.canvas;
-    }
-
-    /**
-     * Return a canvas to merge, does not rerender any changes
-     */
-    public getRender(): HTMLCanvasElement {
-
-        if (!this.renderCanvas) {
-            throw new Error("abstract Layer could not generate an Canvas")
-        }
-
-        return this.renderCanvas.canvas;
-    }
-
-    /**
-     * Export data for longtime storage
-     */
-    public export() {
-
-    }
+	}
 
 }

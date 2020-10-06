@@ -1,43 +1,16 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import {Tree} from 'antd';
-import redux from '../../../redux';
 import {observer} from 'mobx-react-lite';
-import store from "../../../store"
+import store from '../../../store';
+import {toJS} from 'mobx';
 
-const Layers = observer(({dungeon = store.dungeon}) => {
-
-	return (
-		<div>
-			{JSON.stringify(dungeon.tree)}
-		</div>
-	);
-})
-
-/**
-class Layers extends React.Component
+const Layers = observer(({dungeon = store.dungeon}) =>
 {
-	state = {
-		gData : [
-			{
-				title: "Render",
-				key: "key",
-				children: [
-					{
-						title: "test2",
-						key: "key2"
-					}
-				]
-			},
-			{
-				title: "Render2",
-				key: "key3",
-			}
-		],
-		checked: [],
-	};
 
-	onDrop = info =>
+	const tree = toJS(dungeon.tree);
+
+	const onDrop = info =>
 	{
 
 		const dropKey = info.node.props.eventKey;
@@ -59,7 +32,8 @@ class Layers extends React.Component
 				}
 			}
 		};
-		const data = [...this.state.gData];
+
+		const data = tree;
 
 		// Find dragObject
 		let dragObj;
@@ -108,38 +82,28 @@ class Layers extends React.Component
 			}
 		}
 
-		this.setState({
-			gData: data,
-		});
+		dungeon.tree = data;
 	};
 
-	onCheck = (keys, event) =>
-	{
-
-	};
-
-	render()
-	{
-		console.log(this.state.gData);
-
-		return (
+	return (
+		<div>
 			<Tree
 				draggable
 				blockNode
-				onDragEnter={this.onDragEnter}
-				onDrop={this.onDrop}
-				treeData={this.state.gData}
+				onDrop={onDrop}
+				treeData={tree}
 				checkable={true}
 				onCheck={(k, f) =>
 				{
 					console.log(k, f);
 				}}
-				onSelect={(key, event) => {
-					console.log(key, event)
+				onSelect={(key, event) =>
+				{
+					console.log(key, event);
 				}}
 			/>
-		);
-	}
-}
-**/
+		</div>
+	);
+});
+
 export default Layers;

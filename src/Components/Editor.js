@@ -1,12 +1,12 @@
 import React from 'react';
 import Navigation from './Navigation';
 import {Card, Elevation} from '@blueprintjs/core';
-import redux from '../redux/index';
-import {useSelector} from 'react-redux';
 import EditorTabs from './tabs/EditorTabs';
 import DialogManager from './DialogManager';
+import {observer} from 'mobx-react-lite';
+import store from '../store';
 
-const Editor = (props) =>
+const Editor = observer(({dungeon = store.dungeon}) =>
 {
 	return (
 		<div className={'editor_container'}>
@@ -30,7 +30,7 @@ const Editor = (props) =>
 						<canvas
 							ref={(ref) =>
 							{
-								// TODO DUNGEON REF
+								dungeon.setCanvas(ref)
 							}}
 						/>
 					</div>
@@ -40,6 +40,6 @@ const Editor = (props) =>
 
 		</div>
 	);
-};
+});
 
 export default Editor;

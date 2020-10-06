@@ -89,12 +89,17 @@ export class Dungeon
 	{
 		makeAutoObservable(this);
 
-		if(con?.canvas){
-			this.setCanvas(con.canvas)
+		if (con?.canvas)
+		{
+			this.setCanvas(con.canvas);
 		}
 		this.setSize(con);
 	}
 
+	/**
+	 * Define an canvas the end results renders on
+	 * @param canvas
+	 */
 	public setCanvas(canvas: HTMLCanvasElement)
 	{
 		this.canvas = canvas;
@@ -104,6 +109,7 @@ export class Dungeon
 			throw new Error('Could not create canvas 2d context');
 		}
 		this.context = context;
+		this.resize();
 	}
 
 	public async setSize({
@@ -127,7 +133,8 @@ export class Dungeon
 	 */
 	private async resize(): Promise<void>
 	{
-		if(!this.canvas){
+		if (!this.canvas)
+		{
 			return;
 		}
 		this.canvas.width = this._totalWidth;
@@ -176,6 +183,8 @@ export class Dungeon
 			key: this.idCounter,
 		});
 
+		newLayer.render()
+
 		return this.idCounter;
 	}
 
@@ -188,15 +197,42 @@ export class Dungeon
 
 	}
 
+	/**
+	 * Render Class, gets callbacked by Layers
+	 */
 	render()
 	{
-		if(!this.canvas || !this.context){
+		console.log("RENDER CALLED")
+
+		if (!this.canvas || !this.context)
+		{
+			console.warn('Dungeon render no canvas or context found');
 			return;
 		}
+
 		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
-		//TODO use layers with tree from reduxDungeon to merge them + global comp layers etc.
-		// + check if checked
-		// + global id for options at selected layer
+
+		const loop = (node: TreeNode) =>
+		{
+			if (node.children.length)
+			{
+				node.children.reverse();
+				for (const item of node.children)
+				{
+					loop(item);
+				}
+			}
+			const layer = this.layers[node.key];
+			this.context?.drawImage(layer.getRender(), 0, 0);
+		};
+
+		const temp = [...this._tree]; // Make a copy and reverse for bot to top render
+		temp.reverse();
+
+		for (const item of temp)
+		{
+			loop(item);
+		}
 	}
 
 }
