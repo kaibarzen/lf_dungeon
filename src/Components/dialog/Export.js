@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 
 const Export = (props) =>
 {
+	return <div></div>;
 
 	const dialog = useSelector(redux.editor.selectors.getDialog);
 	const open = dialog === redux.editor.enums.dialog.EXPORT;

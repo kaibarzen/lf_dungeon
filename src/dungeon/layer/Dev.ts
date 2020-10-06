@@ -1,8 +1,13 @@
 import {Layer} from "./Layer";
+import {Dungeon} from "../Dungeon";
 
-class DevLayer extends Layer {
+export class DevLayer extends Layer {
 
      public async render(): Promise<HTMLCanvasElement> {
+
+         if (!this.renderCanvas) {
+             throw new Error("dev Layer has no canvas to render on")
+         }
 
         for (let y = 0; y < this.dungeon.height + 1; y++) {
             for (let x = 0; x < this.dungeon.height + 1; x++) {

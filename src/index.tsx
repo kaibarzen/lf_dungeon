@@ -21,6 +21,6 @@ ReactDOM.render(
 );
 
 // @ts-ignore
-window.redux = redux; 
+window.redux = redux;
 
 serviceWorker.unregister();

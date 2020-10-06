@@ -1,7 +1,20 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import {Tree} from 'antd';
+import redux from '../../../redux';
+import {observer} from 'mobx-react-lite';
+import store from "../../../store"
 
+const Layers = observer(({dungeon = store.dungeon}) => {
+
+	return (
+		<div>
+			{JSON.stringify(dungeon.tree)}
+		</div>
+	);
+})
+
+/**
 class Layers extends React.Component
 {
 	state = {
@@ -15,6 +28,10 @@ class Layers extends React.Component
 						key: "key2"
 					}
 				]
+			},
+			{
+				title: "Render2",
+				key: "key3",
 			}
 		],
 		checked: [],
@@ -117,9 +134,12 @@ class Layers extends React.Component
 				{
 					console.log(k, f);
 				}}
+				onSelect={(key, event) => {
+					console.log(key, event)
+				}}
 			/>
 		);
 	}
 }
-
+**/
 export default Layers;

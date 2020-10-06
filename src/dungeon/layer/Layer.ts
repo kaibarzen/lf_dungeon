@@ -20,7 +20,7 @@ export abstract class Layer {
     protected opacity: number;
     protected enabled: boolean;
 
-    protected renderCanvas: Canvas = this.generateCanvas();
+    protected renderCanvas: Canvas | undefined;
 
     constructor(
         dungeon: Dungeon,
@@ -34,6 +34,7 @@ export abstract class Layer {
         this.data = data;
         this.opacity = opacity;
         this.enabled = enabled;
+        this.renderCanvas = this.generateCanvas()
     }
 
     public getOptions() {
@@ -109,6 +110,11 @@ export abstract class Layer {
      */
     public async render(): Promise<HTMLCanvasElement> {
         console.warn("Render not implemented by subclass.")
+
+        if (!this.renderCanvas) {
+            throw new Error("abstract Layer could not generate an Canvas")
+        }
+
         return this.renderCanvas.canvas;
     }
 
@@ -116,6 +122,11 @@ export abstract class Layer {
      * Return a canvas to merge, does not rerender any changes
      */
     public getRender(): HTMLCanvasElement {
+
+        if (!this.renderCanvas) {
+            throw new Error("abstract Layer could not generate an Canvas")
+        }
+
         return this.renderCanvas.canvas;
     }
 

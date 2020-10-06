@@ -9,7 +9,6 @@ import {useSelector} from 'react-redux';
 import redux from '../../../redux/index';
 import Sprites from './tilePanel/Sprites';
 import Tools from './tilePanel/Tools';
-import Callbacks from './Callbacks';
 import Group from './tilePanel/Groups';
 import Heat from './tilePanel/Heat';
 
@@ -20,8 +19,6 @@ const TilePanel = (props) =>
 
 	return (
 		<div className={'editor_panel'}>
-
-			<Callbacks/>
 			<Tools/>
 
 			{

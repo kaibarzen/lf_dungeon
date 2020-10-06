@@ -7,6 +7,8 @@ import {useSelector} from 'react-redux';
 const BackgroundPanel = () =>
 {
 
+	return <div></div>;
+
 	const background = useSelector(redux.dungeon.selectors.getBackground);
 
 	const onChangeBackgroundInput = (e) =>

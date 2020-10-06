@@ -6,7 +6,7 @@ import { IconNames } from "@blueprintjs/icons";
 import GridPanel from './panels/GridPanel';
 import BackgroundPanel from './panels/BackgroundPanel';
 import TilePanel from './panels/TilePanel';
-import Layers from './panels/tilePanel/Layers';
+import Layers from './panels/Layers';
 
 const EditorTabs = (props) =>
 {

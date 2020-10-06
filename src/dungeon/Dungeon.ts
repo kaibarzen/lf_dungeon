@@ -1,86 +1,202 @@
-import {Layer} from "./layer/Layer";
+import {Layer} from './layer/Layer';
+import {DevLayer} from './layer/Dev';
+import {makeAutoObservable} from 'mobx';
 
-export interface Constructor {
-    width?: number,
-    height?: number,
-    cellWidth?: number,
-    cellHeight?: number,
+export interface Constructor
+{
+	width?: number,
+	height?: number,
+	cellWidth?: number,
+	cellHeight?: number,
+	canvas?: HTMLCanvasElement
 }
 
-export class Dungeon {
-    get height(): number {
-        return this._height;
-    }
+export enum Layers
+{
+	BACKGROUND,
+	COMPOSITE,
+	DEV,
+	FOLDER,
+	GRID,
+	TILE,
+}
 
-    get width(): number {
-        return this._width;
-    }
+interface TreeNode
+{
+	title: string,
+	key: number,
+	children: TreeNode[]
+}
 
-    get cellHeight(): number {
-        return this._cellHeight;
-    }
+export class Dungeon
+{
+	get tree(): TreeNode[]
+	{
+		return this._tree;
+	}
 
-    get cellWidth(): number {
-        return this._cellWidth;
-    }
+	set tree(value: TreeNode[])
+	{
+		this._tree = value;
+	}
 
-    get totalHeight(): number {
-        return this._totalHeight;
-    }
+	get height(): number
+	{
+		return this._height;
+	}
 
-    get totalWidth(): number {
-        return this._totalWidth;
-    }
+	get width(): number
+	{
+		return this._width;
+	}
 
-    private _cellWidth: number = 100; // Cell in px
-    private _cellHeight: number = 50;
-    private _width: number = 10; // How Many cells
-    private _height: number = 20;
-    private _totalWidth: number = 0; // Total size in px
-    private _totalHeight: number = 0;
+	get cellHeight(): number
+	{
+		return this._cellHeight;
+	}
 
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+	get cellWidth(): number
+	{
+		return this._cellWidth;
+	}
 
-    private layers: Layer[] = [];
+	get totalHeight(): number
+	{
+		return this._totalHeight;
+	}
 
-    constructor(canvas: HTMLCanvasElement, con: Constructor | undefined) {
-        this.canvas = canvas;
-        const context = canvas.getContext("2d");
-        if (!context) {
-            throw new Error("Could not create canvas 2d context");
-        }
-        this.context = context;
+	get totalWidth(): number
+	{
+		return this._totalWidth;
+	}
 
-        this.setSize(con);
-    }
+	private _cellWidth: number = 100; // Cell in px
+	private _cellHeight: number = 50;
+	private _width: number = 10; // How Many cells
+	private _height: number = 20;
+	private _totalWidth: number = 0; // Total size in px
+	private _totalHeight: number = 0;
 
-    public async setSize({
-                             width = this._width,
-                             height = this._height,
-                             cellWidth = this._cellWidth,
-                             cellHeight = this._cellHeight,
-                         } = {}): Promise<void> {
-        this._width = width;
-        this._height = height;
-        this._cellWidth = cellWidth;
-        this._cellHeight = cellHeight;
-        this._totalWidth = width * cellWidth;
-        this._totalHeight = height * cellHeight * 0.5;
-        await this.resize()
-    }
+	private idCounter: number = 0;
 
-    /**
-     * Resize all, force layers to rerender
-     */
-    private async resize(): Promise<void> {
-        this.canvas.width = this._totalWidth;
-        this.canvas.height = this._totalHeight;
-    }
+	private canvas: HTMLCanvasElement | undefined;
+	private context: CanvasRenderingContext2D | undefined;
 
-    render() {
-        this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
+	private layers: { [key: number]: Layer } = {};
+	private _tree: TreeNode[] = [];
 
-    }
+	constructor(con: Constructor | undefined)
+	{
+		makeAutoObservable(this);
+
+		if(con?.canvas){
+			this.setCanvas(con.canvas)
+		}
+		this.setSize(con);
+	}
+
+	public setCanvas(canvas: HTMLCanvasElement)
+	{
+		this.canvas = canvas;
+		const context = canvas.getContext('2d');
+		if (!context)
+		{
+			throw new Error('Could not create canvas 2d context');
+		}
+		this.context = context;
+	}
+
+	public async setSize({
+		                     width = this._width,
+		                     height = this._height,
+		                     cellWidth = this._cellWidth,
+		                     cellHeight = this._cellHeight,
+	                     } = {}): Promise<void>
+	{
+		this._width = width;
+		this._height = height;
+		this._cellWidth = cellWidth;
+		this._cellHeight = cellHeight;
+		this._totalWidth = width * cellWidth;
+		this._totalHeight = height * cellHeight * 0.5;
+		await this.resize();
+	}
+
+	/**
+	 * Resize all, force layers to rerender
+	 */
+	private async resize(): Promise<void>
+	{
+		if(!this.canvas){
+			return;
+		}
+		this.canvas.width = this._totalWidth;
+		this.canvas.height = this._totalHeight;
+	}
+
+	/**
+	 * Add a layer, returns the id
+	 * @param type
+	 */
+	public addLayer(type: Layers): number
+	{
+
+		let newLayer: undefined | Layer;
+
+		switch (type)
+		{
+			case Layers.BACKGROUND:
+				break;
+			case Layers.COMPOSITE:
+				break;
+			case Layers.DEV:
+				newLayer = new DevLayer(this, undefined);
+				break;
+			case Layers.FOLDER:
+				break;
+			case Layers.GRID:
+				break;
+			case Layers.TILE:
+				break;
+			default:
+				throw new Error('Type of Layer does not exist');
+		}
+
+		if (newLayer === undefined)
+		{
+			throw new Error('Type of Layer is probably not implemented yet.');
+		}
+
+		this.idCounter++;
+		this.layers[this.idCounter] = newLayer;
+
+		this._tree.push({
+			title: `Unnamed - ${this.idCounter}`,
+			children: [],
+			key: this.idCounter,
+		});
+
+		return this.idCounter;
+	}
+
+	/**
+	 * Remove a layer by id
+	 * @param id
+	 */
+	public removeLayer(id: number): void
+	{
+
+	}
+
+	render()
+	{
+		if(!this.canvas || !this.context){
+			return;
+		}
+		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
+		//TODO use layers with tree from reduxDungeon to merge them + global comp layers etc.
+		// + check if checked
+		// + global id for options at selected layer
+	}
 
 }

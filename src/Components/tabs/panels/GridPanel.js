@@ -6,6 +6,8 @@ import {IconNames} from '@blueprintjs/icons';
 
 const GridPanel = (props) =>
 {
+	return <div></div>;
+
 	const size = useSelector(redux.dungeon.selectors.getSize);
 	const grid = useSelector(redux.dungeon.selectors.getGrid);
 
