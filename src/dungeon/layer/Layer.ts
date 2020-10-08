@@ -1,4 +1,5 @@
 import {Dungeon} from '../Dungeon';
+import {action, computed, makeObservable, observable} from 'mobx';
 
 export interface Cords
 {
@@ -6,44 +7,110 @@ export interface Cords
 	y: number,
 }
 
+/**
+ * Layer option types for frontend generation
+ */
+export enum input
+{
+	STRING,
+	NUMBER,
+	DOUBLE,
+	IMAGE,
+	PERCENT,
+	CHECKBOX,
+	NAME,
+}
+
+export interface optionConstructorItem
+{
+	title?: string,
+	desc?: string,
+	type: input,
+	key: string,
+	value?: any,
+}
+
+export interface options
+{
+	name: string,
+	opacity: number,
+	enabled: boolean,
+}
+
+export interface constructorParams
+{
+	name?: string,
+	opacity?: number,
+	enabled?: boolean,
+}
+
+export interface constructorRequired
+{
+	dungeon: Dungeon,
+	id: number,
+}
+
 export abstract class Layer
 {
+	get enabled(): boolean
+	{
+		return this.opt.enabled;
+	}
+
+	set enabled(value: boolean)
+	{
+		this.opt.enabled = value;
+	}
 
 	// Todo blending mode
-	// name
-
 	protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
-
+	private id: number;
 	protected data: any; // TODO Data Class
-	protected opacity: number;
-	protected enabled: boolean;
-
 	protected context: CanvasRenderingContext2D; // Main Context
 
-	constructor(
-		dungeon: Dungeon,
-		{
-			data = null,
-			opacity = 1.0,
-			enabled = true,
-		} = {})
-	{
+	// All Params/Options, has to be public because of mobx,
+	public opt: options = {
+		name: "Unnamed",
+		enabled: true,
+		opacity: 1.0,
+	};
 
-		this.dungeon = dungeon;
-		this.data = data;
-		this.opacity = opacity;
-		this.enabled = enabled;
+	constructor(
+		req: constructorRequired,
+		opt: constructorParams,
+		)
+	{
+		makeObservable(this, {
+			setOptions: action,
+			opt: observable,
+		});
+		this.dungeon = req.dungeon;
+		this.id = req.id;
+		this.opt = {...this.opt, ...opt};
 		this.context = this.generateContext();
 	}
 
-	public getOptions()
+	/**
+	 * Get the option constructur incl value
+	 */
+	public getOptions(): optionConstructorItem[]
 	{
-		//TODO + name
+		return [
+			{
+				type: input.NAME,
+				key: "name",
+				value: this.opt.name,
+			}
+		]
 	}
 
-	public setOptions()
+	/**
+	 * Set options via object destruction
+	 * @param options
+	 */
+	public setOptions(options: options)
 	{
-
+		this.opt = {...this.opt, ...options};
 	}
 
 	/**
@@ -113,7 +180,7 @@ export abstract class Layer
 	{
 		this.context.canvas.width = this.dungeon.totalWidth;
 		this.context.canvas.height = this.dungeon.totalHeight;
-		await this.render()
+		await this.render();
 	}
 
 	/**

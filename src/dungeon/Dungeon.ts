@@ -32,6 +32,11 @@ interface TreeNode
 
 export class Dungeon
 {
+	get selectedLayer(): Layer | undefined
+	{
+		return this._selectedLayer;
+	}
+
 	get tree(): TreeNode[]
 	{
 		return this._tree;
@@ -44,7 +49,7 @@ export class Dungeon
 	set tree(value: TreeNode[])
 	{
 		this._tree = value;
-		this.render()
+		this.render();
 	}
 
 	get height(): number
@@ -90,6 +95,8 @@ export class Dungeon
 
 	private layers: { [key: number]: Layer } = {};
 	private _tree: TreeNode[] = [];
+
+	private _selectedLayer: Layer | undefined;
 
 	constructor(con: Constructor | undefined)
 	{
@@ -158,6 +165,14 @@ export class Dungeon
 		}
 	}
 
+	/**
+	 * Transforms the layer id into the layer class and sets it as the currently selected layer
+	 * @param value
+	 */
+	public setSelectedLayer(value: number)
+	{
+		this._selectedLayer = this.layers[value];
+	}
 
 	/**
 	 * Add a layer, returns the id
@@ -166,7 +181,7 @@ export class Dungeon
 	public addLayer(type: Layers): number
 	{
 
-		let newLayer: undefined | Layer;
+		let newLayer: any;
 
 		switch (type)
 		{
@@ -175,7 +190,7 @@ export class Dungeon
 			case Layers.COMPOSITE:
 				break;
 			case Layers.DEV:
-				newLayer = new DevLayer(this, undefined);
+				newLayer = DevLayer;
 				break;
 			case Layers.FOLDER:
 				break;
@@ -184,7 +199,7 @@ export class Dungeon
 			case Layers.TILE:
 				break;
 			case Layers.SOLID:
-				newLayer = new SolidLayer(this, undefined);
+				newLayer = SolidLayer;
 				break;
 			default:
 				throw new Error('Type of Layer does not exist');
@@ -196,6 +211,10 @@ export class Dungeon
 		}
 
 		this.idCounter++;
+
+		const required = {dungeon: this, id: this.idCounter}
+		const params = {name: `Unnamed Layer - ${this.idCounter}`};
+		newLayer = new newLayer(required, params)
 		this.layers[this.idCounter] = newLayer;
 
 		this._tree.push({
@@ -219,6 +238,38 @@ export class Dungeon
 	}
 
 	/**
+	 * Disable/Uncheck an array of layer ids, rerenders at dungeon
+	 * @param ids
+	 */
+	public enableLayers(ids: number[])
+	{
+		this.setEnabled(true, ids);
+	}
+
+	/**
+	 * Enable/Check an array of layer ids, rerenders at dungeon
+	 * @param ids
+	 */
+	public disableLayers(ids: number[])
+	{
+		this.setEnabled(false, ids);
+	}
+
+	/**
+	 * Enable/Disable an array of layers ids, rerenders at dungeon
+	 * @param enabled
+	 * @param ids
+	 */
+	private setEnabled(enabled: boolean, ids: number[])
+	{
+		for (const item of ids)
+		{
+			this.layers[item].enabled = enabled;
+		}
+		this.render();
+	}
+
+	/**
 	 * Render Class, gets callbacked by the layers itself if changes happen or by this class on tree changes
 	 */
 	render()
@@ -233,6 +284,13 @@ export class Dungeon
 
 		const loop = (node: TreeNode) =>
 		{
+			const layer = this.layers[node.key];
+
+			if (!layer.enabled)
+			{
+				return;
+			}
+
 			if (node.children.length)
 			{
 				node.children.reverse();
@@ -241,7 +299,6 @@ export class Dungeon
 					loop(item);
 				}
 			}
-			const layer = this.layers[node.key];
 			this.context?.drawImage(layer.getRender(), 0, 0);
 		};
 

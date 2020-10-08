@@ -4,6 +4,7 @@ import {Tree} from 'antd';
 import {observer} from 'mobx-react-lite';
 import store from '../../../store';
 import {toJS} from 'mobx';
+import LayerOptions from './LayerOptions';
 
 const Layers = observer(({dungeon = store.dungeon}) =>
 {
@@ -99,9 +100,11 @@ const Layers = observer(({dungeon = store.dungeon}) =>
 				}}
 				onSelect={(key, event) =>
 				{
-					console.log(key, event);
+					dungeon.setSelectedLayer(key);
 				}}
 			/>
+
+			<LayerOptions/>
 		</div>
 	);
 });
