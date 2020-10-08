@@ -212,13 +212,13 @@ export class Dungeon
 
 		this.idCounter++;
 
-		const required = {dungeon: this, id: this.idCounter}
+		const required = {dungeon: this, id: this.idCounter};
 		const params = {name: `Unnamed Layer - ${this.idCounter}`};
-		newLayer = new newLayer(required, params)
+		newLayer = new newLayer(required, params);
 		this.layers[this.idCounter] = newLayer;
 
 		this._tree.push({
-			title: `Unnamed - ${this.idCounter}`,
+			title: newLayer.name,
 			children: [],
 			key: this.idCounter,
 		});
@@ -226,6 +226,32 @@ export class Dungeon
 		newLayer.render();
 
 		return this.idCounter;
+	}
+
+	/**
+	 * Rename a node int he tree by key // TOdo early return
+	 * @param key
+	 * @param name
+	 */
+	public renameTree(key: number, name: string)
+	{
+		const loop = (node: TreeNode) =>
+		{
+			if(node.key === key){
+				node.title = name;
+				return;
+			}
+
+			for (const item of node.children)
+			{
+				loop(item);
+			}
+		};
+		for (const item of this._tree)
+		{
+			loop(item);
+		}
+
 	}
 
 	/**

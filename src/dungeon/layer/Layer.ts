@@ -62,6 +62,11 @@ export abstract class Layer
 		this.opt.enabled = value;
 	}
 
+	get name(): string
+	{
+		return this.opt.name;
+	}
+
 	// Todo blending mode
 	protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
 	private id: number;
@@ -70,7 +75,7 @@ export abstract class Layer
 
 	// All Params/Options, has to be public because of mobx,
 	public opt: options = {
-		name: "Unnamed",
+		name: 'Unnamed',
 		enabled: true,
 		opacity: 1.0,
 	};
@@ -78,7 +83,7 @@ export abstract class Layer
 	constructor(
 		req: constructorRequired,
 		opt: constructorParams,
-		)
+	)
 	{
 		makeObservable(this, {
 			setOptions: action,
@@ -98,10 +103,10 @@ export abstract class Layer
 		return [
 			{
 				type: input.NAME,
-				key: "name",
+				key: 'name',
 				value: this.opt.name,
-			}
-		]
+			},
+		];
 	}
 
 	/**
@@ -111,6 +116,9 @@ export abstract class Layer
 	public setOptions(options: options)
 	{
 		this.opt = {...this.opt, ...options};
+		if(options.name){
+			this.dungeon.renameTree(this.id, this.opt.name)
+		}
 	}
 
 	/**
