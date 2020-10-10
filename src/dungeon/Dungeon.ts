@@ -38,6 +38,13 @@ export class Dungeon
 		return this._treeChecked;
 	}
 
+	// Calls render
+	set treeChecked(value: number[])
+	{
+		this._treeChecked = value;
+		this.render();
+	}
+
 	get selectedLayer(): Layer | undefined
 	{
 		return this._selectedLayer;
@@ -264,79 +271,12 @@ export class Dungeon
 	}
 
 	/**
-	 * Check or uncheck an element on the tree by key, called by layer opt check change, calls rerender
-	 * @param key
-	 * @param checked
-	 */
-	public checkTree(key: number, checked: boolean)
-	{
-		if (checked && !this._treeChecked.includes(key))
-		{
-			this._treeChecked.push(key);
-		}
-		else if (!checked)
-		{
-			if (this._treeChecked.indexOf(key) !== -1)
-			{
-				this._treeChecked.splice(this._treeChecked.indexOf(key), 1);
-			}
-		}
-		this.render()
-	}
-
-	/**
-	 *  Enable/Check or uncheck an layer by key, called by tree check change,
-	 * @param key
-	 * @param checked
-	 */
-	public checkLayer(key: number, checked: boolean)
-	{
-		const layer = this.layers[key];
-		if (layer)
-		{
-			layer.setEnabled(checked);
-		}
-	}
-
-	/**
 	 * Remove a layer by id
 	 * @param id
 	 */
 	public removeLayer(id: number): void
 	{
 		// TODO
-	}
-
-	/**
-	 * Disable/Uncheck an array of layer ids, rerenders at dungeon
-	 * @param ids
-	 */
-	public enableLayers(ids: number[])
-	{
-		this.setEnabled(true, ids);
-	}
-
-	/**
-	 * Enable/Check an array of layer ids, rerenders at dungeon
-	 * @param ids
-	 */
-	public disableLayers(ids: number[])
-	{
-		this.setEnabled(false, ids);
-	}
-
-	/**
-	 * Enable/Disable an array of layers ids, rerenders at dungeon
-	 * @param enabled
-	 * @param ids
-	 */
-	private setEnabled(enabled: boolean, ids: number[])
-	{
-		for (const item of ids)
-		{
-			this.layers[item].enabled = enabled;
-		}
-		this.render();
 	}
 
 	/**
@@ -354,22 +294,25 @@ export class Dungeon
 
 		const loop = (node: TreeNode) =>
 		{
-			const layer = this.layers[node.key];
-
-			if (!layer.enabled)
+			if (node.children.length) // Nodes with children work as folder and do not get rendered
 			{
-				return;
-			}
-
-			if (node.children.length)
-			{
-				node.children.reverse();
-				for (const item of node.children)
+				const children = [...node.children].reverse()
+				for (const item of children)
 				{
 					loop(item);
 				}
 			}
-			this.context?.drawImage(layer.getRender(), 0, 0);
+			else
+			{
+
+				if (!this._treeChecked.includes(node.key)) // Nodes which are not checked do not get rendered
+				{
+					return;
+				}
+
+				const layer = this.layers[node.key];
+				this.context?.drawImage(layer.getRender(), 0, 0);
+			}
 		};
 
 		const temp = [...this._tree]; // Make a copy and reverse for bot to top render

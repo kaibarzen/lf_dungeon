@@ -34,7 +34,6 @@ export interface options
 {
 	name: string,
 	opacity: number,
-	enabled: boolean,
 }
 
 export interface constructorParams
@@ -52,16 +51,6 @@ export interface constructorRequired
 
 export abstract class Layer
 {
-	get enabled(): boolean
-	{
-		return this.opt.enabled;
-	}
-
-	set enabled(value: boolean)
-	{
-		this.opt.enabled = value;
-	}
-
 	get name(): string
 	{
 		return this.opt.name;
@@ -76,7 +65,6 @@ export abstract class Layer
 	// All Params/Options, has to be public because of mobx,
 	public opt: options = {
 		name: 'Unnamed',
-		enabled: true,
 		opacity: 1.0,
 	};
 
@@ -106,12 +94,6 @@ export abstract class Layer
 				key: 'name',
 				value: this.opt.name,
 			},
-			{
-				title: "Enabled",
-				type: input.CHECKBOX,
-				key: 'enabled',
-				value: this.opt.enabled,
-			},
 		];
 	}
 
@@ -125,18 +107,6 @@ export abstract class Layer
 		if(options.name !== undefined){
 			this.dungeon.renameTree(this.id, this.opt.name)
 		}
-		if(options.enabled !== undefined){
-			this.setEnabled(this.opt.enabled);
-		}
-	}
-
-	/**
-	 * Sets the enabled option specific
-	 * @param enabled
-	 */
-	public setEnabled(enabled: boolean){
-		this.opt.enabled = enabled;
-		this.dungeon.checkTree(this.id, enabled)
 	}
 
 	/**

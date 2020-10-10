@@ -95,11 +95,10 @@ const Layers = observer(({dungeon = store.dungeon}) =>
 				onDrop={onDrop}
 				treeData={tree}
 				checkable={true}
-				checkedKeys={checked}
-				checkStrictly={true}
+				checkedKeys={dungeon.treeChecked}
 				onCheck={(data, e) =>
 				{
-					dungeon.checkLayer(e.node.key, e.checked)
+					dungeon.treeChecked = data;
 				}}
 				onSelect={(key, event) =>
 				{
@@ -107,7 +106,7 @@ const Layers = observer(({dungeon = store.dungeon}) =>
 				}}
 			/>
 
-			<LayerOptions/>
+			<LayerOptions />
 		</div>
 	);
 });
