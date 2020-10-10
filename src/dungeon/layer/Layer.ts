@@ -64,7 +64,7 @@ export abstract class Layer
 
 	// All Params/Options, has to be public because of mobx,
 	public opt: options = {
-		name: 'Unnamed',
+		name: 'New Layer ',
 		opacity: 1.0,
 	};
 
@@ -81,6 +81,11 @@ export abstract class Layer
 		this.id = req.id;
 		this.opt = {...this.opt, ...opt};
 		this.context = this.generateContext();
+
+		// If no name gets passed we simply but the key at the end of the currently existing name
+		if(!opt?.name){
+			this.opt.name = this.opt.name + req.id;
+		}
 	}
 
 	/**

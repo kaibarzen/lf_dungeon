@@ -3,6 +3,7 @@ import {DevLayer} from './layer/Dev';
 import {makeAutoObservable, toJS} from 'mobx';
 import {SolidLayer} from './layer/Solid';
 import {number} from 'prop-types';
+import {FolderLayer} from './layer/Folder';
 
 export interface Constructor
 {
@@ -207,6 +208,7 @@ export class Dungeon
 				newLayer = DevLayer;
 				break;
 			case Layers.FOLDER:
+				newLayer = FolderLayer;
 				break;
 			case Layers.GRID:
 				break;
@@ -227,8 +229,7 @@ export class Dungeon
 		this.idCounter++;
 
 		const required = {dungeon: this, id: this.idCounter};
-		const params = {name: `Unnamed Layer - ${this.idCounter}`};
-		newLayer = new newLayer(required, params);
+		newLayer = new newLayer(required);
 		this.layers[this.idCounter] = newLayer;
 
 		this._tree.push({
@@ -280,6 +281,19 @@ export class Dungeon
 	}
 
 	/**
+	 * Returns Layer by key/id, returns false of id does not exists
+	 * @param id
+	 */
+	getLayer(id: number): Layer | false
+	{
+		const layer = this.layers[id];
+		if(layer){
+			return layer;
+		}
+		return false;
+	}
+
+	/**
 	 * Render Class, gets callbacked by the layers itself if changes happen or by this class on tree changes
 	 */
 	render()
@@ -296,7 +310,7 @@ export class Dungeon
 		{
 			if (node.children.length) // Nodes with children work as folder and do not get rendered
 			{
-				const children = [...node.children].reverse()
+				const children = [...node.children].reverse();
 				for (const item of children)
 				{
 					loop(item);

@@ -5,6 +5,7 @@ import {observer} from 'mobx-react-lite';
 import store from '../../../store';
 import {toJS} from 'mobx';
 import LayerOptions from './LayerOptions';
+import {FolderLayer} from '../../../dungeon/layer/Folder';
 
 const Layers = observer(({dungeon = store.dungeon}) =>
 {
@@ -14,6 +15,11 @@ const Layers = observer(({dungeon = store.dungeon}) =>
 
 	const onDrop = info =>
 	{
+		// Disallow Children below non Folders, checks the opt.folder property on the layer class
+		const layer = dungeon.getLayer(info.node.key);
+		if(!layer?.opt?.folder){
+			return;
+		}
 
 		const dropKey = info.node.props.eventKey;
 		const dragKey = info.dragNode.props.eventKey;
