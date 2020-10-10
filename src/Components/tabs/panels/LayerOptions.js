@@ -5,6 +5,7 @@ import store from '../../../store';
 import {toJS} from 'mobx';
 import {input} from '../../../dungeon/layer/Layer';
 import Name from '../../layer/input/Name';
+import Checkbox from "../../layer/input/Checkbox"
 
 // @ts-ignore
 const LayerOptions = observer(({dungeon = store.dungeon}) =>
@@ -17,24 +18,33 @@ const LayerOptions = observer(({dungeon = store.dungeon}) =>
 	}
 	const opt = layer.getOptions();
 
-	/**
-	 * Forward an change to the layer
-	 * @param forward object
-	 */
-	const setChange = (forward) =>
-	{
-		layer.setOptions(forward)
-	};
-
 	const returnOption = (option) =>
 	{
+		const setChange = (value) =>
+		{
+			layer.setOptions({[option.key]: value});
+		};
+
 		switch (option.type)
 		{
 			case input.NAME:
-				return <Name option={option} setChange={setChange}/>;
+				return <Name
+					option={option}
+					setChange={setChange}
+				/>;
+			case input.CHECKBOX:
+				return <Checkbox
+					option={option}
+					setChange={setChange}
+				/>;
 			default:
 				return <div></div>;
 		}
+	};
+
+	const getInput = (type) =>
+	{
+
 	};
 
 	return (

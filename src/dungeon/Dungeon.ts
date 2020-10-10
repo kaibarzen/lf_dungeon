@@ -1,7 +1,8 @@
 import {Layer} from './layer/Layer';
 import {DevLayer} from './layer/Dev';
-import {makeAutoObservable} from 'mobx';
+import {makeAutoObservable, toJS} from 'mobx';
 import {SolidLayer} from './layer/Solid';
+import {number} from 'prop-types';
 
 export interface Constructor
 {
@@ -32,6 +33,11 @@ interface TreeNode
 
 export class Dungeon
 {
+	get treeChecked(): number[]
+	{
+		return this._treeChecked;
+	}
+
 	get selectedLayer(): Layer | undefined
 	{
 		return this._selectedLayer;
@@ -95,6 +101,7 @@ export class Dungeon
 
 	private layers: { [key: number]: Layer } = {};
 	private _tree: TreeNode[] = [];
+	private _treeChecked: number[] = [];
 
 	private _selectedLayer: Layer | undefined;
 
@@ -222,6 +229,7 @@ export class Dungeon
 			children: [],
 			key: this.idCounter,
 		});
+		this._treeChecked.push(this.idCounter);
 
 		newLayer.render();
 
@@ -237,7 +245,8 @@ export class Dungeon
 	{
 		const loop = (node: TreeNode) =>
 		{
-			if(node.key === key){
+			if (node.key === key)
+			{
 				node.title = name;
 				return;
 			}
@@ -252,6 +261,41 @@ export class Dungeon
 			loop(item);
 		}
 
+	}
+
+	/**
+	 * Check or uncheck an element on the tree by key, called by layer opt check change, calls rerender
+	 * @param key
+	 * @param checked
+	 */
+	public checkTree(key: number, checked: boolean)
+	{
+		if (checked && !this._treeChecked.includes(key))
+		{
+			this._treeChecked.push(key);
+		}
+		else if (!checked)
+		{
+			if (this._treeChecked.indexOf(key) !== -1)
+			{
+				this._treeChecked.splice(this._treeChecked.indexOf(key), 1);
+			}
+		}
+		this.render()
+	}
+
+	/**
+	 *  Enable/Check or uncheck an layer by key, called by tree check change,
+	 * @param key
+	 * @param checked
+	 */
+	public checkLayer(key: number, checked: boolean)
+	{
+		const layer = this.layers[key];
+		if (layer)
+		{
+			layer.setEnabled(checked);
+		}
 	}
 
 	/**

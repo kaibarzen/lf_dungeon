@@ -13,7 +13,7 @@ const Name = ({option, setChange}) =>
 					value={option.value}
 					onChange={(newValue) =>
 					{
-						setChange({[option.key]: newValue})
+						setChange(newValue)
 					}}
 				/>
 			</H1>

@@ -106,6 +106,12 @@ export abstract class Layer
 				key: 'name',
 				value: this.opt.name,
 			},
+			{
+				title: "Enabled",
+				type: input.CHECKBOX,
+				key: 'enabled',
+				value: this.opt.enabled,
+			},
 		];
 	}
 
@@ -116,9 +122,21 @@ export abstract class Layer
 	public setOptions(options: options)
 	{
 		this.opt = {...this.opt, ...options};
-		if(options.name){
+		if(options.name !== undefined){
 			this.dungeon.renameTree(this.id, this.opt.name)
 		}
+		if(options.enabled !== undefined){
+			this.setEnabled(this.opt.enabled);
+		}
+	}
+
+	/**
+	 * Sets the enabled option specific
+	 * @param enabled
+	 */
+	public setEnabled(enabled: boolean){
+		this.opt.enabled = enabled;
+		this.dungeon.checkTree(this.id, enabled)
 	}
 
 	/**
