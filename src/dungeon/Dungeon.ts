@@ -3,6 +3,7 @@ import {DevLayer} from './layer/Dev';
 import {makeAutoObservable, toJS} from 'mobx';
 import {SolidLayer} from './layer/Solid';
 import {FolderLayer} from './layer/Folder';
+import {GridLayer} from './layer/Grid';
 
 export interface Constructor
 {
@@ -210,6 +211,7 @@ export class Dungeon
 				newLayer = FolderLayer;
 				break;
 			case Layers.GRID:
+				newLayer = GridLayer;
 				break;
 			case Layers.TILE:
 				break;
