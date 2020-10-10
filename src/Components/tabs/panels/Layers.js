@@ -11,14 +11,16 @@ const Layers = observer(({dungeon = store.dungeon}) =>
 {
 
 	const tree = toJS(dungeon.tree);
-	const checked = toJS(dungeon.treeChecked);
 
 	const onDrop = info =>
 	{
+		console.log("NODE", info.node.key, info)
 		// Disallow Children below non Folders, checks the opt.folder property on the layer class
-		const layer = dungeon.getLayer(info.node.key);
-		if(!layer?.opt?.folder){
-			return;
+		if(!info.dropToGap){
+			const layer = dungeon.getLayer(info.node.key);
+			if(!layer?.opt?.folder){
+				return;
+			}
 		}
 
 		const dropKey = info.node.props.eventKey;

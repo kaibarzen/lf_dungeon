@@ -19,6 +19,7 @@ export enum input
 	PERCENT,
 	CHECKBOX,
 	NAME,
+	COLOR
 }
 
 export interface optionConstructorItem
@@ -81,11 +82,6 @@ export abstract class Layer
 		this.id = req.id;
 		this.opt = {...this.opt, ...opt};
 		this.context = this.generateContext();
-
-		// If no name gets passed we simply but the key at the end of the currently existing name
-		if(!opt?.name){
-			this.opt.name = this.opt.name + req.id;
-		}
 	}
 
 	/**
@@ -103,7 +99,7 @@ export abstract class Layer
 	}
 
 	/**
-	 * Set options via object destruction
+	 * Set options via object destruction, calls render
 	 * @param options
 	 */
 	public setOptions(options: options)
@@ -112,6 +108,7 @@ export abstract class Layer
 		if(options.name !== undefined){
 			this.dungeon.renameTree(this.id, this.opt.name)
 		}
+		this.render()
 	}
 
 	/**

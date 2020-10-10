@@ -2,7 +2,6 @@ import {Layer} from './layer/Layer';
 import {DevLayer} from './layer/Dev';
 import {makeAutoObservable, toJS} from 'mobx';
 import {SolidLayer} from './layer/Solid';
-import {number} from 'prop-types';
 import {FolderLayer} from './layer/Folder';
 
 export interface Constructor

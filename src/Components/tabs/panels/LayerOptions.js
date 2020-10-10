@@ -5,7 +5,8 @@ import store from '../../../store';
 import {toJS} from 'mobx';
 import {input} from '../../../dungeon/layer/Layer';
 import Name from '../../layer/input/Name';
-import Checkbox from "../../layer/input/Checkbox"
+import Checkbox from '../../layer/input/Checkbox';
+import Color from '../../layer/input/Color';
 
 // @ts-ignore
 const LayerOptions = observer(({dungeon = store.dungeon}) =>
@@ -34,6 +35,11 @@ const LayerOptions = observer(({dungeon = store.dungeon}) =>
 				/>;
 			case input.CHECKBOX:
 				return <Checkbox
+					option={option}
+					setChange={setChange}
+				/>;
+			case input.COLOR:
+				return <Color
 					option={option}
 					setChange={setChange}
 				/>;
