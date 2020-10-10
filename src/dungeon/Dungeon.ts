@@ -286,7 +286,8 @@ export class Dungeon
 	getLayer(id: number): Layer | false
 	{
 		const layer = this.layers[id];
-		if(layer){
+		if (layer)
+		{
 			return layer;
 		}
 		return false;
@@ -305,14 +306,40 @@ export class Dungeon
 
 		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
 
-		const loop = (node: TreeNode) =>
+		/**
+		 * Function that draw's the layer to the canvas.
+		 * @param layer
+		 * @param opacity, calculated opacity through the tree
+		 */
+		const drawSingle = (layer: Layer, opacity: number) =>
 		{
+			// Already checked this but typescript wants so
+			if(!this.context){
+				return;
+			}
+
+			this.context.save();
+			this.context.globalAlpha = opacity;
+			this.context.drawImage(layer.getRender(), 0, 0);
+			this.context.restore()
+		};
+
+		/**
+		 * Function to recursively loop to the tree
+		 * @param node
+		 * @param preOpacity calculated opacity from all nodes bat this branch before
+		 */
+		const loop = (node: TreeNode, preOpacity: number = 1) =>
+		{
+			const layer = this.layers[node.key];
+			const opacity = layer.opt.opacity * preOpacity;
+
 			if (node.children.length) // Nodes with children work as folder and do not get rendered
 			{
-				const children = [...node.children].reverse();
+				const children = [...node.children].reverse(); // Make a copy and reverse for bot to top render
 				for (const item of children)
 				{
-					loop(item);
+					loop(item, opacity);
 				}
 			}
 			else
@@ -323,14 +350,13 @@ export class Dungeon
 					return;
 				}
 
-				const layer = this.layers[node.key];
-				this.context?.drawImage(layer.getRender(), 0, 0);
+				drawSingle(layer, opacity)
 			}
 		};
 
 		const temp = [...this._tree]; // Make a copy and reverse for bot to top render
 		temp.reverse();
-
+		// Start looping down the tree
 		for (const item of temp)
 		{
 			loop(item);

@@ -7,6 +7,7 @@ import {input} from '../../../dungeon/layer/Layer';
 import Name from '../../layer/input/Name';
 import Checkbox from '../../layer/input/Checkbox';
 import Color from '../../layer/input/Color';
+import Percent from '../../layer/input/Percent';
 
 // @ts-ignore
 const LayerOptions = observer(({dungeon = store.dungeon}) =>
@@ -40,6 +41,11 @@ const LayerOptions = observer(({dungeon = store.dungeon}) =>
 				/>;
 			case input.COLOR:
 				return <Color
+					option={option}
+					setChange={setChange}
+				/>;
+			case input.PERCENT:
+				return <Percent
 					option={option}
 					setChange={setChange}
 				/>;

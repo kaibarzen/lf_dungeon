@@ -17,25 +17,20 @@ export class DevLayer extends Layer
 
 	public getOptions(): optionConstructorItem[]
 	{
-		return [
+		return [...super.getOptions(),
 			{
-				type: input.NAME,
-				key: "name",
-				value: this.opt.name,
+				title: 'Primary Color',
+				type: input.COLOR,
+				key: 'primaryColor',
+				value: this.opt.primaryColor,
 			},
 			{
-				title: "Primary Color",
+				title: 'Secondary Color',
 				type: input.COLOR,
-				key: "primaryColor",
-				value: this.opt.primaryColor
+				key: 'secondaryColor',
+				value: this.opt.secondaryColor,
 			},
-			{
-				title: "Secondary Color",
-				type: input.COLOR,
-				key: "secondaryColor",
-				value: this.opt.secondaryColor
-			}
-		]
+		];
 	}
 
 	public async render(): Promise<void>

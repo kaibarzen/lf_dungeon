@@ -1,6 +1,6 @@
 import {input, Layer, optionConstructorItem, options} from './Layer';
 import {folderOptions} from './Folder';
-import { toJS } from 'mobx';
+import {toJS} from 'mobx';
 
 export interface solidOptions extends options
 {
@@ -17,19 +17,13 @@ export class SolidLayer extends Layer
 
 	public getOptions(): optionConstructorItem[]
 	{
-		return [
+		return [...super.getOptions(),
 			{
-				type: input.NAME,
-				key: 'name',
-				value: this.opt.name,
-			},
-			{
-				title: "Color",
+				title: 'Color',
 				type: input.COLOR,
 				key: 'color',
 				value: this.opt.color,
-			},
-		];
+			}];
 	}
 
 	public async render()

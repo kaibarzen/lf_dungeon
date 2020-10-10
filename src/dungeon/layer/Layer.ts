@@ -95,6 +95,12 @@ export abstract class Layer
 				key: 'name',
 				value: this.opt.name,
 			},
+			{
+				title: "Opacity",
+				type: input.PERCENT,
+				key: 'opacity',
+				value: this.opt.opacity,
+			},
 		];
 	}
 
