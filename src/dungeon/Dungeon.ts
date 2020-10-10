@@ -4,6 +4,7 @@ import {makeAutoObservable, toJS} from 'mobx';
 import {SolidLayer} from './layer/Solid';
 import {FolderLayer} from './layer/Folder';
 import {GridLayer} from './layer/Grid';
+import {compositeLayer} from './layer/Composite';
 
 export interface Constructor
 {
@@ -203,6 +204,7 @@ export class Dungeon
 			case Layers.BACKGROUND:
 				break;
 			case Layers.COMPOSITE:
+				newLayer = compositeLayer;
 				break;
 			case Layers.DEV:
 				newLayer = DevLayer;
@@ -308,40 +310,78 @@ export class Dungeon
 
 		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
 
+		interface preInterface
+		{
+			opacity: number,
+			composite: string,
+			parent: Layer | undefined
+		}
+
+		// First Layer of a composite has to be source-over, so this is a checklist
+		let compositePlaced: number[] = [];
+
 		/**
 		 * Function that draw's the layer to the canvas.
 		 * @param layer
 		 * @param opacity, calculated opacity through the tree
 		 */
-		const drawSingle = (layer: Layer, opacity: number) =>
+		const drawSingle = (layer: Layer, pre: preInterface) =>
 		{
 			// Already checked this but typescript wants so
-			if(!this.context){
+			if (!this.context)
+			{
 				return;
 			}
 
 			this.context.save();
-			this.context.globalAlpha = opacity;
+			this.context.globalAlpha = pre.opacity;
+
+			// @ts-ignore
+			if (pre.parent?.opt.composite)
+			{
+				if (compositePlaced.includes(pre.parent.id))
+				{
+					this.context.globalCompositeOperation = pre.composite;
+				}
+				else
+				{
+					compositePlaced.push(pre.parent.id);
+				}
+			}
+
 			this.context.drawImage(layer.getRender(), 0, 0);
-			this.context.restore()
+			this.context.restore();
 		};
 
 		/**
 		 * Function to recursively loop to the tree
 		 * @param node
-		 * @param preOpacity calculated opacity from all nodes bat this branch before
+		 * @param pre
 		 */
-		const loop = (node: TreeNode, preOpacity: number = 1) =>
+		const loop = (node: TreeNode, pre: preInterface =
+			{
+				opacity: 1,
+				composite: 'source-over',
+				parent: undefined,
+			},
+		) =>
 		{
 			const layer = this.layers[node.key];
-			const opacity = layer.opt.opacity * preOpacity;
+			pre.opacity = layer.opt.opacity * pre.opacity;
+
+			if (layer.opt.hasOwnProperty('composite'))
+			{
+				// @ts-ignore pass the global composition down
+				pre.composite = layer.opt.selected;
+			}
 
 			if (node.children.length) // Nodes with children work as folder and do not get rendered
 			{
+				pre.parent = layer;
 				const children = [...node.children].reverse(); // Make a copy and reverse for bot to top render
 				for (const item of children)
 				{
-					loop(item, opacity);
+					loop(item, pre);
 				}
 			}
 			else
@@ -352,7 +392,7 @@ export class Dungeon
 					return;
 				}
 
-				drawSingle(layer, opacity)
+				drawSingle(layer, pre);
 			}
 		};
 

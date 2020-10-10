@@ -19,7 +19,8 @@ export enum input
 	PERCENT,
 	CHECKBOX,
 	NAME,
-	COLOR
+	COLOR,
+	SELECT,
 }
 
 export interface optionConstructorItem
@@ -29,6 +30,7 @@ export interface optionConstructorItem
 	type: input,
 	key: string,
 	value?: any,
+	data?: object, // optional Data like min-max range and so on
 }
 
 export interface options
@@ -52,6 +54,10 @@ export interface constructorRequired
 
 export abstract class Layer
 {
+	get id(): number
+	{
+		return this._id;
+	}
 	get name(): string
 	{
 		return this.opt.name;
@@ -59,7 +65,7 @@ export abstract class Layer
 
 	// Todo blending mode
 	protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
-	private id: number;
+	private _id: number;
 	protected data: any; // TODO Data Class
 	protected context: CanvasRenderingContext2D; // Main Context
 
@@ -79,7 +85,7 @@ export abstract class Layer
 			opt: observable,
 		});
 		this.dungeon = req.dungeon;
-		this.id = req.id;
+		this._id = req.id;
 		this.opt = {...this.opt, ...opt};
 		this.context = this.generateContext();
 	}
@@ -112,7 +118,7 @@ export abstract class Layer
 	{
 		this.opt = {...this.opt, ...options};
 		if(options.name !== undefined){
-			this.dungeon.renameTree(this.id, this.opt.name)
+			this.dungeon.renameTree(this._id, this.opt.name)
 		}
 		this.render()
 	}

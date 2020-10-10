@@ -9,6 +9,7 @@ import Checkbox from '../../layer/input/Checkbox';
 import Color from '../../layer/input/Color';
 import Percent from '../../layer/input/Percent';
 import Number from '../../layer/input/Number';
+import Select from '../../layer/input/Select';
 
 // @ts-ignore
 const LayerOptions = observer(({dungeon = store.dungeon}) =>
@@ -52,6 +53,11 @@ const LayerOptions = observer(({dungeon = store.dungeon}) =>
 				/>;
 			case input.NUMBER:
 				return <Number
+					option={option}
+					setChange={setChange}
+				/>;
+			case input.SELECT:
+				return <Select
 					option={option}
 					setChange={setChange}
 				/>;
