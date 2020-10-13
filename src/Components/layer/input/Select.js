@@ -18,7 +18,7 @@ const Select = ({option, setChange}) =>
 					}}
 				>
 					{
-						option?.data?.options?.map((option, i) =>
+						option.data?.options?.map((option, i) =>
 						{
 							return (
 								<option value={option.value} key={i}> {option.display || option.value} </option>

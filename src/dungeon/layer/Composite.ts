@@ -9,7 +9,6 @@ export interface compositeOptions extends options
 
 export class compositeLayer extends Layer
 {
-	// I didn't figured out how to check which specific sunclass we are currently using so i just set the folder opt which gets consumed in the frontend
 	public opt: compositeOptions = {
 		name: 'Composite Folder ',
 		opacity: 1.0,

@@ -4,7 +4,7 @@ import {Card, Elevation} from '@blueprintjs/core';
 import EditorTabs from './tabs/EditorTabs';
 import DialogManager from './DialogManager';
 import {observer} from 'mobx-react-lite';
-import store from '../store';
+import store from '../dungeon/store';
 
 const Editor = observer(({dungeon = store.dungeon}) =>
 {

@@ -2,7 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import {Tree} from 'antd';
 import {observer} from 'mobx-react-lite';
-import store from '../../../store';
+import store from '../../../dungeon/store';
 import {toJS} from 'mobx';
 import LayerOptions from './LayerOptions';
 import {FolderLayer} from '../../../dungeon/layer/Folder';
