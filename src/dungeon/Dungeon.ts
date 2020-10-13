@@ -312,12 +312,18 @@ export class Dungeon
 
 		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
 
-		interface preInterface
+		const generateContext = () =>
 		{
-			opacity: number,
-			composite: string,
-			parent: Layer | undefined
-		}
+			let canvas = document.createElement('canvas');
+			canvas.width = this.totalWidth;
+			canvas.height = this.totalHeight;
+			const context = canvas.getContext('2d');
+			if (context === null)
+			{
+				throw new Error('Could not create 2d context of HTML Canvas');
+			}
+			return context;
+		};
 
 		// First Layer of a composite has to be source-over, so this is a checklist
 		let compositePlaced: number[] = [];
@@ -327,32 +333,34 @@ export class Dungeon
 		 * @param layer
 		 * @param opacity, calculated opacity through the tree
 		 */
-		const drawSingle = (layer: Layer, pre: preInterface) =>
+		const drawSingle = (layer: Layer, parent: Layer, folderContext: CanvasRenderingContext2D, overrideContext: CanvasRenderingContext2D | null) =>
 		{
-			// Already checked this but typescript wants so
-			if (!this.context)
-			{
-				return;
-			}
+			folderContext.globalAlpha = layer.opt.opacity;
 
-			this.context.save();
-			this.context.globalAlpha = pre.opacity;
+			console.log("PARENT", parent)
 
 			// @ts-ignore
-			if (pre.parent?.opt.composite)
+			if (parent.opt.composite)
 			{
-				if (compositePlaced.includes(pre.parent.id))
+				if (compositePlaced.includes(parent.id))
 				{
-					this.context.globalCompositeOperation = pre.composite;
+					// @ts-ignore
+					folderContext.globalCompositeOperation = parent.opt.selected;
 				}
 				else
 				{
-					compositePlaced.push(pre.parent.id);
+					compositePlaced.push(parent.id);
 				}
 			}
 
-			this.context.drawImage(layer.getRender(), 0, 0);
-			this.context.restore();
+			if (overrideContext)
+			{
+				folderContext.drawImage(overrideContext.canvas, 0, 0);
+			}
+			else
+			{
+				folderContext.drawImage(layer.getRender(), 0, 0);
+			}
 		};
 
 		/**
@@ -360,51 +368,41 @@ export class Dungeon
 		 * @param node
 		 * @param pre
 		 */
-		const loop = (node: TreeNode, pre: preInterface =
-			{
-				opacity: 1,
-				composite: 'source-over',
-				parent: undefined,
-			},
-		) =>
+		const loop = (node: TreeNode, parent: Layer, higherContext: CanvasRenderingContext2D) =>
 		{
-			const layer = this.layers[node.key];
-			pre.opacity = layer.opt.opacity * pre.opacity;
+			const layer = this.layers[node.key]; // Current Layer/Folder
 
-			if (layer.opt.hasOwnProperty('composite'))
+			if (node.children.length) // Folder
 			{
-				// @ts-ignore pass the global composition down
-				pre.composite = layer.opt.selected;
-			}
-
-			if (node.children.length) // Nodes with children work as folder and do not get rendered
-			{
-				pre.parent = layer;
-				const children = [...node.children].reverse(); // Make a copy and reverse for bot to top render
-				for (const item of children)
+				const context = generateContext(); // Emulate Layer context
+				for (const item of [...node.children].reverse())
 				{
-					loop(item, pre);
+					loop(item, layer, context); //
 				}
+				drawSingle(layer, parent, higherContext, context)
 			}
 			else
 			{
 
-				if (!this._treeChecked.includes(node.key)) // Nodes which are not checked do not get rendered
+				if (!this._treeChecked.includes(node.key)) // Layer
 				{
-					return;
+					return false;
 				}
 
-				drawSingle(layer, pre);
+				drawSingle(layer, parent, higherContext, null);
 			}
 		};
 
-		const temp = [...this._tree]; // Make a copy and reverse for bot to top render
-		temp.reverse();
-		// Start looping down the tree
-		for (const item of temp)
-		{
-			loop(item);
-		}
+		this.layers[-1] = new FolderLayer({dungeon: this, id: -1}, undefined);
+
+		const source = {
+			title: 'Final Render Layer',
+			key: -1,
+			children: this._tree,
+		};
+
+		loop(source, this.layers[-1], this.context);
+
 	}
 
 }

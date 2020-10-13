@@ -78,7 +78,7 @@ export abstract class Layer
 
 	constructor(
 		req: constructorRequired,
-		opt: constructorParams,
+		opt: constructorParams | undefined,
 	)
 	{
 		makeObservable(this, {
