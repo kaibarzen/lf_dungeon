@@ -4,7 +4,8 @@ import {makeAutoObservable, toJS} from 'mobx';
 import {SolidLayer} from './layer/Solid';
 import {FolderLayer} from './layer/Folder';
 import {GridLayer} from './layer/Grid';
-import {compositeLayer} from './layer/Composite';
+import {CompositeLayer} from './layer/Composite';
+import {BackgroundLayer} from './layer/Background';
 
 export interface Constructor
 {
@@ -202,9 +203,10 @@ export class Dungeon
 		switch (type)
 		{
 			case Layers.BACKGROUND:
+				newLayer = BackgroundLayer;
 				break;
 			case Layers.COMPOSITE:
-				newLayer = compositeLayer;
+				newLayer = CompositeLayer;
 				break;
 			case Layers.DEV:
 				newLayer = DevLayer;

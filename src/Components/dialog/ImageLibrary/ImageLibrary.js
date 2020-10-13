@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {observer} from 'mobx-react-lite';
-import {imageLibrary} from '../../../dungeon/store';
 import store from '../../../dungeon/store';
-import {Button, Classes, Dialog, FileInput, FormGroup, H2, Intent, NumericInput} from '@blueprintjs/core';
+import {Button, Classes, Dialog, FileInput} from '@blueprintjs/core';
 import {IconNames} from '@blueprintjs/icons';
-import redux from '../../../redux';
 import Image from './Image';
 
 const ImageLibrary = observer(({lib = store.imageLibrary}) =>
@@ -89,9 +86,5 @@ const ImageLibrary = observer(({lib = store.imageLibrary}) =>
 		</Dialog>
 	);
 });
-
-ImageLibrary.defaultProps = {};
-
-ImageLibrary.propTypes = {};
 
 export default ImageLibrary;

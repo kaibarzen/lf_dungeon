@@ -7,7 +7,7 @@ export interface compositeOptions extends options
 	selected: string,
 }
 
-export class compositeLayer extends Layer
+export class CompositeLayer extends Layer
 {
 	public opt: compositeOptions = {
 		name: 'Composite Folder ',

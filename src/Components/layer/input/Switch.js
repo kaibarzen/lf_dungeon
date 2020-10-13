@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Checkbox as Check, EditableText, H1, Intent} from '@blueprintjs/core';
+import {Switch as BlueSwitch, EditableText, H1, Intent} from '@blueprintjs/core';
 
-const Checkbox = ({option, setChange}) =>
+const Switch = ({option, setChange}) =>
 {
 	return (
 		<div>
-			<Check
+			<BlueSwitch
 				checked={option.value}
 				large={true}
 				onChange={(e) =>
@@ -15,9 +15,9 @@ const Checkbox = ({option, setChange}) =>
 				}}
 			>
 				{option.title}
-			</Check>
+			</BlueSwitch>
 		</div>
 	);
 };
 
-export default Checkbox;
+export default Switch;

@@ -10,6 +10,8 @@ import Color from '../../layer/input/Color';
 import Percent from '../../layer/input/Percent';
 import Number from '../../layer/input/Number';
 import Select from '../../layer/input/Select';
+import Switch from '../../layer/input/Switch';
+import Image from '../../layer/input/Image';
 
 // @ts-ignore
 const LayerOptions = observer(({dungeon = store.dungeon}) =>
@@ -58,6 +60,16 @@ const LayerOptions = observer(({dungeon = store.dungeon}) =>
 				/>;
 			case input.SELECT:
 				return <Select
+					option={option}
+					setChange={setChange}
+				/>;
+			case input.SWITCH:
+				return <Switch
+					option={option}
+					setChange={setChange}
+				/>;
+			case input.IMAGE:
+				return <Image
 					option={option}
 					setChange={setChange}
 				/>;

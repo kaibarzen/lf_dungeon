@@ -21,6 +21,7 @@ export enum input
 	NAME,
 	COLOR,
 	SELECT,
+	SWITCH,
 }
 
 export interface optionConstructorItem

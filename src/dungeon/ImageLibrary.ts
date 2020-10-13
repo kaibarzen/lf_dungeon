@@ -20,7 +20,7 @@ export class ImageLibrary
 
 	private store;
 	private thumbnailStore;
-	private _dialog: boolean = true;
+	private _dialog: boolean = false;
 	private _select: boolean = false;
 	private callback: Function | null = null;
 	private _keys: string[] = [];
