@@ -6,6 +6,7 @@ import {FolderLayer} from './layer/Folder';
 import {GridLayer} from './layer/Grid';
 import {CompositeLayer} from './layer/Composite';
 import {BackgroundLayer} from './layer/Background';
+import {Interaction} from './Interaction';
 
 export interface Constructor
 {
@@ -45,7 +46,7 @@ export class Dungeon
 	set treeChecked(value: number[])
 	{
 		this._treeChecked = value;
-		this.render();
+		this.renderLayer();
 	}
 
 	get selectedLayer(): Layer | undefined
@@ -65,7 +66,7 @@ export class Dungeon
 	set tree(value: TreeNode[])
 	{
 		this._tree = value;
-		this.render();
+		this.renderLayer();
 	}
 
 	get height(): number
@@ -108,11 +109,12 @@ export class Dungeon
 	private idCounter: number = 0;
 
 	private context: CanvasRenderingContext2D | undefined;
+	private renderContext: CanvasRenderingContext2D = this.generateContext();
+	private interaction: Interaction = new Interaction({dungeon: this}, undefined);
 
 	private layers: { [key: number]: Layer } = {};
 	private _tree: TreeNode[] = [];
 	private _treeChecked: number[] = [];
-
 	private _selectedLayer: Layer | undefined;
 
 	constructor(con: Constructor | undefined)
@@ -138,7 +140,24 @@ export class Dungeon
 			throw new Error('Could not create canvas 2d context');
 		}
 		this.context = context;
+		this.interaction.bindEvents(context.canvas);
 		this.resize();
+	}
+
+	/**
+	 * Generate an already resized context
+	 */
+	private generateContext(): CanvasRenderingContext2D
+	{
+		let canvas = document.createElement('canvas');
+		canvas.width = this.totalWidth;
+		canvas.height = this.totalHeight;
+		const context = canvas.getContext('2d');
+		if (context === null)
+		{
+			throw new Error('Could not create 2d context of HTML Canvas');
+		}
+		return context;
 	}
 
 	/**
@@ -165,7 +184,7 @@ export class Dungeon
 	}
 
 	/**
-	 * Resize all, force layers to resize/rerender
+	 * Resize all, force layers to resize/rerender, also rezized Interaction.ts
 	 */
 	private resize(): void
 	{
@@ -175,11 +194,14 @@ export class Dungeon
 		}
 		this.context.canvas.width = this._totalWidth;
 		this.context.canvas.height = this._totalHeight;
+		this.renderContext.canvas.width = this._totalWidth;
+		this.renderContext.canvas.height = this._totalHeight;
 
 		for (const [key, layer] of Object.entries(this.layers))
 		{
 			layer.resize();
 		}
+		this.interaction.resize();
 	}
 
 	/**
@@ -300,31 +322,10 @@ export class Dungeon
 	}
 
 	/**
-	 * Render Class, gets callbacked by the layers itself if changes happen or by this class on tree changes
+	 * Renders the layers hierarchy, gets called by the layers itself on changes
 	 */
-	render()
+	renderLayer()
 	{
-		if (!this.context)
-		{
-			console.warn('No context/canvas to render on');
-			return;
-		}
-
-		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
-
-		const generateContext = () =>
-		{
-			let canvas = document.createElement('canvas');
-			canvas.width = this.totalWidth;
-			canvas.height = this.totalHeight;
-			const context = canvas.getContext('2d');
-			if (context === null)
-			{
-				throw new Error('Could not create 2d context of HTML Canvas');
-			}
-			return context;
-		};
-
 		// First Layer of a composite has to be source-over, so this is a checklist
 		let compositePlaced: number[] = [];
 
@@ -336,8 +337,6 @@ export class Dungeon
 		const drawSingle = (layer: Layer, parent: Layer, folderContext: CanvasRenderingContext2D, overrideContext: CanvasRenderingContext2D | null) =>
 		{
 			folderContext.globalAlpha = layer.opt.opacity;
-
-			console.log("PARENT", parent)
 
 			// @ts-ignore
 			if (parent.opt.composite)
@@ -374,12 +373,12 @@ export class Dungeon
 
 			if (node.children.length) // Folder
 			{
-				const context = generateContext(); // Emulate Layer context
+				const context = this.generateContext(); // Emulate Layer context
 				for (const item of [...node.children].reverse())
 				{
 					loop(item, layer, context); //
 				}
-				drawSingle(layer, parent, higherContext, context)
+				drawSingle(layer, parent, higherContext, context);
 			}
 			else
 			{
@@ -393,7 +392,8 @@ export class Dungeon
 			}
 		};
 
-		this.layers[-1] = new FolderLayer({dungeon: this, id: -1}, undefined);
+		this.renderContext.clearRect(0, 0, this._totalWidth, this._totalHeight); // Clear canvas
+		this.layers[-1] = new FolderLayer({dungeon: this, id: -1}, undefined); // Fake folder layer
 
 		const source = {
 			title: 'Final Render Layer',
@@ -401,8 +401,21 @@ export class Dungeon
 			children: this._tree,
 		};
 
-		loop(source, this.layers[-1], this.context);
+		loop(source, this.layers[-1], this.renderContext);
+		this.render()
+	}
 
+	/**
+	 * Render the final class, gets called on layer or interactable changes
+	 */
+	render()
+	{
+		if(!this.context){
+			return;
+		}
+		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
+		this.context.drawImage(this.renderContext.canvas, 0, 0);
+		this.context.drawImage(this.interaction.context.canvas, 0, 0);
 	}
 
 }

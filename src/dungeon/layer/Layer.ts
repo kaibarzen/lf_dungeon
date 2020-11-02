@@ -202,7 +202,7 @@ export abstract class Layer
 		// Render our canvas and notify our mainclass that we made changes.
 		// Render will be automatically called after everything got initialized in the mainclass
 		// (so do not call this from the constructor)
-		this.dungeon.render();
+		this.dungeon.renderLayer();
 	}
 
 	/**
