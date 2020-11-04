@@ -1,7 +1,7 @@
 import md5 from 'md5';
 import {type} from './enums';
 
-export default class SpriteLoader
+export default class SpriteLoaderOLD
 {
 	constructor(registerAll)
 	{

@@ -7,6 +7,8 @@ import {GridLayer} from './layer/Grid';
 import {CompositeLayer} from './layer/Composite';
 import {BackgroundLayer} from './layer/Background';
 import {Interaction} from './Interaction';
+import {Editor} from './Editor';
+import {SpriteLoader} from './SpriteLoader';
 
 export interface Constructor
 {
@@ -110,7 +112,10 @@ export class Dungeon
 
 	private context: CanvasRenderingContext2D | undefined;
 	private renderContext: CanvasRenderingContext2D = this.generateContext();
-	private interaction: Interaction = new Interaction({dungeon: this}, undefined);
+
+	public interaction: Interaction = new Interaction({dungeon: this}, undefined);
+	public editor: Editor = new Editor({dungeon: this}, undefined);
+	public sprite: SpriteLoader = new SpriteLoader();
 
 	private layers: { [key: number]: Layer } = {};
 	private _tree: TreeNode[] = [];
@@ -402,7 +407,7 @@ export class Dungeon
 		};
 
 		loop(source, this.layers[-1], this.renderContext);
-		this.render()
+		this.render();
 	}
 
 	/**
@@ -410,7 +415,8 @@ export class Dungeon
 	 */
 	render()
 	{
-		if(!this.context){
+		if (!this.context)
+		{
 			return;
 		}
 		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);

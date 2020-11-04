@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 import redux from '../../../../redux';
-import {register} from '../../../../dungeon/sprites';
 import {Card, H2, H6} from '@blueprintjs/core';
 
 const Group = (props) =>

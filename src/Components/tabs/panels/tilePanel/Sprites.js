@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import {H2, Tooltip} from '@blueprintjs/core';
 import {useSelector} from 'react-redux';
 import redux from '../../../../redux';
-import {register} from '../../../../dungeon/sprites';
 import random from '../../../../img/random.png';
 
 const Sprites = (props) =>
 {
+	return <div></div>;
 
 	const activeTheme =useSelector(redux.editor.selectors.getSpritesTheme);
 	const group = useSelector(redux.editor.selectors.getSpritesGroup);
 	const activeSprite = useSelector(redux.editor.selectors.getActiveSprite);
-
-	const theme = register[activeTheme];
 
 	const onChangeSprite = (sprite) =>
 	{

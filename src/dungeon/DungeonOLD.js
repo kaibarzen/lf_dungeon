@@ -1,4 +1,4 @@
-import SpriteLoader from './SpriteLoader';
+import SpriteLoaderOLD from './SpriteLoader';
 import {getSprites} from './sprites/index';
 
 
@@ -58,7 +58,7 @@ class DungeonOLD
 		this.backgroundRepeat = backgroundRepeat;
 
 		// Image loader class which manages the loading of images
-		this.spriteLoader = spriteLoader ? spriteLoader : new SpriteLoader(getSprites());
+		this.spriteLoader = spriteLoader ? spriteLoader : new SpriteLoaderOLD(getSprites());
 
 		// Events, internal only
 		this.highlight.canvas.onmousemove = this.onmousemove;

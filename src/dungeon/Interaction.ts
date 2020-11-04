@@ -1,16 +1,19 @@
 import {Dungeon} from './Dungeon';
 import {Cords} from './layer/Layer';
 
-export interface constructorParams
+export interface conParams
 {
 
 }
 
-export interface constructorRequired
+export interface conRequired
 {
 	dungeon: Dungeon;
 }
 
+/**
+ * Class to manage the direct interaction with the canvas
+ */
 export class Interaction
 {
 	get context(): CanvasRenderingContext2D
@@ -25,7 +28,7 @@ export class Interaction
 	private eventCanvas: HTMLCanvasElement | undefined;
 	private _context: CanvasRenderingContext2D;
 
-	constructor(req: constructorRequired, params: constructorParams | undefined)
+	constructor(req: conRequired, params: conParams | undefined)
 	{
 		this.dungeon = req.dungeon;
 		this.hitContext = this.generateContext();
@@ -50,6 +53,7 @@ export class Interaction
 
 	private onmousedown(e: MouseEvent)
 	{
+		// DIFFER LEFT OR RIGHT CLICK
 		const cords = this.getCords(e);
 		console.log('CLICK', cords);
 	}

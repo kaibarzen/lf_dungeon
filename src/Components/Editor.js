@@ -21,7 +21,6 @@ const Editor = observer(({dungeon = store.dungeon}) =>
 						elevation={Elevation.ONE}
 						className={'panelcard'}
 					>
-						<EditorTabs />
 					</Card>
 				</div>
 
