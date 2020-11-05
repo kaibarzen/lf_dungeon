@@ -9,6 +9,7 @@ import {BackgroundLayer} from './layer/Background';
 import {Interaction} from './Interaction';
 import {Editor} from './Editor';
 import {SpriteLoader} from './SpriteLoader';
+import { TileLayer } from './layer/Tile';
 
 export interface Constructor
 {
@@ -245,6 +246,7 @@ export class Dungeon
 				newLayer = GridLayer;
 				break;
 			case Layers.TILE:
+				newLayer = TileLayer;
 				break;
 			case Layers.SOLID:
 				newLayer = SolidLayer;

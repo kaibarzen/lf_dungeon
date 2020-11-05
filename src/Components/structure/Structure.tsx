@@ -6,15 +6,23 @@ import './Structure.sass';
 import Footer from './Footer';
 import Canvas from './Canvas';
 import Sidebar from './Sidebar';
+import Tilebar from './Tilebar';
+
+const {Content, Sider} = Layout;
 
 const Structure = () =>
 {
 	return (
 		<Layout className={'structure'}>
 			<Header />
-			<Layout className={"content"}>
-				<Sidebar/>
-				<Canvas />
+			<Layout className={'content'}>
+				<Sidebar />
+				<Layout>
+					<Content className={"contenttwo"}>
+						<Canvas/>
+						<Tilebar/>
+					</Content>
+				</Layout>
 			</Layout>
 			<Footer />
 		</Layout>

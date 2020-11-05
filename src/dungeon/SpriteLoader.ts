@@ -1,4 +1,5 @@
-import {slice} from './sprites/moon';
+import {register} from './sprites/all';
+import {Sprite} from './Sprite';
 
 export interface Slice
 {
@@ -23,9 +24,14 @@ export interface SpriteInterface
 export class SpriteLoader
 {
 
+	private sprites: { [key: string]: Sprite } = {};
+
 	constructor()
 	{
-		this.registerSlice(slice);
+		for (const slice of register)
+		{
+			this.registerSlice(slice);
+		}
 	}
 
 	public registerSlice(slice: Slice)
@@ -39,21 +45,14 @@ export class SpriteLoader
 		}
 	}
 
-	/**
-	 * Calls registerSprite with an foreach loop
-	 * @param sprites
-	 */
-	public registerSprites(sprites: SpriteInterface[])
-	{
-		for (const key in sprites)
-		{
-			this.registerSprite(sprites[key]);
-		}
-	}
-
 	public registerSprite(sprite: SpriteInterface)
 	{
-		console.log(sprite);
+		this.sprites[sprite.id] = new Sprite(sprite);
+	}
+
+	public getSprite(key: string): Sprite | undefined
+	{
+		return this.sprites[key];
 	}
 
 }

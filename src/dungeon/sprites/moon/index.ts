@@ -105,5 +105,15 @@ export const slice = {
 			image: lunar_1,
 			data: ['moon_1', 'lunar_1'],
 		},
+		{
+			display: 'Outdoor 2',
+			image: lunar_1,
+			data: ['stars_1', 'stars_2'],
+		},
+		{
+			display: 'Outdoor 3',
+			image: lunar_1,
+			data: ['grass_1', 'lunar_1'],
+		},
 	],
 };

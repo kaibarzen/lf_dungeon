@@ -1,8 +1,10 @@
 import {Layer} from "./Layer";
 
-class TileLayer extends Layer {
+export class TileLayer extends Layer {
 
-    test(){
-
-    }
+	public opt = {
+		name: 'Tile Layer',
+		opacity: 1.0,
+		tile: true,
+	};
 }
