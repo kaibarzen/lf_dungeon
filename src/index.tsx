@@ -1,26 +1,17 @@
+import { Button } from 'antd';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './resources/sass/index.sass';
-import App from './App';
+import "antd/dist/antd.dark.css";
+
+// @ts-ignore
 import * as serviceWorker from './serviceWorker';
-
-import redux from './redux/index';
-import {Provider} from 'react-redux';
-
-import "normalize.css";
-import "@blueprintjs/core/lib/css/blueprint.css";
-import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+import Structure from './Components/structure/Structure';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Provider store={redux.store}>
-			<App />
-		</Provider>
+		<Structure/>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );
-
-// @ts-ignore
-window.redux = redux;
 
 serviceWorker.unregister();

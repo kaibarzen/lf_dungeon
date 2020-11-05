@@ -1,5 +1,3 @@
-import heat_full from './sprites/moon/heat/heat_full.svg';
-import {type} from './enums';
 import {slice} from './sprites/moon';
 
 export interface Slice
