@@ -5,21 +5,18 @@ import Header from './Header';
 import './Structure.sass';
 import Footer from './Footer';
 import Canvas from './Canvas';
-
-const {Content, Sider} = Layout;
+import Sidebar from './Sidebar';
 
 const Structure = () =>
 {
 	return (
-		<Layout className={"structure"}>
+		<Layout className={'structure'}>
 			<Header />
-			<Layout>
-				<Sider>
-					MENU SPACE
-				</Sider>
-				<Canvas/>
+			<Layout className={"content"}>
+				<Sidebar/>
+				<Canvas />
 			</Layout>
-			<Footer/>
+			<Footer />
 		</Layout>
 	);
 };
