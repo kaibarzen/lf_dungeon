@@ -11,7 +11,7 @@ import Number from './input/Number';
 import Select from './input/Select';
 import Switch from './input/Switch';
 import Image from './input/Image';
-import "./LayersOptions.sass"
+import "./Layers.sass"
 // @ts-ignore
 const LayerOptions = observer(() =>
 {

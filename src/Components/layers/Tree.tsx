@@ -1,8 +1,9 @@
 import React from 'react';
-import {Card, Tree} from 'antd';
+import {Button, Card, Tree} from 'antd';
 import {observer} from 'mobx-react-lite';
 import {toJS} from 'mobx';
 import store from '../../dungeon/store';
+import {PlusOutlined} from '@ant-design/icons';
 
 const Layers = observer(() =>
 {
@@ -15,10 +16,12 @@ const Layers = observer(() =>
 	const onDrop = info =>
 	{
 		// Disallow Children below non Folders, checks the opt.folder property on the layer class
-		if(!info.dropToGap){
+		if (!info.dropToGap)
+		{
 			const layer = dungeon.getLayer(info.node.key);
 			// @ts-ignore
-			if(!layer?.opt?.folder){
+			if (!layer?.opt?.folder)
+			{
 				return;
 			}
 		}
@@ -67,7 +70,8 @@ const Layers = observer(() =>
 				// @ts-ignore
 				item.children.push(dragObj);
 			});
-		} else if (
+		}
+		else if (
 			(info.node.props.children || []).length > 0 && // Has children
 			info.node.props.expanded && // Is expanded
 			dropPosition === 1 // On the bottom gap
@@ -81,7 +85,8 @@ const Layers = observer(() =>
 				// @ts-ignore
 				item.children.unshift(dragObj);
 			});
-		} else
+		}
+		else
 		{
 			let ar;
 			let i;
@@ -95,7 +100,8 @@ const Layers = observer(() =>
 			{
 				// @ts-ignore
 				ar.splice(i, 0, dragObj);
-			} else
+			}
+			else
 			{
 				// @ts-ignore
 				ar.splice(i + 1, 0, dragObj);
@@ -105,8 +111,29 @@ const Layers = observer(() =>
 		dungeon.tree = data;
 	};
 
+	const title = (
+		<div>
+			Layers
+			<Button
+				shape='circle'
+				icon={<PlusOutlined />}
+				size={'small'}
+				className={'add'}
+				onClick={() =>
+				{
+					store.editor.layerModal = true;
+				}}
+			/>
+		</div>
+	);
+
 	return (
-		<Card title={"Layers"} bordered={false} style={{ width: 300 }}>
+		<Card
+			title={title}
+			bordered={false}
+			style={{width: 300}}
+			className={'tree'}
+		>
 			<Tree
 				draggable
 				blockNode

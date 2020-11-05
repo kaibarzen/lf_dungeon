@@ -1,13 +1,17 @@
-import {Dungeon} from "./Dungeon";
+import {Dungeon} from './Dungeon';
 import {ImageLibrary} from './ImageLibrary';
 
 export const dungeon = new Dungeon(undefined);
 export const imageLibrary = new ImageLibrary();
 
-export default {dungeon, imageLibrary}
+export default {
+	dungeon,
+	imageLibrary,
+	editor: dungeon.editor,
+};
 
 // DEBUG
 // @ts-ignore
 window.dungeon = dungeon;
 // @ts-ignore
-window.lib = imageLibrary
+window.lib = imageLibrary;
