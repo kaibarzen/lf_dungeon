@@ -2,6 +2,7 @@ import React from 'react';
 import ImageLibrary from './imageLibrary/ImageLibrary';
 import "./Dialog.sass"
 import AddLayer from './addLayer/AddLayer';
+import Resize from './resize/Resize';
 
 /**
  * Collection of all Dialogs
@@ -13,6 +14,7 @@ const Dialogs = () =>
 		<div>
 			<ImageLibrary/>
 			<AddLayer/>
+			<Resize/>
 		</div>
 	);
 };

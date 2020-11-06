@@ -24,6 +24,15 @@ export enum Tool
  */
 export class Editor
 {
+	get resizeModal(): boolean
+	{
+		return this._resizeModal;
+	}
+
+	set resizeModal(value: boolean)
+	{
+		this._resizeModal = value;
+	}
 	set selectedTile(value: string | null)
 	{
 		this._selectedTile = value;
@@ -59,6 +68,7 @@ export class Editor
 	}
 
 	private _layerModal = false; // Add Layer Modal open/close status
+	private _resizeModal = false;
 	private _selectedTool: Tool = Tool.PLACE; // Selected tool
 	private _selectedGroups: string[] = [];
 	// Active Sprites

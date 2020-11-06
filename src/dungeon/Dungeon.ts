@@ -196,6 +196,19 @@ export class Dungeon
 	}
 
 	/**
+	 * Return als size variables in one object
+	 */
+	public getSize()
+	{
+		return {
+			width: this._width,
+			height: this._height,
+			cellWidth: this._cellWidth,
+			cellHeight: this._cellHeight,
+		};
+	}
+
+	/**
 	 * Resize all, force layers to resize/rerender, also rezized Interaction.ts
 	 */
 	private resize(): void
