@@ -226,7 +226,7 @@ export class Dungeon
 		this._selectedLayer = newLayer;
 
 		// I don't trust ts on that
-		if ( newLayer instanceof TileLayer && 'tile' in newLayer.opt)
+		if (newLayer instanceof TileLayer && 'tile' in newLayer.opt)
 		{
 			this._lastSelectedTileLayer = newLayer;
 		}
@@ -239,7 +239,6 @@ export class Dungeon
 	 */
 	public addLayer(type: Layers): number
 	{
-
 		let newLayer: any;
 
 		switch (type)
@@ -289,6 +288,7 @@ export class Dungeon
 
 		newLayer.render();
 
+		this.setSelectedLayer(this.idCounter); // set the layer as selected for quality of life
 		return this.idCounter;
 	}
 
@@ -438,6 +438,17 @@ export class Dungeon
 		this.context.clearRect(0, 0, this._totalWidth, this._totalHeight);
 		this.context.drawImage(this.renderContext.canvas, 0, 0);
 		this.context.drawImage(this.interaction.context.canvas, 0, 0);
+	}
+
+	public download()
+	{
+		const img = this.renderContext.canvas.toDataURL('image/png');
+		let link = document.createElement('a');
+		link.download = 'Dungeon.png';
+		link.href = img;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
 	}
 
 }
