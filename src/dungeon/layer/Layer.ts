@@ -67,7 +67,6 @@ export abstract class Layer
 	// Todo blending mode
 	protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
 	private _id: number;
-	protected data: any; // TODO Data Class
 	protected context: CanvasRenderingContext2D; // Main Context
 
 	// All Params/Options, has to be public because of mobx,

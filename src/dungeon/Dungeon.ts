@@ -9,7 +9,7 @@ import {BackgroundLayer} from './layer/Background';
 import {Interaction} from './Interaction';
 import {Editor} from './Editor';
 import {SpriteLoader} from './SpriteLoader';
-import { TileLayer } from './layer/Tile';
+import {TileLayer} from './layer/Tile';
 
 export interface Constructor
 {
@@ -40,6 +40,11 @@ interface TreeNode
 
 export class Dungeon
 {
+	get lastSelectedTileLayer(): TileLayer | undefined
+	{
+		return this._lastSelectedTileLayer;
+	}
+
 	get treeChecked(): number[]
 	{
 		return this._treeChecked;
@@ -122,6 +127,7 @@ export class Dungeon
 	private _tree: TreeNode[] = [];
 	private _treeChecked: number[] = [];
 	private _selectedLayer: Layer | undefined;
+	private _lastSelectedTileLayer: TileLayer | undefined;
 
 	constructor(con: Constructor | undefined)
 	{
@@ -216,7 +222,15 @@ export class Dungeon
 	 */
 	public setSelectedLayer(value: number)
 	{
-		this._selectedLayer = this.layers[value];
+		const newLayer = this.layers[value];
+		this._selectedLayer = newLayer;
+
+		// I don't trust ts on that
+		if ( newLayer instanceof TileLayer && 'tile' in newLayer.opt)
+		{
+			this._lastSelectedTileLayer = newLayer;
+		}
+
 	}
 
 	/**

@@ -53,9 +53,9 @@ export class Interaction
 
 	private onmousedown(e: MouseEvent)
 	{
-		// DIFFER LEFT OR RIGHT CLICK
-		const cords = this.getCords(e);
-		console.log('CLICK', cords);
+		if(this.dungeon.lastSelectedTileLayer){
+			this.dungeon.lastSelectedTileLayer.onmousedown(e, this.getCords(e))
+		}
 	}
 
 	private renderHighlight()

@@ -34,6 +34,10 @@ export class SpriteLoader
 		}
 	}
 
+	/**
+	 * Register all sprites in a slice
+	 * @param slice
+	 */
 	public registerSlice(slice: Slice)
 	{
 		for (const key in slice.sprites)
@@ -45,11 +49,19 @@ export class SpriteLoader
 		}
 	}
 
+	/**
+	 * Register a single new sprite
+	 * @param sprite
+	 */
 	public registerSprite(sprite: SpriteInterface)
 	{
 		this.sprites[sprite.id] = new Sprite(sprite);
 	}
 
+	/**
+	 * Get a sprite by id
+	 * @param key
+	 */
 	public getSprite(key: string): Sprite | undefined
 	{
 		return this.sprites[key];
