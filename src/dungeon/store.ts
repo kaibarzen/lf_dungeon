@@ -9,6 +9,7 @@ export default {
 	imageLibrary,
 	editor: dungeon.editor,
 	sprite: dungeon.sprite,
+	iom: dungeon.iom,
 };
 
 // DEBUG

@@ -1,5 +1,6 @@
 import {input, Layer, optionConstructorItem, options} from './Layer';
 import store from '../store';
+import {Layers} from '../Dungeon';
 
 export interface backgroundOptions extends options
 {
@@ -9,6 +10,8 @@ export interface backgroundOptions extends options
 
 export class BackgroundLayer extends Layer
 {
+	public type: Layers = Layers.BACKGROUND;
+
 	public opt: backgroundOptions = {
 		name: 'Background Layer',
 		opacity: 1.0,

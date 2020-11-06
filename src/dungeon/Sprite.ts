@@ -27,7 +27,12 @@ export class Sprite
 		return this._src;
 	}
 
-	private readonly id: string;
+	get id(): string
+	{
+		return this._id;
+	}
+
+	private readonly _id: string;
 	private readonly display: string;
 	private readonly _src: string;
 	private _width: number;
@@ -38,7 +43,7 @@ export class Sprite
 
 	constructor({id, display, src, width = 1, height = 1, offsetX = 0, offsetY = 0}: SpriteInterface)
 	{
-		this.id = id;
+		this._id = id;
 		this.display = display;
 		this._src = src;
 		this._width = width;

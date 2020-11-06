@@ -1,4 +1,5 @@
 import {input, Layer, optionConstructorItem, options} from './Layer';
+import {Layers} from '../Dungeon';
 
 export interface devOptions extends options
 {
@@ -8,6 +9,8 @@ export interface devOptions extends options
 
 export class DevLayer extends Layer
 {
+	public type: Layers = Layers.DEV;
+
 	public opt: devOptions = {
 		name: 'Dev Layer',
 		opacity: 1.0,

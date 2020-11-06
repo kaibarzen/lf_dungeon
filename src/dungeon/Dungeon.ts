@@ -10,6 +10,7 @@ import {Interaction} from './Interaction';
 import {Editor} from './Editor';
 import {SpriteLoader} from './SpriteLoader';
 import {TileLayer} from './layer/Tile';
+import {ExportDungeon, IOManager} from './IOManager';
 
 export interface Constructor
 {
@@ -22,16 +23,17 @@ export interface Constructor
 
 export enum Layers
 {
-	BACKGROUND,
-	COMPOSITE,
-	DEV,
-	FOLDER,
-	GRID,
-	TILE,
-	SOLID,
+	LAYER = 'LAYER', // Not Possible
+	BACKGROUND = 'BACKGROUND',
+	COMPOSITE = 'COMPOSITE',
+	DEV = 'DEV',
+	FOLDER = 'FOLDER',
+	GRID = 'GRID',
+	TILE = 'TILE',
+	SOLID = 'SOLID',
 }
 
-interface TreeNode
+export interface TreeNode
 {
 	title: string,
 	key: number,
@@ -40,6 +42,11 @@ interface TreeNode
 
 export class Dungeon
 {
+	get layers(): { [p: number]: Layer }
+	{
+		return this._layers;
+	}
+
 	get lastSelectedTileLayer(): TileLayer | undefined
 	{
 		return this._lastSelectedTileLayer;
@@ -122,8 +129,9 @@ export class Dungeon
 	public interaction: Interaction = new Interaction({dungeon: this}, undefined);
 	public editor: Editor = new Editor({dungeon: this}, undefined);
 	public sprite: SpriteLoader = new SpriteLoader();
+	public iom: IOManager = new IOManager({dungeon: this});
 
-	private layers: { [key: number]: Layer } = {};
+	private _layers: { [key: number]: Layer } = {};
 	private _tree: TreeNode[] = [];
 	private _treeChecked: number[] = [];
 	private _selectedLayer: Layer | undefined;
@@ -222,7 +230,7 @@ export class Dungeon
 		this.renderContext.canvas.width = this._totalWidth;
 		this.renderContext.canvas.height = this._totalHeight;
 
-		for (const [key, layer] of Object.entries(this.layers))
+		for (const [key, layer] of Object.entries(this._layers))
 		{
 			layer.resize();
 		}
@@ -235,7 +243,7 @@ export class Dungeon
 	 */
 	public setSelectedLayer(value: number)
 	{
-		const newLayer = this.layers[value];
+		const newLayer = this._layers[value];
 		this._selectedLayer = newLayer;
 
 		// I don't trust ts on that
@@ -290,7 +298,7 @@ export class Dungeon
 
 		const required = {dungeon: this, id: this.idCounter};
 		newLayer = new newLayer(required);
-		this.layers[this.idCounter] = newLayer;
+		this._layers[this.idCounter] = newLayer;
 
 		this._tree.push({
 			title: newLayer.name,
@@ -347,7 +355,7 @@ export class Dungeon
 	 */
 	getLayer(id: number): Layer | false
 	{
-		const layer = this.layers[id];
+		const layer = this._layers[id];
 		if (layer)
 		{
 			return layer;
@@ -403,7 +411,7 @@ export class Dungeon
 		 */
 		const loop = (node: TreeNode, parent: Layer, higherContext: CanvasRenderingContext2D) =>
 		{
-			const layer = this.layers[node.key]; // Current Layer/Folder
+			const layer = this._layers[node.key]; // Current Layer/Folder
 
 			if (node.children.length) // Folder
 			{
@@ -427,7 +435,7 @@ export class Dungeon
 		};
 
 		this.renderContext.clearRect(0, 0, this._totalWidth, this._totalHeight); // Clear canvas
-		this.layers[-1] = new FolderLayer({dungeon: this, id: -1}, undefined); // Fake folder layer
+		this._layers[-1] = new FolderLayer({dungeon: this, id: -1}, undefined); // Fake folder layer
 
 		const source = {
 			title: 'Final Render Layer',
@@ -435,7 +443,7 @@ export class Dungeon
 			children: this._tree,
 		};
 
-		loop(source, this.layers[-1], this.renderContext);
+		loop(source, this._layers[-1], this.renderContext);
 		this.render();
 	}
 
@@ -462,6 +470,39 @@ export class Dungeon
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+	}
+
+	public import(data: ExportDungeon)
+	{
+		this._width = data.width;
+		this._height = data.height;
+		this._cellWidth = data.cellWidth;
+		this._cellHeight = data.cellHeight;
+		this._totalWidth = data.totalWidth;
+		this._totalHeight = data.totalHeight;
+		this.idCounter = data.idCounter;
+		this._tree = data.tree;
+		this._treeChecked = data.treeChecked;
+	}
+
+	public importLayer(id: number, layer: Layer)
+	{
+		this._layers[id] = layer;
+	}
+
+	public export(): ExportDungeon
+	{
+		return {
+			width: this._width,
+			height: this._height,
+			cellWidth: this._cellWidth,
+			cellHeight: this._cellHeight,
+			totalWidth: this._totalWidth,
+			totalHeight: this._totalHeight,
+			idCounter: this.idCounter,
+			tree: toJS(this._tree),
+			treeChecked: toJS(this._treeChecked),
+		};
 	}
 
 }

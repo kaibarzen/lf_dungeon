@@ -1,4 +1,5 @@
-import {constructorParams, constructorRequired, input, Layer, optionConstructorItem, options} from './Layer';
+import {input, Layer, optionConstructorItem, options} from './Layer';
+import {Layers} from '../Dungeon';
 
 export interface compositeOptions extends options
 {
@@ -9,6 +10,8 @@ export interface compositeOptions extends options
 
 export class CompositeLayer extends Layer
 {
+	public type: Layers = Layers.COMPOSITE;
+
 	public opt: compositeOptions = {
 		name: 'Composite Folder ',
 		opacity: 1.0,

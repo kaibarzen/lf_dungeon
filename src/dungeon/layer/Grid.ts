@@ -1,4 +1,5 @@
 import {input, Layer, optionConstructorItem, options} from './Layer';
+import {Layers} from '../Dungeon';
 
 export interface gridOptions extends options
 {
@@ -8,6 +9,8 @@ export interface gridOptions extends options
 
 export class GridLayer extends Layer
 {
+	public type: Layers = Layers.GRID;
+
 	public opt: gridOptions = {
 		name: 'Grid Layer ',
 		opacity: 1.0,

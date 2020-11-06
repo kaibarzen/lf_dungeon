@@ -1,5 +1,5 @@
-import {Dungeon} from '../Dungeon';
-import {action, computed, makeObservable, observable} from 'mobx';
+import {Dungeon, Layers} from '../Dungeon';
+import {action, makeObservable, observable, toJS} from 'mobx';
 
 export interface Cords
 {
@@ -40,13 +40,6 @@ export interface options
 	opacity: number,
 }
 
-export interface constructorParams
-{
-	name?: string,
-	opacity?: number,
-	enabled?: boolean,
-}
-
 export interface constructorRequired
 {
 	dungeon: Dungeon,
@@ -59,17 +52,17 @@ export abstract class Layer
 	{
 		return this._id;
 	}
+
 	get name(): string
 	{
 		return this.opt.name;
 	}
 
-	// Todo blending mode
-	protected dungeon: Dungeon; // Dungeon ref, mainly used for sizes
-	private _id: number;
+	protected _id: number;
+	public type: Layers = Layers.LAYER;
+	protected dungeon: Dungeon;
 	protected context: CanvasRenderingContext2D; // Main Context
 
-	// All Params/Options, has to be public because of mobx,
 	public opt: options = {
 		name: 'New Layer ',
 		opacity: 1.0,
@@ -77,7 +70,7 @@ export abstract class Layer
 
 	constructor(
 		req: constructorRequired,
-		opt: constructorParams | undefined,
+		opt: options | undefined,
 	)
 	{
 		makeObservable(this, {
@@ -87,6 +80,7 @@ export abstract class Layer
 		this.dungeon = req.dungeon;
 		this._id = req.id;
 		this.opt = {...this.opt, ...opt};
+
 		this.context = this.generateContext();
 	}
 
@@ -102,7 +96,7 @@ export abstract class Layer
 				value: this.opt.name,
 			},
 			{
-				title: "Opacity",
+				title: 'Opacity',
 				type: input.PERCENT,
 				key: 'opacity',
 				value: this.opt.opacity,
@@ -117,10 +111,11 @@ export abstract class Layer
 	public setOptions(options: options)
 	{
 		this.opt = {...this.opt, ...options};
-		if(options.name !== undefined){
-			this.dungeon.renameTree(this._id, this.opt.name)
+		if (options.name !== undefined)
+		{
+			this.dungeon.renameTree(this._id, this.opt.name);
 		}
-		this.render()
+		this.render();
 	}
 
 	/**
@@ -213,11 +208,33 @@ export abstract class Layer
 	}
 
 	/**
-	 * Export data for longtime storage
+	 * Import function
+	 * @param data
 	 */
-	public export()
+	public import(data: ExportData)
 	{
-
+		// @ts-ignore
+		this.opt = data.opt;
+		this._id = data.id;
+		this.type = data.type;
 	}
 
+	/**
+	 * Export data for longtime storage
+	 */
+	public export(): ExportData
+	{
+		return {
+			id: this._id,
+			type: this.type,
+			opt: toJS(this.opt),
+		};
+	}
+}
+
+export interface ExportData
+{
+	id: number,
+	type: Layers,
+	opt: any
 }

@@ -2,8 +2,9 @@ import Card from 'antd/lib/card';
 import React from 'react';
 import {Divider} from 'antd';
 import store from '../../../dungeon/store';
+import {Layers} from '../../../dungeon/Dungeon';
 
-const Layer = (props: { id: number, title: React.ReactNode, content: React.ReactNode }) =>
+const Layer = (props: { id: Layers, title: React.ReactNode, content: React.ReactNode }) =>
 {
 
 	const onClick = () =>

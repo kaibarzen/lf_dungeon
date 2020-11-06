@@ -1,4 +1,5 @@
-import {constructorParams, constructorRequired, Layer, options} from './Layer';
+import {constructorRequired, Layer, options} from './Layer';
+import {Layers} from '../Dungeon';
 
 export interface folderOptions extends options
 {
@@ -7,6 +8,8 @@ export interface folderOptions extends options
 
 export class FolderLayer extends Layer
 {
+	public type: Layers = Layers.FOLDER;
+
 	public opt: folderOptions = {
 		name: 'Folder ',
 		opacity: 1.0,
