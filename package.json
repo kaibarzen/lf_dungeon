@@ -1,6 +1,6 @@
 {
-  "name": "lf_dungeon",
-  "version": "0.1.0",
+  "name": "lf_dungeon_beta",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
     "@ant-design/dark-theme": "^2.0.2",
@@ -28,8 +28,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
