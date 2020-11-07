@@ -461,6 +461,9 @@ export class Dungeon
 		this.context.drawImage(this.interaction.context.canvas, 0, 0);
 	}
 
+	/**
+	 * User Download for the canvas as png image
+	 */
 	public download()
 	{
 		const img = this.renderContext.canvas.toDataURL('image/png');
@@ -470,6 +473,14 @@ export class Dungeon
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+	}
+
+	/**
+	 * Returns rendercanvas as dataurl
+	 */
+	public getDataUrl(): string
+	{
+		return this.renderContext.canvas.toDataURL('image/png');
 	}
 
 	public import(data: ExportDungeon)

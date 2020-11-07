@@ -35,6 +35,17 @@ const Header = () =>
 				>
 					Resize
 				</Button>
+
+				<Button
+					type={'text'}
+					size={'large'}
+					onClick={() =>
+					{
+						store.iom.dialog = true;
+					}}
+				>
+					Save
+				</Button>
 			</div>
 		</Layout.Header>
 	);

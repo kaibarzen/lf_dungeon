@@ -40,9 +40,6 @@ export class ImageLibrary
 		});
 
 		this.refreshKeys();
-
-		// @ts-ignore debug
-		window.store = this.store;
 	}
 
 	/**

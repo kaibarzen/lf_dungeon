@@ -3,6 +3,7 @@ import ImageLibrary from './imageLibrary/ImageLibrary';
 import "./Dialog.sass"
 import AddLayer from './addLayer/AddLayer';
 import Resize from './resize/Resize';
+import IOManager from './ioManager/IOManager';
 
 /**
  * Collection of all Dialogs
@@ -15,6 +16,7 @@ const Dialogs = () =>
 			<ImageLibrary/>
 			<AddLayer/>
 			<Resize/>
+			<IOManager/>
 		</div>
 	);
 };

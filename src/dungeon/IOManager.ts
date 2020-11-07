@@ -22,13 +22,18 @@ export interface ExportDungeon
 	idCounter: number,
 }
 
-export interface ExportComplete
+export interface ExportData
 {
-	version: 'string',
-	time: 'string',
-	title: 'string', // User Title
+	version: string,
+	time: string,
 	dungeon: ExportDungeon,
 	layers: any // TODO
+}
+
+export interface Preview
+{
+	time: string,
+	thumbnail: string,
 }
 
 interface ParamsReq
@@ -38,9 +43,25 @@ interface ParamsReq
 
 export class IOManager
 {
+	get dialog(): boolean
+	{
+		return this._dialog;
+	}
+
+	set dialog(value: boolean)
+	{
+		this._dialog = value;
+	}
+	get keys(): string[]
+	{
+		return this._keys;
+	}
 
 	private dungeon: Dungeon;
-	private store;
+	private data;
+	private previews;
+	private _keys: string[] = [];
+	private _dialog: boolean = false;
 
 	constructor(req: ParamsReq)
 	{
@@ -48,14 +69,21 @@ export class IOManager
 
 		makeAutoObservable(this);
 
-		this.store = localforage.createInstance({
+		this.data = localforage.createInstance({
 			name: 'dungeons',
-			storeName: 'saved',
+			storeName: 'data',
 		});
+
+		this.previews = localforage.createInstance({
+			name: 'dungeons',
+			storeName: 'previews',
+		});
+
+		this.refreshKeys();
 
 	}
 
-	public export()
+	private export(): ExportData
 	{
 		let layers = [];
 		for (const key in this.dungeon.layers)
@@ -70,21 +98,49 @@ export class IOManager
 		return {
 			version: '0.0.0',
 			time: Date(),
-			title: 'New Export', // Better preview images?
 			dungeon: this.dungeon.export(),
 			layers,
 		};
 	}
 
-	public save(id: string)
+	private exportPreview(): Preview
 	{
-		const data = this.export();
-		this.store.setItem(id, data);
+		return {
+			time: Date(),
+			thumbnail: this.dungeon.getDataUrl(),
+		};
+	}
+
+	public getPreview(id: string)
+	{
+		return this.previews.getItem(id);
+	}
+
+	/**
+	 * Refresh the intenal list of keys
+	 */
+	async refreshKeys()
+	{
+		this._keys = await this.previews.keys();
+	}
+
+	public async delete(id: string)
+	{
+		await this.data.removeItem(id);
+		await this.previews.removeItem(id);
+		this.refreshKeys()
+	}
+
+	public async save(id: string)
+	{
+		await this.data.setItem(id, this.export());
+		await this.previews.setItem(id, this.exportPreview());
+		await this.refreshKeys()
 	}
 
 	public async load(id: string)
 	{
-		const data: ExportComplete | null = await this.store.getItem(id);
+		const data: ExportData | null = await this.data.getItem(id);
 		if (!data)
 		{
 			console.error('Could not Load, debug msg');
@@ -125,7 +181,7 @@ export class IOManager
 			}
 
 			const layer = new newLayer({dungeon: this.dungeon, id: item.id}, undefined);
-			layer.import(item)
+			layer.import(item);
 			this.dungeon.importLayer(item.id, layer);
 		}
 		this.dungeon.setSize();
