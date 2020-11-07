@@ -2,6 +2,7 @@ import {Button, Popconfirm} from 'antd';
 import React, {useEffect, useState} from 'react';
 import store from '../../../dungeon/store';
 import {Preview} from '../../../dungeon/IOManager';
+import moment from 'moment';
 
 const Save = (props: { id: string }) =>
 {
@@ -23,6 +24,7 @@ const Save = (props: { id: string }) =>
 	const onLoad = () =>
 	{
 		store.iom.load(props.id);
+		store.iom.dialog = false;
 	};
 
 	const onDelete = () =>
@@ -32,6 +34,10 @@ const Save = (props: { id: string }) =>
 
 	return (
 		<div className={'save'}>
+
+			<div className={"time"}>
+				{preview?.time ? moment(preview.time).format("YYYY/MM/DD"): ""}
+			</div>
 
 			<div>
 				<div className={'container'}>
