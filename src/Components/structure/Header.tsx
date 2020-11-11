@@ -1,10 +1,8 @@
 import {DownloadOutlined} from '@ant-design/icons';
-import {Button, Divider, Layout, Typography} from 'antd';
+import {Button, Layout} from 'antd';
 import React from 'react';
 import logo from './../../resources/img/lunar.png';
 import store from '../../dungeon/store';
-
-const {Title} = Typography;
 
 const Header = () =>
 {

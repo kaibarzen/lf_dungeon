@@ -230,7 +230,7 @@ export class Dungeon
 		this.renderContext.canvas.width = this._totalWidth;
 		this.renderContext.canvas.height = this._totalHeight;
 
-		for (const [key, layer] of Object.entries(this._layers))
+		for (const [, layer] of Object.entries(this._layers))
 		{
 			layer.resize();
 		}

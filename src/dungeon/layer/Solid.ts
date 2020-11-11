@@ -1,6 +1,4 @@
 import {input, Layer, optionConstructorItem, options} from './Layer';
-import {folderOptions} from './Folder';
-import {toJS} from 'mobx';
 import {Layers} from '../Dungeon';
 
 export interface solidOptions extends options

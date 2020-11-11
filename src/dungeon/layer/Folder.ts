@@ -1,4 +1,4 @@
-import {constructorRequired, Layer, options} from './Layer';
+import {Layer, options} from './Layer';
 import {Layers} from '../Dungeon';
 
 export interface folderOptions extends options

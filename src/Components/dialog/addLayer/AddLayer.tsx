@@ -1,4 +1,4 @@
-import {Button, Divider, Modal} from 'antd';
+import {Button, Modal} from 'antd';
 import React from 'react';
 import {observer} from 'mobx-react-lite';
 import store from '../../../dungeon/store';

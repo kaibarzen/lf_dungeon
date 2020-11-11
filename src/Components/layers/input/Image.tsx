@@ -32,7 +32,7 @@ const Image = (props: { option: optionConstructorItem, setChange: Function }) =>
 
 	return (
 		<div className={'image'}>
-			<div className={"input"}>
+			<div className={'input'}>
 				<h3>
 					{props.option.title}
 				</h3>
@@ -42,7 +42,10 @@ const Image = (props: { option: optionConstructorItem, setChange: Function }) =>
 				>
 					{
 						props.option.value && image ?
-							<img src={image} />
+							<img
+								src={image}
+								alt={''}
+							/>
 							:
 							<Button>
 								Select an Image

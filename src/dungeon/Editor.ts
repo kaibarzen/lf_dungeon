@@ -1,7 +1,6 @@
 import {Dungeon} from './Dungeon';
 import {makeAutoObservable} from 'mobx';
 import {allGroups} from './sprites/all';
-import {string} from 'prop-types';
 
 export interface conParams
 {

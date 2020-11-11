@@ -1,4 +1,4 @@
-import React, {SyntheticEvent} from 'react';
+import React from 'react';
 import {Card, Radio} from 'antd';
 import {Tool} from '../../dungeon/Editor';
 import store from '../../dungeon/store';

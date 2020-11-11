@@ -1,14 +1,13 @@
 import {Layout} from 'antd';
 import React from 'react';
 import Header from './Header';
-
-import './Structure.sass';
 import Footer from './Footer';
 import Canvas from './Canvas';
 import Sidebar from './Sidebar';
 import Tilebar from './Tilebar';
+import './Structure.sass';
 
-const {Content, Sider} = Layout;
+const {Content} = Layout;
 
 const Structure = () =>
 {
