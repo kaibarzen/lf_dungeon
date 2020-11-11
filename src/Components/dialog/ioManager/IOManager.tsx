@@ -30,7 +30,7 @@ const IOManager = observer(() =>
 				<Button
 					onClick={onNew}
 					type={'primary'}
-				>Save a New</Button>,
+				>Save as new</Button>,
 			]}
 			className={'iom'}
 		>

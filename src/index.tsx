@@ -15,4 +15,11 @@ ReactDOM.render(
 	document.getElementById('root'),
 );
 
-serviceWorker.unregister();
+serviceWorker.register()
+
+console.log(`
+  _      _      _
+>(.)__ <(.)__ =(.)__
+ (___/  (___/  (___/  Quack.
+ 
+`);
