@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout} from 'antd';
+import packageJson from "../../package.alias.json"
 
 const Footer = () =>
 {
@@ -7,7 +7,7 @@ const Footer = () =>
 		<footer>
 			<div className={"spacer"} />
 			<div className={"content"}>
-				<h4> DUNGEON IS WIP AND MAY NEED SOME TIME DEPENDING ON MY MOOD, HAVE A GREAT DAY </h4>
+				<h4>v{packageJson.version} WIP </h4>
 			</div>
 		</footer>
 	);
