@@ -1,6 +1,5 @@
 import {ExportData, Layer, options} from './Layer';
 import {Sprite} from '../Sprite';
-import {Tool} from '../Editor';
 import {toJS} from 'mobx';
 import {Layers} from '../Dungeon';
 
@@ -20,55 +19,32 @@ export class TileLayer extends Layer
 		tile: true,
 	};
 
-	public onmousedown(e: MouseEvent, cords: { x: number, y: number })
-	{
-		const tool: Tool = this.dungeon.editor.selectedTool;
-		const spriteId: string | null = this.dungeon.editor.selectedTile;
-
-		if (tool === Tool.REMOVE)
-		{
-			this.removeTile(cords);
-			this.render();
-			return;
-		}
-
-		if (!spriteId) // No Sprite Selected
-		{
-			return;
-		}
-
-		const sprite: Sprite | undefined = this.dungeon.sprite.getSprite(spriteId);
-
-		if (!sprite) // Safety check
-		{
-			return;
-		}
-
-		this.setTile(cords, sprite);
-		this.render();
-	}
-
 	/**
 	 * Set a sprite on given cords, safety check included
 	 * @param cords
 	 * @param sprite
 	 */
-	private setTile(cords: { x: number, y: number }, sprite: Sprite)
+	public setTile(cords: { x: number, y: number }, sprite: Sprite)
 	{
 		if (!this.data[cords.y])
 		{
 			this.data[cords.y] = {};
 		}
 		this.data[cords.y][cords.x] = sprite;
+		this.render()
 	}
 
 	/**
 	 * remove a sprite from cords
 	 * @param cords
 	 */
-	private removeTile(cords: { x: number, y: number })
+	public removeTile(cords: { x: number, y: number })
 	{
-		delete this.data[cords.y][cords.x];
+		if (this.data[cords.y])
+		{
+			delete this.data[cords.y][cords.x];
+		}
+		this.render()
 	}
 
 	async render(): Promise<void>

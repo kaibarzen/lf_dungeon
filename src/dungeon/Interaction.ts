@@ -1,5 +1,7 @@
 import {Dungeon} from './Dungeon';
 import {Cords} from './layer/Layer';
+import {Tool} from './Editor';
+import {Sprite} from './Sprite';
 
 export interface conParams
 {
@@ -9,6 +11,14 @@ export interface conParams
 export interface conRequired
 {
 	dungeon: Dungeon;
+}
+
+export enum MouseStatus
+{
+	PRIMARY,
+	SECONDARY,
+	MIDDLE,
+	UNPRESSED,
 }
 
 /**
@@ -25,6 +35,7 @@ export class Interaction
 	private hitContext: CanvasRenderingContext2D;
 
 	private highlight: { x: number, y: number } = {x: -1, y: -1};
+	private mouseStatus: MouseStatus = MouseStatus.UNPRESSED;
 	private eventCanvas: HTMLCanvasElement | undefined;
 	private _context: CanvasRenderingContext2D;
 
@@ -35,6 +46,16 @@ export class Interaction
 		this._context = this.generateContext();
 	}
 
+	/**
+	 * Disable the context menu on the canvas
+	 * @param e
+	 */
+	private oncontextmenu(e: MouseEvent)
+	{
+		e.preventDefault();
+		return false;
+	}
+
 	private onmousemove(e: MouseEvent)
 	{
 		const cords = this.getCords(e);
@@ -42,20 +63,91 @@ export class Interaction
 		{
 			this.highlight = cords;
 			this.renderHighlight();
+			this.tileInteraction();
 		}
 	}
 
-	private onmouseleave()
+	private onmouseleave(e: MouseEvent)
 	{
 		this.highlight = {x: -1, y: -1};
 		this.renderHighlight();
 	}
 
+	/**
+	 * Bound on the document body
+	 * @param e
+	 */
 	private onmousedown(e: MouseEvent)
 	{
-		if(this.dungeon.lastSelectedTileLayer){
-			this.dungeon.lastSelectedTileLayer.onmousedown(e, this.getCords(e))
+		switch (e.button)
+		{
+			case 0:
+				this.mouseStatus = MouseStatus.PRIMARY;
+				break;
+			case 1:
+				this.mouseStatus = MouseStatus.MIDDLE;
+				break;
+			case 2:
+				this.mouseStatus = MouseStatus.SECONDARY;
+				break;
+			default:
+				return;
 		}
+		this.tileInteraction();
+	}
+
+	/**
+	 * Bound on the document body
+	 * @param e
+	 */
+	private onmouseup(e: MouseEvent)
+	{
+		this.mouseStatus = MouseStatus.UNPRESSED;
+	}
+
+	/**
+	 * Decides if to place / remove a tile on a tile layer
+	 */
+	private tileInteraction()
+	{
+		if (!this.dungeon.lastSelectedTileLayer || this.mouseStatus === MouseStatus.UNPRESSED)
+		{
+			return;
+		}
+
+		switch (this.dungeon.editor.selectedTool)
+		{
+			case Tool.PLACE:
+
+				if (this.mouseStatus === MouseStatus.SECONDARY) // Secondary mouse button, delete
+				{
+					this.dungeon.lastSelectedTileLayer.removeTile(this.highlight);
+					return;
+				}
+
+				const spriteId: string | null = this.dungeon.editor.selectedTile;
+				if (!spriteId) // No Sprite Selected
+				{
+					return;
+				}
+				const sprite: Sprite | undefined = this.dungeon.sprite.getSprite(spriteId);
+
+				if (!sprite) // Safety check
+				{
+					return;
+				}
+
+				this.dungeon.lastSelectedTileLayer.setTile(this.highlight, sprite);
+				return;
+
+			case Tool.REMOVE:
+				this.dungeon.lastSelectedTileLayer.removeTile(this.highlight);
+				return;
+
+			default:
+				return;
+		}
+
 	}
 
 	private renderHighlight()
@@ -94,9 +186,11 @@ export class Interaction
 	 */
 	public bindEvents(canvas: HTMLCanvasElement)
 	{
-		canvas.onmousedown = this.onmousedown.bind(this);
 		canvas.onmousemove = this.onmousemove.bind(this);
 		canvas.onmouseleave = this.onmouseleave.bind(this);
+		canvas.oncontextmenu = this.oncontextmenu.bind(this);
+		document.body.onmousedown = this.onmousedown.bind(this);
+		document.body.onmouseup = this.onmouseup.bind(this);
 		this.eventCanvas = canvas;
 	}
 
