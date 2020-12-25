@@ -15,7 +15,7 @@ const Layer = (props: { id: Layers, title: React.ReactNode, content: React.React
 
 	return (
 		<Card
-			className={'layer'}
+			className={'dialog layer'}
 			onClick={onClick}
 		>
 			<div>

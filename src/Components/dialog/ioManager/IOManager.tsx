@@ -32,7 +32,7 @@ const IOManager = observer(() =>
 					type={'primary'}
 				>Save as new</Button>,
 			]}
-			className={'iom'}
+			className={'dialog iom'}
 		>
 			<div className={'container'}>
 				{
