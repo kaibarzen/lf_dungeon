@@ -1,6 +1,6 @@
 {
   "name": "lf_dungeon_beta",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "dependencies": {
     "@ant-design/dark-theme": "^2.0.2",

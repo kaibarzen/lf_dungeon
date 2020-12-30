@@ -94,6 +94,12 @@ export class Interaction
 				return;
 		}
 		this.tileInteraction();
+
+		// @ts-ignore
+		if (e.target?.nodeName === 'IMG')
+		{
+			e.preventDefault(); // To Stop drop n drag of images
+		}
 	}
 
 	/**

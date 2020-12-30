@@ -4,14 +4,14 @@ import store from '../../dungeon/store';
 import {Card} from 'antd';
 import {input, optionConstructorItem} from '../../dungeon/layer/Layer';
 import Checkbox from './input/Checkbox';
-import Name from './input/Name';
+import Default from './input/Default';
 import Percent from './input/Percent';
 import Color from './input/Color';
 import Number from './input/Number';
 import Select from './input/Select';
 import Switch from './input/Switch';
 import Image from './input/Image';
-import "./Layers.sass"
+import './Layers.sass';
 // @ts-ignore
 const LayerOptions = observer(() =>
 {
@@ -31,12 +31,18 @@ const LayerOptions = observer(() =>
 			layer.setOptions({[option.key]: value});
 		};
 
+		const removeLayer = () =>
+		{
+			store.dungeon.removeLayer(layer.id)
+		};
+
 		switch (option.type)
 		{
-			case input.NAME:
-				return <Name
+			case input.DEFAULT:
+				return <Default
 					option={option}
 					setChange={setChange}
+					removeLayer={removeLayer}
 				/>;
 			case input.CHECKBOX:
 				return <Checkbox
@@ -83,7 +89,7 @@ const LayerOptions = observer(() =>
 			title={'Layer Options'}
 			bordered={false}
 			style={{width: 300}}
-			className={"layeropt"}
+			className={'layeropt'}
 		>
 			{opt.map((option, i) =>
 			{

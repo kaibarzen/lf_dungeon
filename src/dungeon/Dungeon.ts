@@ -346,7 +346,60 @@ export class Dungeon
 	 */
 	public removeLayer(id: number): void
 	{
-		// TODO
+
+		let removeIds: number[] = []; // List of ids to be removed
+
+		const loop = (children: TreeNode[], remove = false) =>
+		{
+
+			for (let i = 0; i < children.length; i++)
+			{
+				const node = children[i];
+				if (node.key === id) // Exactly the deleted layer
+				{
+					loop(node.children, true);
+					children.splice(i, 1);
+					removeIds.push(node.key);
+					return;
+				}
+				if (remove) // Child of deleted layer
+				{
+					removeIds.push(node.key);
+					loop(node.children, true);
+				}
+				else // Not a child of the deleted layer/not the deleted layer
+				{
+					loop(node.children);
+				}
+			}
+		};
+
+		loop(this._tree);
+
+		for (const id of removeIds)
+		{
+			// Remove deleted ids out of is checked array
+			const index = this._treeChecked.indexOf(id);
+			if (index !== -1)
+			{
+				this._treeChecked.splice(index, 1);
+			}
+
+			// Delete layer obj
+			delete this._layers[id];
+		}
+
+
+		//Unset selected layers
+		if (this._selectedLayer?.id === id)
+		{
+			this._selectedLayer = undefined;
+		}
+		if (this._lastSelectedTileLayer?.id === id)
+		{
+			this._lastSelectedTileLayer = undefined;
+		}
+		this.renderLayer();
 	}
 
 	/**
