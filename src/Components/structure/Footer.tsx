@@ -1,5 +1,4 @@
 import React from 'react';
-import packageJson from "../../package.alias.json"
 
 const Footer = () =>
 {
@@ -7,7 +6,7 @@ const Footer = () =>
 		<footer>
 			<div className={"spacer"} />
 			<div className={"content"}>
-				<h4>v{packageJson.version} WIP </h4>
+				<h4>v{process.env.REACT_APP_VERSION} WIP </h4>
 			</div>
 		</footer>
 	);

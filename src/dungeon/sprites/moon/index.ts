@@ -14,7 +14,7 @@ import galaxy_2_flow_right from './galaxy_2_flow_right.png';
 import heat_full from './heat/heat_full.svg';
 import heat_flow_right from './heat/heat_flow_right.svg';
 import heat_flow_right_full from './heat/heat_flow_right_full.svg';
-import heat_flow_right_semi from "./heat/heat_flow_right_semi.svg"
+import heat_flow_right_semi from './heat/heat_flow_right_semi.svg';
 
 import grass_1 from './grass_1.png';
 
@@ -83,37 +83,37 @@ export const slice = {
 		heat_flow_right: {
 			display: 'Heat Fluid Right',
 			src: heat_flow_right,
-			width: 8/16,
-			height: 11/8,
+			width: 8 / 16,
+			height: 11 / 8,
 		},
 		heat_flow_right_full: {
 			display: 'Heat Fluid Right',
 			src: heat_flow_right_full,
-			width: 8/16,
-			height: 12/8,
+			width: 8 / 16,
+			height: 12 / 8,
 		},
 		heat_flow_right_semi: {
 			display: 'Heat Fluid Semi',
 			src: heat_flow_right_semi,
-			width: 8/16,
-			height: 12/8,
-		}
+			width: 8 / 16,
+			height: 12 / 8,
+		},
 	},
 	groups: [
 		{
-			display: 'Outdoor',
-			image: lunar_1,
-			data: ['moon_1', 'lunar_1'],
+			display: 'Surfaces',
+			image: marble_1,
+			data: ['grass_1', 'lunar_1', 'moon_1', 'marble_1', 'marble_2', 'metal_1', 'metal_2', 'wood_1'],
 		},
 		{
-			display: 'Outdoor 2',
-			image: lunar_1,
-			data: ['stars_1', 'stars_2'],
+			display: 'Fluids',
+			image: galaxy_2,
+			data: ['stars_1', 'stars_2', 'galaxy_1', 'galaxy_2', 'galaxy_2_flow_right'],
 		},
 		{
-			display: 'Outdoor 3',
-			image: lunar_1,
-			data: ['grass_1', 'lunar_1'],
+			display: 'GCO',
+			image: heat_full,
+			data: ['heat_full', 'heat_flow_left', 'heat_flow_right', 'heat_flow_right_full', 'heat_flow_right_semi'],
 		},
 	],
 };

@@ -20,24 +20,27 @@
   display: flex
   flex-wrap: wrap
 
-.tiles .content
-  display: flex
-  flex-wrap: wrap
 
-.tiles .tile .container
-  display: flex
-  justify-content: center
-  align-items: center
-  width: 60px
-  height: 60px
-  cursor: pointer
+.tiles
 
-.tiles .tile .selected
-  filter: drop-shadow(0px 0px 16px red)
+  .content
+    display: flex
+    flex-wrap: wrap
 
-.tiles .tile img
-  max-height: 100%
-  max-width: 100%
+  .tile
+    margin: 4px
 
-.tiles .tile
-  margin: 4px
+    .container
+      display: flex
+      justify-content: center
+      align-items: center
+      width: 60px
+      height: 60px
+      cursor: pointer
+
+    .selected
+      filter: drop-shadow(0px 0px 16px red)
+
+    img
+      max-height: 100%
+      max-width: 100%

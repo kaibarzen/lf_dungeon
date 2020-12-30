@@ -18,7 +18,7 @@ export enum input
 	IMAGE,
 	PERCENT,
 	CHECKBOX,
-	NAME,
+	DEFAULT,
 	COLOR,
 	SELECT,
 	SWITCH,
@@ -91,7 +91,7 @@ export abstract class Layer
 	{
 		return [
 			{
-				type: input.NAME,
+				type: input.DEFAULT,
 				key: 'name',
 				value: this.opt.name,
 			},
