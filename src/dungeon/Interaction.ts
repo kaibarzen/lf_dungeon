@@ -127,13 +127,7 @@ export class Interaction
 			return;
 		}
 
-		const selectedLayerId: string | null = this.dungeon.editor.selectedTile;
-		const sprite: Sprite | undefined = this.dungeon.sprite.getSprite(selectedLayerId || '');
-
-		if (!selectedLayerId)
-		{
-			return;
-		}
+		const sprite: Sprite | undefined = this.dungeon.sprite.getSprite(this.dungeon.editor.selectedTile || '');
 
 		switch (this.dungeon.editor.selectedTool)
 		{
