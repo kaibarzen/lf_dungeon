@@ -67,7 +67,14 @@ export class TileLayer extends Layer
 			return;
 		}
 
-		if (this.getTarget({x, y}) !== replace) // wrong target
+		const target = this.getTarget({x, y});
+
+		if (target === place) // cant replace itself
+		{
+			return;
+		}
+
+		if (target !== replace) // wrong target
 		{
 			return;
 		}
@@ -88,12 +95,12 @@ export class TileLayer extends Layer
 		if (y % 2 === 0)
 		{
 			this.fill(x + 1, y + 1, replace, place);
-			this.fill(x + 1, y - 1, replace, place);
+			this.fill(x + 1, y - 1, replace, place); //
 		}
 		else
 		{
-			this.fill(x - 1, y + 1, replace, place);
 			this.fill(x - 1, y - 1, replace, place);
+			this.fill(x - 1, y + 1, replace, place); //
 		}
 		this.fill(x, y + 1, replace, place);
 		this.fill(x, y - 1, replace, place);
