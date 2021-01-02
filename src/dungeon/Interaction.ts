@@ -21,6 +21,12 @@ export enum MouseStatus
 	UNPRESSED,
 }
 
+enum InteractionType
+{
+	CLICK,
+	DRAW
+}
+
 /**
  * Class to manage the direct interaction with the canvas
  */
@@ -63,7 +69,7 @@ export class Interaction
 		{
 			this.highlight = cords;
 			this.renderHighlight();
-			this.tileInteraction();
+			this.tileInteraction(InteractionType.DRAW);
 		}
 	}
 
@@ -93,7 +99,7 @@ export class Interaction
 			default:
 				return;
 		}
-		this.tileInteraction();
+		this.tileInteraction(InteractionType.CLICK);
 
 		// @ts-ignore
 		if (e.target?.nodeName === 'IMG')
@@ -114,9 +120,17 @@ export class Interaction
 	/**
 	 * Decides if to place / remove a tile on a tile layer
 	 */
-	private tileInteraction()
+	private tileInteraction(type: InteractionType)
 	{
 		if (!this.dungeon.lastSelectedTileLayer || this.mouseStatus === MouseStatus.UNPRESSED)
+		{
+			return;
+		}
+
+		const selectedLayerId: string | null = this.dungeon.editor.selectedTile;
+		const sprite: Sprite | undefined = this.dungeon.sprite.getSprite(selectedLayerId || '');
+
+		if (!selectedLayerId)
 		{
 			return;
 		}
@@ -131,23 +145,31 @@ export class Interaction
 					return;
 				}
 
-				const spriteId: string | null = this.dungeon.editor.selectedTile;
-				if (!spriteId) // No Sprite Selected
+				if (!sprite) // No Sprite Selected
 				{
 					return;
 				}
-				const sprite: Sprite | undefined = this.dungeon.sprite.getSprite(spriteId);
-
-				if (!sprite) // Safety check
-				{
-					return;
-				}
-
 				this.dungeon.lastSelectedTileLayer.setTile(this.highlight, sprite);
 				return;
 
-			case Tool.REMOVE:
-				this.dungeon.lastSelectedTileLayer.removeTile(this.highlight);
+			case Tool.FILL:
+
+				if (type === InteractionType.DRAW)
+				{
+					return;
+				}
+
+				if (this.mouseStatus === MouseStatus.SECONDARY) // delete
+				{
+					this.dungeon.lastSelectedTileLayer.removeFill(this.highlight);
+					return;
+				}
+
+				if (!sprite) // No Sprite Selected
+				{
+					return;
+				}
+				this.dungeon.lastSelectedTileLayer.setFill(this.highlight, sprite);
 				return;
 
 			default:

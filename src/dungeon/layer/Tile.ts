@@ -20,6 +20,86 @@ export class TileLayer extends Layer
 	};
 
 	/**
+	 * Fill from an specific point out
+	 * @param cords
+	 * @param sprite
+	 */
+	public setFill(cords: { x: number, y: number }, sprite: Sprite)
+	{
+		this.fill(cords.x, cords.y, this.getTarget(cords), sprite);
+		this.render();
+	}
+
+	/**
+	 * Fill remove everything from an specific point out
+	 * @param cords
+	 */
+	public removeFill(cords: { x: number, y: number })
+	{
+		this.fill(cords.x, cords.y, this.getTarget(cords), undefined);
+		this.render();
+	}
+
+	/**
+	 * Returns taget cords Sprite or undefined on non existence
+	 * @param cords
+	 */
+	private getTarget(cords: { x: number, y: number })
+	{
+		if (!this.data[cords.y])
+		{
+			return undefined;
+		}
+		return this.data[cords.y][cords.x];
+	}
+
+	/**
+	 * Internal function to fill
+	 * @param x
+	 * @param y
+	 * @param replace
+	 * @param place
+	 */
+	private fill(x: number, y: number, replace: Sprite | undefined, place: Sprite | undefined)
+	{
+		if (x > this.dungeon.width || x < 0 || y > this.dungeon.height || y < 0) // Out of bounds
+		{
+			return;
+		}
+
+		if (this.getTarget({x, y}) !== replace) // wrong target
+		{
+			return;
+		}
+
+		if (place)
+		{ // Place Data
+			if (!this.data[y])
+			{
+				this.data[y] = {};
+			}
+			this.data[y][x] = place;
+		}
+		else
+		{
+			delete this.data[y][x]; // Remove Data
+		}
+
+		if (y % 2 === 0)
+		{
+			this.fill(x + 1, y + 1, replace, place);
+			this.fill(x + 1, y - 1, replace, place);
+		}
+		else
+		{
+			this.fill(x - 1, y + 1, replace, place);
+			this.fill(x - 1, y - 1, replace, place);
+		}
+		this.fill(x, y + 1, replace, place);
+		this.fill(x, y - 1, replace, place);
+	}
+
+	/**
 	 * Set a sprite on given cords, safety check included
 	 * @param cords
 	 * @param sprite
@@ -31,7 +111,7 @@ export class TileLayer extends Layer
 			this.data[cords.y] = {};
 		}
 		this.data[cords.y][cords.x] = sprite;
-		this.render()
+		this.render();
 	}
 
 	/**
@@ -44,7 +124,7 @@ export class TileLayer extends Layer
 		{
 			delete this.data[cords.y][cords.x];
 		}
-		this.render()
+		this.render();
 	}
 
 	async render(): Promise<void>

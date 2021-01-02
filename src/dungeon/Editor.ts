@@ -15,7 +15,7 @@ export interface conRequired
 export enum Tool
 {
 	PLACE,
-	REMOVE
+	FILL
 }
 
 /**
