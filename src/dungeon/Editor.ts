@@ -1,4 +1,4 @@
-import {Dungeon} from './Dungeon';
+import {Dungeon, Layers} from './Dungeon';
 import {makeAutoObservable} from 'mobx';
 import {allGroups} from './sprites/all';
 
@@ -15,7 +15,7 @@ export interface conRequired
 export enum Tool
 {
 	PLACE,
-	REMOVE
+	FILL
 }
 
 /**
@@ -32,10 +32,16 @@ export class Editor
 	{
 		this._resizeModal = value;
 	}
+
 	set selectedTile(value: string | null)
 	{
+		if (!this.dungeon.lastSelectedTileLayer)
+		{
+			this.dungeon.addLayer(Layers.TILE);
+		}
 		this._selectedTile = value;
 	}
+
 	get selectedTile(): string | null
 	{
 		return this._selectedTile;
@@ -99,7 +105,7 @@ export class Editor
 	/**
 	 * Returns an id list of all active tiles which can be selected
 	 */
-	public getActiveTiles() : string[]
+	public getActiveTiles(): string[]
 	{
 		let out = new Set<string>();
 

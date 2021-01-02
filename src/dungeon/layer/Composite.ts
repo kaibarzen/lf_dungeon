@@ -31,10 +31,17 @@ export class CompositeLayer extends Layer
 				data: {
 					options: [
 						{
+							display: "Default",
 							value: 'source-over',
 						},
 						{
 							value: 'source-in',
+						},
+						{
+							value: 'source-out',
+						},
+						{
+							value: 'source-atop',
 						},
 						{
 							value: 'destination-in',
@@ -42,6 +49,9 @@ export class CompositeLayer extends Layer
 						{
 							value: 'destination-out',
 						},
+						{
+							value: "destination-atop"
+						}
 					],
 				},
 			}];
