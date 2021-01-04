@@ -13,7 +13,17 @@ const Number = (props: { option: optionConstructorItem, setChange: Function }) =
 				value={props.option.value}
 				onChange={(value) =>
 				{
-					props.setChange(value);
+					switch (typeof value)
+					{
+						case 'number':
+							props.setChange(value);
+							break;
+						case 'string':
+							props.setChange(parseFloat(value));
+							break;
+						default:
+							props.setChange(0);
+					}
 				}}
 			/>
 		</div>
