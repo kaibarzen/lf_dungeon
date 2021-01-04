@@ -53,6 +53,14 @@ export class Interaction
 	}
 
 	/**
+	 * Sets mousestatus to unpressed, usefull because custom drop n drag sections could interfere with interaciton.ts
+	 */
+	public cancelMouseDown = () =>
+	{
+		this.mouseStatus = MouseStatus.UNPRESSED
+	};
+
+	/**
 	 * Disable the context menu on the canvas
 	 * @param e
 	 */

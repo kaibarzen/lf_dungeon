@@ -151,6 +151,7 @@ const Layers = observer(() =>
 					// @ts-ignore
 					dungeon.setSelectedLayer(key);
 				}}
+				onDragStart={store.dungeon.interaction.cancelMouseDown} // Tell interaction that this mousedown is from here so it doesnt start bugging
 			/>
 		</Card>
 	);

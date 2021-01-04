@@ -94,7 +94,7 @@ const LayerOptions = observer(() =>
 			{opt.map((option, i) =>
 			{
 				return (
-					<div key={i}>
+					<div key={i} className={"preinput"}>
 						{returnOption(option)}
 					</div>
 				);
